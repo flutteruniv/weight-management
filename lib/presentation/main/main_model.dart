@@ -10,5 +10,6 @@ class TopModel extends ChangeNotifier {
 
   void onTabTapped(int index) {
     currentIndex = index;
+    notifyListeners();
   }
 }
