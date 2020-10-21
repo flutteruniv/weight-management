@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "732257714985",
+    "firebase_url": "https://weight-management-864b6.firebaseio.com",
+    "project_id": "weight-management-864b6",
+    "storage_bucket": "weight-management-864b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732257714985:android:75734d105a7e2ef7e16d38",
+        "android_client_info": {
+          "package_name": "com.gmail.sepak.kou.weight_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "732257714985-9l7jt5udssogd6iosbapounn8pb367ir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrfS6Mq5ZG-3VsfubiGzSyn1T-p_Mhc3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "732257714985-9l7jt5udssogd6iosbapounn8pb367ir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
