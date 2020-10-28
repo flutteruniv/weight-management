@@ -17,6 +17,7 @@ class CarenderSavePage extends StatelessWidget {
                 children: <Widget>[
                   Text(model.value),
                   RaisedButton(
+                    // 日付を取得
                     onPressed: () async {
                       model.picked = await showDatePicker(
                         context: context,
@@ -27,6 +28,18 @@ class CarenderSavePage extends StatelessWidget {
                       model.selectDate();
                     },
                     child: Text('Click me'),
+                  ),
+                  TextField(
+                      decoration:
+                          InputDecoration(hintText: '62.0', labelText: 'Date')),
+                  TextField(
+                      decoration: InputDecoration(
+                          hintText: '62.0', labelText: 'Weight')),
+                  RaisedButton(
+                    onPressed: () {
+                      //to do
+                    },
+                    child: Text('保存する'),
                   )
                 ],
               ),
