@@ -10,7 +10,7 @@ class CarenderSavePage extends StatelessWidget {
       create: (_) => CalenderSaveModel(),
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(32.0),
+          padding: EdgeInsets.all(50.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
             return Center(
               child: Column(
@@ -27,15 +27,55 @@ class CarenderSavePage extends StatelessWidget {
                       );
                       model.selectDate();
                     },
-                    child: Text(model.value),
+                    child: Text(model.date),
                   ),
                   TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          hintText: '62.0', labelText: 'Weight')),
+                    keyboardType: TextInputType.number,
+                    decoration:
+                        InputDecoration(hintText: '60.0', labelText: 'Weight'),
+                    onChanged: (number) {
+                      model.addWeight = double.parse(number);
+                    },
+                  ),
+                  SizedBox(height: 30),
                   RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       //to do
+                      try {
+                        await model.addDataToFirebase();
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('保存しました'),
+                              actions: <Widget>[
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'))
+                              ],
+                            );
+                          },
+                        );
+                      } catch (e) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(e.toString()),
+                              actions: <Widget>[
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'))
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
                     child: Text('保存する'),
                   )
