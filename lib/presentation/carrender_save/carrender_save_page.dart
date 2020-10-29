@@ -27,7 +27,7 @@ class CarenderSavePage extends StatelessWidget {
                       );
                       model.selectDate();
                     },
-                    child: Text(model.date),
+                    child: Text(model.viewDate),
                   ),
                   TextField(
                     keyboardType: TextInputType.number,
