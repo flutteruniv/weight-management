@@ -10,8 +10,7 @@ class BookListModel extends ChangeNotifier {
     Firebase.initializeApp();
     final docs =
         await FirebaseFirestore.instance.collection('muscleData').get();
-    final muscleData =
-        docs.docs.map((doc) => MuscleData(doc.data()['weight'])).toList();
+    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
     this.muscleData = muscleData;
     notifyListeners();
   }

@@ -7,8 +7,11 @@ import 'package:weight_management/presentation/list/list_page.dart';
 import 'package:weight_management/presentation/main/main_model.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/seni.dart';
+import 'package:weight_management/seni_model.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -41,7 +44,7 @@ class TopPage extends StatelessWidget {
                 title: Text(_tabNames[model.currentIndex]),
                 backgroundColor: Colors.blue,
               ),
-              body: _topPageBody(context),
+              body: _topPageBody(context, model),
               bottomNavigationBar: BottomNavigationBar(
                 onTap: model.onTabTapped,
                 currentIndex: model.currentIndex,
@@ -70,7 +73,7 @@ class TopPage extends StatelessWidget {
     );
   }
 
-  Widget _topPageBody(BuildContext context) {
+  Widget _topPageBody(BuildContext context, TopModel model) {
     Firebase.initializeApp();
     final model = Provider.of<TopModel>(context);
     final currentIndex = model.currentIndex;

@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/carrender_save/carrender_save_model.dart';
 
 class CarenderSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    TextEditingController textEditingController = TextEditingController();
     return ChangeNotifierProvider<CalenderSaveModel>(
-      create: (_) => CalenderSaveModel(),
+      create: (_) => CalenderSaveModel()..fetchData(),
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.all(50.0),
@@ -31,9 +33,10 @@ class CarenderSavePage extends StatelessWidget {
                   ),
                   TextField(
                     keyboardType: TextInputType.number,
-                    decoration:
-                        InputDecoration(hintText: '60.0', labelText: 'Weight'),
+                    decoration: InputDecoration(
+                        hintText: '体重を入力（Kg）', labelText: 'Weight'),
                     onChanged: (number) {
+                      //テキストに体重入力
                       model.addWeight = double.parse(number);
                     },
                   ),
@@ -41,44 +44,11 @@ class CarenderSavePage extends StatelessWidget {
                   RaisedButton(
                     onPressed: () async {
                       //to do
-                      try {
-                        await model.addDataToFirebase();
-
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('保存しました'),
-                              actions: <Widget>[
-                                FlatButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('OK'))
-                              ],
-                            );
-                          },
-                        );
-                      } catch (e) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(e.toString()),
-                              actions: <Widget>[
-                                FlatButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('OK'))
-                              ],
-                            );
-                          },
-                        );
-                      }
+                      await addData(model, context); //入力した体重、日付をfirestoreに入れる
+                      await model.fetchData();
                     },
                     child: Text('保存する'),
-                  )
+                  ),
                 ],
               ),
             );
@@ -86,5 +56,82 @@ class CarenderSavePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future addData(CalenderSaveModel model, BuildContext context) async {
+    try {
+      await model.addDataToFirebase();
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('保存しました'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(e.toString()),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future updateData(CalenderSaveModel model, BuildContext context,
+      MuscleData muscleData) async {
+    try {
+      await model.upDateData(muscleData);
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('更新しました'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(e.toString()),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        },
+      );
+    }
   }
 }

@@ -9,9 +9,6 @@ class ListPage extends StatelessWidget {
     return ChangeNotifierProvider<BookListModel>(
       create: (_) => BookListModel()..fetchData(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('本一覧'),
-        ),
         body: Consumer<BookListModel>(
           builder: (context, model, child) {
             final muscleData = model.muscleData;
