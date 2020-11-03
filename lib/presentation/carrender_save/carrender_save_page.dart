@@ -9,7 +9,7 @@ class CarenderSavePage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController textEditingController = TextEditingController();
     return ChangeNotifierProvider<CalenderSaveModel>(
-      create: (_) => CalenderSaveModel()..fetchData(),
+      create: (_) => CalenderSaveModel(),
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.all(50.0),
@@ -44,8 +44,7 @@ class CarenderSavePage extends StatelessWidget {
                   RaisedButton(
                     onPressed: () async {
                       //to do
-                      await addData(model, context); //入力した体重、日付をfirestoreに入れる
-                      await model.fetchData();
+                      await addData(model, context); //入力した体重、日付をfirestoreに入れ
                     },
                     child: Text('保存する'),
                   ),

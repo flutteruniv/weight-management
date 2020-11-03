@@ -9,16 +9,6 @@ class CalenderSaveModel extends ChangeNotifier {
   double addWeight; //textfieldで入力する値
   DateTime addDate = DateTime.now(); //firestoreに入れる日付
 
-  List<MuscleData> muscledatas = [];
-
-  Future fetchData() async {
-    final docs =
-        await FirebaseFirestore.instance.collection('muscleData').get();
-    final muscledatas = docs.docs.map((doc) => MuscleData(doc)).toList();
-    this.muscledatas = muscledatas;
-    notifyListeners();
-  }
-
   void selectDate() async {
     //datepickerでとった値を入れる
     if (picked != null) {

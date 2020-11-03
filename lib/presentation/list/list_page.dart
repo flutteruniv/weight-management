@@ -6,10 +6,10 @@ import 'package:weight_management/presentation/list/list_model.dart';
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<BookListModel>(
-      create: (_) => BookListModel()..fetchData(),
+    return ChangeNotifierProvider<ListModel>(
+      create: (_) => ListModel()..fetchData(),
       child: Scaffold(
-        body: Consumer<BookListModel>(
+        body: Consumer<ListModel>(
           builder: (context, model, child) {
             final muscleData = model.muscleData;
             final listTiles = muscleData
