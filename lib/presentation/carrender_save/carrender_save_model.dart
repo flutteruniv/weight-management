@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:weight_management/domain/muscle_data.dart';
+import 'package:weight_management/presentation/main/main.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
@@ -33,11 +35,13 @@ class CalenderSaveModel extends ChangeNotifier {
     if (addWeight == null) {
       throw ('体重を入力してください');
     }
+    final imageURL = await _uploadImage();
     await FirebaseFirestore.instance.collection('muscleData').add(
       {
         'weight': addWeight,
         'date': Timestamp.fromDate(addDate),
         'StringDate': viewDate,
+        'imageURL': imageURL,
       },
     );
   }
@@ -50,5 +54,16 @@ class CalenderSaveModel extends ChangeNotifier {
         .collection('muscleData')
         .doc(muscleData.documentID);
     await document.update({'weight': addWeight});
+  }
+
+  Future<String> _uploadImage() async {
+    final storage = FirebaseStorage.instance;
+    StorageTaskSnapshot snapshot = await storage
+        .ref()
+        .child("muscle/$addWeight")
+        .putFile(imageFile)
+        .onComplete;
+    final String downloadURL = await snapshot.ref.getDownloadURL();
+    return downloadURL;
   }
 }
