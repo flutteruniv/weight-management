@@ -44,7 +44,7 @@ class TopPage extends StatelessWidget {
                 title: Text(_tabNames[model.currentIndex]),
                 backgroundColor: Colors.blue,
               ),
-              body: _topPageBody(context, model),
+              body: _topPageBody(context),
               bottomNavigationBar: BottomNavigationBar(
                 onTap: model.onTabTapped,
                 currentIndex: model.currentIndex,
@@ -73,7 +73,7 @@ class TopPage extends StatelessWidget {
     );
   }
 
-  Widget _topPageBody(BuildContext context, TopModel model) {
+  Widget _topPageBody(BuildContext context) {
     Firebase.initializeApp();
     final model = Provider.of<TopModel>(context);
     final currentIndex = model.currentIndex;

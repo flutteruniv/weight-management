@@ -7,7 +7,6 @@ class ListModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
 
   Future fetchData() async {
-    Firebase.initializeApp();
     final docs =
         await FirebaseFirestore.instance.collection('muscleData').get();
     final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();

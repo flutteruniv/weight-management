@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 
@@ -8,6 +10,7 @@ class CalenderSaveModel extends ChangeNotifier {
   DateTime picked; //datepickerで取得する日付
   double addWeight; //textfieldで入力する値
   DateTime addDate = DateTime.now(); //firestoreに入れる日付
+  File imageFile;
 
   void selectDate() async {
     //datepickerでとった値を入れる
@@ -15,6 +18,13 @@ class CalenderSaveModel extends ChangeNotifier {
       viewDate = (DateFormat('yyyy/MM/dd')).format(picked);
       addDate = picked;
     }
+    notifyListeners();
+  }
+
+  Future showImagePicker() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    imageFile = File(pickedFile.path);
     notifyListeners();
   }
 
