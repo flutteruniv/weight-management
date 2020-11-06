@@ -42,15 +42,28 @@ class CarenderSavePage extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   SizedBox(
-                    height: 100,
-                    width: 200,
+                    height: 200,
+                    width: 150,
                     child: InkWell(
-                        onTap: () async {
-                          await model.showImagePicker();
-                        },
-                        child: model.imageFile != null
-                            ? Image.file(model.imageFile)
-                            : Container(color: Colors.green)),
+                      onTap: () async {
+                        await model.showImagePicker();
+                      },
+                      child: model.imageFile != null
+                          ? Image.file(model.imageFile)
+                          : Container(
+                              color: Colors.green,
+                              child: Center(
+                                child: Text(
+                                  '写真を選ぶ',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 30),
+                                ),
+                              ),
+                            ),
+                    ),
                   ),
                   SizedBox(height: 30),
                   RaisedButton(

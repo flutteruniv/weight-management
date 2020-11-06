@@ -13,8 +13,19 @@ class ListPage extends StatelessWidget {
           builder: (context, model, child) {
             final muscleData = model.muscleData;
             final listTiles = muscleData
-                .map((muscleData) => ListTile(
-                      title: Text(muscleData.weight.toString()),
+                .map((muscleData) => Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black38, width: 1),
+                        ),
+                      ),
+                      child: ListTile(
+                          leading: Image.network(muscleData.imageURL),
+                          title: Text(muscleData.weight.toString() + ' kg'),
+                          subtitle: Text(muscleData.date),
+                          trailing: IconButton(
+                            icon: Icon(Icons.edit),
+                          )),
                     ))
                 .toList();
             return ListView(
