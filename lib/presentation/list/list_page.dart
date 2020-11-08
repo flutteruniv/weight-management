@@ -30,6 +30,7 @@ class ListPage extends StatelessWidget {
             return ListView(
               children: listTiles,
             );
+            //return Text(model.muscleData.toString());
           },
         ),
       ),

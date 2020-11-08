@@ -6,8 +6,10 @@ class ListModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
 
   Future fetchData() async {
-    final docs =
-        await FirebaseFirestore.instance.collection('muscleData').get();
+    final docs = await FirebaseFirestore.instance
+        .collection('muscleData')
+        .orderBy('date', descending: true)
+        .get();
     final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
     this.muscleData = muscleData;
     notifyListeners();
