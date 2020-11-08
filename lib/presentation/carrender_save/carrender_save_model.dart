@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/presentation/main/main.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
@@ -23,6 +23,59 @@ class CalenderSaveModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<int> showCupertinoBottomBar(BuildContext context) {
+    //選択するためのボトムシートを表示
+    return showCupertinoModalPopup<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            message: Text('写真をアップロードしますか？'),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                child: Text(
+                  'カメラで撮影',
+                ),
+                onPressed: () {
+                  Navigator.pop(context, 0);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: Text(
+                  'アルバムから選択',
+                ),
+                onPressed: () {
+                  Navigator.pop(context, 1);
+                },
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              child: const Text('キャンセル'),
+              onPressed: () {
+                Navigator.pop(context, 2);
+              },
+              isDefaultAction: true,
+            ),
+          );
+        });
+  }
+
+  void showBottomSheet(BuildContext context) async {
+    //ボトムシートから受け取った値によって操作を変える
+    final result = await showCupertinoBottomBar(context);
+
+    if (result == 0) {
+      final picker = ImagePicker();
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      imageFile = File(pickedFile.path);
+    } else if (result == 1) {
+      final picker = ImagePicker();
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      imageFile = File(pickedFile.path);
+    }
+    notifyListeners();
+  }
+
+  //写真をカメラロールから選ぶ
   Future showImagePicker() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);

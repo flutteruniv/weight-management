@@ -7,7 +7,7 @@ import 'package:weight_management/presentation/carrender_save/carrender_save_mod
 class CarenderSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController = TextEditingController();
+    // TextEditingController textEditingController = TextEditingController();
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel(),
       child: Scaffold(
@@ -46,7 +46,8 @@ class CarenderSavePage extends StatelessWidget {
                     width: 150,
                     child: InkWell(
                       onTap: () async {
-                        await model.showImagePicker();
+                        //await model.showImagePicker();
+                        model.showBottomSheet(context);
                       },
                       child: model.imageFile != null
                           ? Image.file(model.imageFile)
