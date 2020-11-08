@@ -4,6 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 
 class TopModel extends ChangeNotifier {
+  bool savePageUpdate = false;
+
+  Future updatePageTrue() {
+    savePageUpdate = true;
+    notifyListeners();
+  }
+
+  Future updatePageFalse() {
+    savePageUpdate = false;
+    notifyListeners();
+  }
+
   Future init() async {
     notifyListeners();
   }

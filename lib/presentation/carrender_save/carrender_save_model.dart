@@ -85,18 +85,31 @@ class CalenderSaveModel extends ChangeNotifier {
 
   Future addDataToFirebase() async {
     //firebaseに値を追加
+
     if (addWeight == null) {
       throw ('体重を入力してください');
     }
-    final imageURL = await _uploadImage();
-    await FirebaseFirestore.instance.collection('muscleData').add(
-      {
-        'weight': addWeight,
-        'date': Timestamp.fromDate(addDate),
-        'StringDate': viewDate,
-        'imageURL': imageURL,
-      },
-    );
+    if (imageFile != null) {
+      final imageURL = await _uploadImage();
+      await FirebaseFirestore.instance.collection('muscleData').add(
+        {
+          'weight': addWeight,
+          'date': Timestamp.fromDate(addDate),
+          'StringDate': viewDate,
+          'imageURL': imageURL,
+        },
+      );
+    } else if (imageFile == null) {
+      //   final imageURL = await _uploadImage();
+      await FirebaseFirestore.instance.collection('muscleData').add(
+        {
+          'weight': addWeight,
+          'date': Timestamp.fromDate(addDate),
+          'StringDate': viewDate,
+          //    'imageURL': imageURL,
+        },
+      );
+    }
   }
 
   Future upDateData(MuscleData muscleData) async {

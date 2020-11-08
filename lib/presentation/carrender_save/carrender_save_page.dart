@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/carrender_save/carrender_save_model.dart';
+import 'package:weight_management/presentation/main/main_model.dart';
 
 class CarenderSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TextEditingController textEditingController = TextEditingController();
+    final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel(),
       child: Scaffold(
@@ -33,8 +34,8 @@ class CarenderSavePage extends StatelessWidget {
                   ),
                   TextField(
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: '体重を入力（Kg）', labelText: 'Weight'),
+                    decoration:
+                        InputDecoration(hintText: '体重を入力（Kg）', labelText: '体重'),
                     onChanged: (number) {
                       //テキストに体重入力
                       model.addWeight = double.parse(number);
@@ -70,7 +71,8 @@ class CarenderSavePage extends StatelessWidget {
                   RaisedButton(
                     onPressed: () async {
                       //to do
-                      await addData(model, context); //入力した体重、日付をfirestoreに入れ
+                      await addData(
+                          model, context, topModel); //入力した体重、日付をfirestoreに入れ
                     },
                     child: Text('保存する'),
                   ),
@@ -83,9 +85,11 @@ class CarenderSavePage extends StatelessWidget {
     );
   }
 
-  Future addData(CalenderSaveModel model, BuildContext context) async {
+  Future addData(
+      CalenderSaveModel model, BuildContext context, TopModel topModel) async {
     try {
       await model.addDataToFirebase();
+      topModel.updatePageTrue();
 
       showDialog(
         context: context,
@@ -94,10 +98,12 @@ class CarenderSavePage extends StatelessWidget {
             title: Text('保存しました'),
             actions: <Widget>[
               FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'))
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  topModel.updatePageFalse();
+                },
+                child: Text('OK'),
+              )
             ],
           );
         },
