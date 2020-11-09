@@ -42,6 +42,15 @@ class CarenderSavePage extends StatelessWidget {
                         model.addWeight = double.parse(number);
                       },
                     ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          hintText: '体脂肪率を入力（％）', labelText: '体脂肪率'),
+                      onChanged: (number) {
+                        //テキストに体重入力
+                        model.addBodyFatPercentage = double.parse(number);
+                      },
+                    ),
                     SizedBox(height: 30),
                     SizedBox(
                       height: 200,

@@ -11,6 +11,7 @@ class CalenderSaveModel extends ChangeNotifier {
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
   DateTime picked; //datepickerで取得する日付
   double addWeight; //textfieldで入力する値
+  double addBodyFatPercentage;
   DateTime addDate = DateTime.now(); //firestoreに入れる日付
   File imageFile;
 
@@ -89,21 +90,49 @@ class CalenderSaveModel extends ChangeNotifier {
     if (addWeight == null) {
       throw ('体重を入力してください');
     }
-    if (imageFile != null) {
+    if (imageFile != null && addBodyFatPercentage != null) {
+      //写真と体脂肪率があるとき
       final imageURL = await _uploadImage();
       await FirebaseFirestore.instance.collection('muscleData').add(
         {
           'weight': addWeight,
+          'bodyFatPercentage': addBodyFatPercentage,
           'date': Timestamp.fromDate(addDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
         },
       );
-    } else if (imageFile == null) {
+    } else if (imageFile == null && addBodyFatPercentage != null) {
+      //写真なし＆体脂肪率あり
       //   final imageURL = await _uploadImage();
       await FirebaseFirestore.instance.collection('muscleData').add(
         {
           'weight': addWeight,
+          'bodyFatPercentage': addBodyFatPercentage,
+          'date': Timestamp.fromDate(addDate),
+          'StringDate': viewDate,
+          //    'imageURL': imageURL,
+        },
+      );
+    } else if (imageFile != null && addBodyFatPercentage == null) {
+      //写真アリ＆体脂肪率なし
+      final imageURL = await _uploadImage();
+      await FirebaseFirestore.instance.collection('muscleData').add(
+        {
+          'weight': addWeight,
+          //  'bodyFatPercentage': addBodyFatPercentage,
+          'date': Timestamp.fromDate(addDate),
+          'StringDate': viewDate,
+          'imageURL': imageURL,
+        },
+      );
+    } else if (imageFile == null && addBodyFatPercentage == null) {
+      //写真なし＆体脂肪率なし
+      //   final imageURL = await _uploadImage();
+      await FirebaseFirestore.instance.collection('muscleData').add(
+        {
+          'weight': addWeight,
+          //  'bodyFatPercentage': addBodyFatPercentage,
           'date': Timestamp.fromDate(addDate),
           'StringDate': viewDate,
           //    'imageURL': imageURL,

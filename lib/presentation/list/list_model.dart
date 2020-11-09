@@ -5,7 +5,7 @@ import 'package:weight_management/domain/muscle_data.dart';
 
 class ListModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
-  String sortName = '日付順（昇順）';
+  String sortName = '日付順（降順）';
 
   Future fetchData() async {
     final docs = await FirebaseFirestore.instance
@@ -27,7 +27,7 @@ class ListModel extends ChangeNotifier {
             actions: <Widget>[
               CupertinoActionSheetAction(
                 child: Text(
-                  '日付（昇順）',
+                  '日付（降順）',
                 ),
                 onPressed: () {
                   Navigator.pop(context, 0);
@@ -35,7 +35,7 @@ class ListModel extends ChangeNotifier {
               ),
               CupertinoActionSheetAction(
                 child: Text(
-                  '日付（降順）',
+                  '日付（昇順）',
                 ),
                 onPressed: () {
                   Navigator.pop(context, 1);
@@ -43,7 +43,7 @@ class ListModel extends ChangeNotifier {
               ),
               CupertinoActionSheetAction(
                 child: Text(
-                  '体重順（昇順）',
+                  '体重順（降順）',
                 ),
                 onPressed: () {
                   Navigator.pop(context, 2);
@@ -51,7 +51,7 @@ class ListModel extends ChangeNotifier {
               ),
               CupertinoActionSheetAction(
                 child: Text(
-                  '体重順（降順）',
+                  '体重順（昇順）',
                 ),
                 onPressed: () {
                   Navigator.pop(context, 3);
@@ -73,7 +73,7 @@ class ListModel extends ChangeNotifier {
     //ボトムシートから受け取った値によって操作を変える
     final result = await showCupertinoBottomBar(context);
     if (result == 0) {
-      sortName = '日付順（昇順）';
+      sortName = '日付順（降順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
           .orderBy('date', descending: true)
@@ -81,7 +81,7 @@ class ListModel extends ChangeNotifier {
       final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
       this.muscleData = muscleData;
     } else if (result == 1) {
-      sortName = '日付順（降順）';
+      sortName = '日付順（昇順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
           .orderBy('date', descending: false)
@@ -89,7 +89,7 @@ class ListModel extends ChangeNotifier {
       final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
       this.muscleData = muscleData;
     } else if (result == 2) {
-      sortName = '体重順（昇順）';
+      sortName = '体重順（降順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
           .orderBy('weight', descending: true)
@@ -97,7 +97,7 @@ class ListModel extends ChangeNotifier {
       final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
       this.muscleData = muscleData;
     } else if (result == 3) {
-      sortName = '体重順（降順）';
+      sortName = '体重順（昇順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
           .orderBy('weight', descending: false)
