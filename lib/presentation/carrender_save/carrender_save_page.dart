@@ -15,68 +15,70 @@ class CarenderSavePage extends StatelessWidget {
         body: Container(
           padding: EdgeInsets.all(50.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  Text('日付を選択'),
-                  RaisedButton(
-                    // 日付を取得
-                    onPressed: () async {
-                      model.picked = await showDatePicker(
-                        context: context,
-                        initialDate: new DateTime.now(),
-                        firstDate: DateTime.now().add(Duration(days: -1095)),
-                        lastDate: DateTime.now().add(Duration(days: 1095)),
-                      );
-                      model.selectDate();
-                    },
-                    child: Text(model.viewDate),
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    decoration:
-                        InputDecoration(hintText: '体重を入力（Kg）', labelText: '体重'),
-                    onChanged: (number) {
-                      //テキストに体重入力
-                      model.addWeight = double.parse(number);
-                    },
-                  ),
-                  SizedBox(height: 30),
-                  SizedBox(
-                    height: 200,
-                    width: 150,
-                    child: InkWell(
-                      onTap: () async {
-                        //await model.showImagePicker();
-                        model.showBottomSheet(context);
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text('日付を選択'),
+                    RaisedButton(
+                      // 日付を取得
+                      onPressed: () async {
+                        model.picked = await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: DateTime.now().add(Duration(days: -1095)),
+                          lastDate: DateTime.now().add(Duration(days: 1095)),
+                        );
+                        model.selectDate();
                       },
-                      child: model.imageFile != null
-                          ? Image.file(model.imageFile)
-                          : Container(
-                              color: Colors.green,
-                              child: Center(
-                                child: Text(
-                                  '写真を選ぶ',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 30),
+                      child: Text(model.viewDate),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          hintText: '体重を入力（Kg）', labelText: '体重'),
+                      onChanged: (number) {
+                        //テキストに体重入力
+                        model.addWeight = double.parse(number);
+                      },
+                    ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      height: 200,
+                      width: 150,
+                      child: InkWell(
+                        onTap: () async {
+                          //await model.showImagePicker();
+                          model.showBottomSheet(context);
+                        },
+                        child: model.imageFile != null
+                            ? Image.file(model.imageFile)
+                            : Container(
+                                color: Colors.green,
+                                child: Center(
+                                  child: Text(
+                                    '写真を選ぶ',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 30),
+                                  ),
                                 ),
                               ),
-                            ),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  RaisedButton(
-                    onPressed: () async {
-                      //to do
-                      await addData(
-                          model, context, topModel); //入力した体重、日付をfirestoreに入れ
-                    },
-                    child: Text('保存する'),
-                  ),
-                ],
+                    SizedBox(height: 30),
+                    RaisedButton(
+                      onPressed: () async {
+                        //to do
+                        await addData(
+                            model, context, topModel); //入力した体重、日付をfirestoreに入れ
+                      },
+                      child: Text('保存する'),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
