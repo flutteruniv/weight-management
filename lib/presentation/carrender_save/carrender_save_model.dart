@@ -14,6 +14,7 @@ class CalenderSaveModel extends ChangeNotifier {
   double addBodyFatPercentage;
   DateTime addDate = DateTime.now(); //firestoreに入れる日付
   File imageFile;
+  List<MuscleData> muscleData = [];
 
   void selectDate() async {
     //datepickerでとった値を入れる
@@ -86,7 +87,6 @@ class CalenderSaveModel extends ChangeNotifier {
 
   Future addDataToFirebase() async {
     //firebaseに値を追加
-
     if (addWeight == null) {
       throw ('体重を入力してください');
     }
@@ -145,10 +145,15 @@ class CalenderSaveModel extends ChangeNotifier {
     if (addWeight == null) {
       throw ('体重を入力してください');
     }
+    final imageURL = await _uploadImage();
     final document = FirebaseFirestore.instance
         .collection('muscleData')
         .doc(muscleData.documentID);
-    await document.update({'weight': addWeight});
+    await document.update({
+      'weight': addWeight,
+      'bodyFatPercentage': addBodyFatPercentage,
+      'imageURL': imageURL
+    });
   }
 
   Future<String> _uploadImage() async {
@@ -160,5 +165,15 @@ class CalenderSaveModel extends ChangeNotifier {
         .onComplete;
     final String downloadURL = await snapshot.ref.getDownloadURL();
     return downloadURL;
+  }
+
+  Future fetchData() async {
+    final docs = await FirebaseFirestore.instance
+        .collection('muscleData')
+        .orderBy('date', descending: true)
+        .get();
+    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+    this.muscleData = muscleData;
+    notifyListeners();
   }
 }

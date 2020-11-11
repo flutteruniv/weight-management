@@ -54,6 +54,7 @@ class ListPage extends StatelessWidget {
                             subtitle: Text(muscleData.date),
                             trailing: IconButton(
                               icon: Icon(Icons.edit),
+                              onPressed: () {},
                             ),
                           ),
                   ),

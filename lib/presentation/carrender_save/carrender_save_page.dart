@@ -10,7 +10,7 @@ class CarenderSavePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
-      create: (_) => CalenderSaveModel(),
+      create: (_) => CalenderSaveModel()..fetchData(),
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.all(50.0),
@@ -81,10 +81,21 @@ class CarenderSavePage extends StatelessWidget {
                     RaisedButton(
                       onPressed: () async {
                         //to do
-                        await addData(
-                            model, context, topModel); //入力した体重、日付をfirestoreに入れ
+                        bool dateJudgement;
+                        for (int i = 0; i < model.muscleData.length; i++) {
+                          if (model.viewDate == model.muscleData[i].date) {
+                            dateJudgement = true;
+                            await updateData(
+                                model, context, model.muscleData[i], topModel);
+                            break;
+                          }
+                        }
+                        if (dateJudgement != true) {
+                          await addData(model, context, topModel);
+                        }
+                        await model.fetchData();
                       },
-                      child: Text('保存する'),
+                      child: Text('保存'),
                     ),
                   ],
                 ),
@@ -139,9 +150,10 @@ class CarenderSavePage extends StatelessWidget {
   }
 
   Future updateData(CalenderSaveModel model, BuildContext context,
-      MuscleData muscleData) async {
+      MuscleData muscleData, TopModel topModel) async {
     try {
       await model.upDateData(muscleData);
+      topModel.updatePageTrue();
 
       showDialog(
         context: context,
@@ -168,6 +180,7 @@ class CarenderSavePage extends StatelessWidget {
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    topModel.updatePageFalse();
                   },
                   child: Text('OK'))
             ],
