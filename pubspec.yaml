@@ -20,6 +20,8 @@ dependencies:
   http: ^0.12.1
   flutter_dotenv: ^2.1.0
   table_calendar: ^2.2.3
+  image_picker: ^0.6.7+12
+  firebase_storage: ^4.0.1
 
 
 dev_dependencies:
