@@ -23,7 +23,7 @@ class CarenderSavePage extends StatelessWidget {
                     RaisedButton(
                       // 日付を取得
                       onPressed: () async {
-                        model.picked = await showDatePicker(
+                        model.pickedDate = await showDatePicker(
                           context: context,
                           initialDate: new DateTime.now(),
                           firstDate: DateTime.now().add(Duration(days: -1095)),
@@ -39,7 +39,7 @@ class CarenderSavePage extends StatelessWidget {
                           hintText: '体重を入力（Kg）', labelText: '体重'),
                       onChanged: (number) {
                         //テキストに体重入力
-                        model.addWeight = double.parse(number);
+                        model.additionalWeight = double.parse(number);
                       },
                     ),
                     TextField(
@@ -48,7 +48,8 @@ class CarenderSavePage extends StatelessWidget {
                           hintText: '体脂肪率を入力（％）', labelText: '体脂肪率'),
                       onChanged: (number) {
                         //テキストに体重入力
-                        model.addBodyFatPercentage = double.parse(number);
+                        model.additionalBodyFatPercentage =
+                            double.parse(number);
                       },
                     ),
                     SizedBox(height: 30),
@@ -152,7 +153,7 @@ class CarenderSavePage extends StatelessWidget {
   Future updateData(CalenderSaveModel model, BuildContext context,
       MuscleData muscleData, TopModel topModel) async {
     try {
-      await model.upDateData(muscleData);
+      await model.updateData(muscleData);
       topModel.updatePageTrue();
 
       showDialog(

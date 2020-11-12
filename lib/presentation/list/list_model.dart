@@ -71,8 +71,8 @@ class ListModel extends ChangeNotifier {
 
   void showBottomSheet(BuildContext context) async {
     //ボトムシートから受け取った値によって操作を変える
-    final result = await showCupertinoBottomBar(context);
-    if (result == 0) {
+    final sortingType = await showCupertinoBottomBar(context);
+    if (sortingType == 0) {
       sortName = '日付順（降順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
@@ -80,7 +80,7 @@ class ListModel extends ChangeNotifier {
           .get();
       final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
       this.muscleData = muscleData;
-    } else if (result == 1) {
+    } else if (sortingType == 1) {
       sortName = '日付順（昇順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
@@ -88,7 +88,7 @@ class ListModel extends ChangeNotifier {
           .get();
       final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
       this.muscleData = muscleData;
-    } else if (result == 2) {
+    } else if (sortingType == 2) {
       sortName = '体重順（降順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')
@@ -96,7 +96,7 @@ class ListModel extends ChangeNotifier {
           .get();
       final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
       this.muscleData = muscleData;
-    } else if (result == 3) {
+    } else if (sortingType == 3) {
       sortName = '体重順（昇順）';
       final docs = await FirebaseFirestore.instance
           .collection('muscleData')

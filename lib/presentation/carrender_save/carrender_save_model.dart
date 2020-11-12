@@ -9,18 +9,18 @@ import 'package:weight_management/domain/muscle_data.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
-  DateTime picked; //datepickerで取得する日付
-  double addWeight; //textfieldで入力する値
-  double addBodyFatPercentage;
-  DateTime addDate = DateTime.now(); //firestoreに入れる日付
+  DateTime pickedDate; //datepickerで取得する日付
+  double additionalWeight; //textfieldで入力する値
+  double additionalBodyFatPercentage;
+  DateTime additionalDate = DateTime.now(); //firestoreに入れる日付
   File imageFile;
   List<MuscleData> muscleData = [];
 
   void selectDate() async {
     //datepickerでとった値を入れる
-    if (picked != null) {
-      viewDate = (DateFormat('yyyy/MM/dd')).format(picked);
-      addDate = picked;
+    if (pickedDate != null) {
+      viewDate = (DateFormat('yyyy/MM/dd')).format(pickedDate);
+      additionalDate = pickedDate;
     }
     notifyListeners();
   }
@@ -87,53 +87,53 @@ class CalenderSaveModel extends ChangeNotifier {
 
   Future addDataToFirebase() async {
     //firebaseに値を追加
-    if (addWeight == null) {
+    if (additionalWeight == null) {
       throw ('体重を入力してください');
     }
-    if (imageFile != null && addBodyFatPercentage != null) {
+    if (imageFile != null && additionalBodyFatPercentage != null) {
       //写真と体脂肪率があるとき
       final imageURL = await _uploadImage();
       await FirebaseFirestore.instance.collection('muscleData').add(
         {
-          'weight': addWeight,
-          'bodyFatPercentage': addBodyFatPercentage,
-          'date': Timestamp.fromDate(addDate),
+          'weight': additionalWeight,
+          'bodyFatPercentage': additionalBodyFatPercentage,
+          'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
         },
       );
-    } else if (imageFile == null && addBodyFatPercentage != null) {
+    } else if (imageFile == null && additionalBodyFatPercentage != null) {
       //写真なし＆体脂肪率あり
       //   final imageURL = await _uploadImage();
       await FirebaseFirestore.instance.collection('muscleData').add(
         {
-          'weight': addWeight,
-          'bodyFatPercentage': addBodyFatPercentage,
-          'date': Timestamp.fromDate(addDate),
+          'weight': additionalWeight,
+          'bodyFatPercentage': additionalBodyFatPercentage,
+          'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           //    'imageURL': imageURL,
         },
       );
-    } else if (imageFile != null && addBodyFatPercentage == null) {
+    } else if (imageFile != null && additionalBodyFatPercentage == null) {
       //写真アリ＆体脂肪率なし
       final imageURL = await _uploadImage();
       await FirebaseFirestore.instance.collection('muscleData').add(
         {
-          'weight': addWeight,
+          'weight': additionalWeight,
           //  'bodyFatPercentage': addBodyFatPercentage,
-          'date': Timestamp.fromDate(addDate),
+          'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
         },
       );
-    } else if (imageFile == null && addBodyFatPercentage == null) {
+    } else if (imageFile == null && additionalBodyFatPercentage == null) {
       //写真なし＆体脂肪率なし
       //   final imageURL = await _uploadImage();
       await FirebaseFirestore.instance.collection('muscleData').add(
         {
-          'weight': addWeight,
+          'weight': additionalWeight,
           //  'bodyFatPercentage': addBodyFatPercentage,
-          'date': Timestamp.fromDate(addDate),
+          'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           //    'imageURL': imageURL,
         },
@@ -141,8 +141,8 @@ class CalenderSaveModel extends ChangeNotifier {
     }
   }
 
-  Future upDateData(MuscleData muscleData) async {
-    if (addWeight == null) {
+  Future updateData(MuscleData muscleData) async {
+    if (additionalWeight == null) {
       throw ('体重を入力してください');
     }
     final imageURL = await _uploadImage();
@@ -150,8 +150,8 @@ class CalenderSaveModel extends ChangeNotifier {
         .collection('muscleData')
         .doc(muscleData.documentID);
     await document.update({
-      'weight': addWeight,
-      'bodyFatPercentage': addBodyFatPercentage,
+      'weight': additionalWeight,
+      'bodyFatPercentage': additionalBodyFatPercentage,
       'imageURL': imageURL
     });
   }
@@ -160,7 +160,7 @@ class CalenderSaveModel extends ChangeNotifier {
     final storage = FirebaseStorage.instance;
     StorageTaskSnapshot snapshot = await storage
         .ref()
-        .child("muscle/$addWeight")
+        .child("muscle/$additionalWeight")
         .putFile(imageFile)
         .onComplete;
     final String downloadURL = await snapshot.ref.getDownloadURL();
