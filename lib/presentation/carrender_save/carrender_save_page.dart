@@ -13,28 +13,40 @@ class CarenderSavePage extends StatelessWidget {
       create: (_) => CalenderSaveModel()..fetchDataJudgeDate(),
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(50.0),
+          padding: EdgeInsets.all(30.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
             if (model.loadingData == true) {
               return SingleChildScrollView(
                 child: Center(
                   child: Column(
                     children: <Widget>[
-                      Text('日付を選択'),
-                      RaisedButton(
-                        // 日付を取得
-                        onPressed: () async {
-                          model.pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: new DateTime.now(),
-                            firstDate:
-                                DateTime.now().add(Duration(days: -1095)),
-                            lastDate: DateTime.now().add(Duration(days: 1095)),
-                          );
-                          model.selectDate();
-                          model.judgeDate();
-                        },
-                        child: Text(model.viewDate),
+                      ButtonTheme(
+                        minWidth: 250,
+                        height: 50,
+                        child: RaisedButton.icon(
+                          // 日付を取得
+                          icon: Icon(Icons.arrow_drop_down),
+                          onPressed: () async {
+                            model.pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: new DateTime.now(),
+                              firstDate:
+                                  DateTime.now().add(Duration(days: -1095)),
+                              lastDate:
+                                  DateTime.now().add(Duration(days: 1095)),
+                            );
+                            model.selectDate();
+                            model.judgeDate();
+                          },
+                          label: Text(
+                            model.viewDate,
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                       TextField(
                         keyboardType: TextInputType.number,
@@ -44,21 +56,27 @@ class CarenderSavePage extends StatelessWidget {
                           //テキストに体重入力
                           model.additionalWeight = double.parse(number);
                         },
+                        style: TextStyle(fontSize: 20),
                       ),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            hintText: '体脂肪率を入力（％）', labelText: '体脂肪率'),
-                        onChanged: (number) {
-                          //テキストに体重入力
-                          model.additionalBodyFatPercentage =
-                              double.parse(number);
-                        },
+                      Container(
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: '体脂肪率を入力（％）',
+                            labelText: '体脂肪率',
+                          ),
+                          onChanged: (number) {
+                            //テキストに体重入力
+                            model.additionalBodyFatPercentage =
+                                double.parse(number);
+                          },
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 50),
                       SizedBox(
-                        height: 200,
-                        width: 150,
+                        height: 230,
+                        width: 180,
                         child: InkWell(
                           onTap: () async {
                             //await model.showImagePicker();
@@ -67,7 +85,7 @@ class CarenderSavePage extends StatelessWidget {
                           child: model.imageFile != null
                               ? Image.file(model.imageFile)
                               : Container(
-                                  color: Colors.green,
+                                  color: Colors.blue,
                                   child: Center(
                                     child: Text(
                                       '写真を選ぶ',
@@ -81,22 +99,46 @@ class CarenderSavePage extends StatelessWidget {
                                 ),
                         ),
                       ),
-                      SizedBox(height: 30),
-                      RaisedButton(
-                        onPressed: () async {
-                          //to do
-                          if (model.sameDate == true) {
-                            //同じ日付あるなら更新
-                            await updateData(model, context,
-                                model.sameDateMuscleData, topModel);
-                          } else if (model.sameDate != true) {
-                            //同じ日付なら保存
-                            await addData(model, context, topModel);
-                          }
-                          await model.fetchData();
-                          await model.judgeDate();
-                        },
-                        child: model.sameDate != true ? Text('保存') : Text('更新'),
+                      SizedBox(height: 80),
+                      ButtonTheme(
+                        minWidth: 20000,
+                        height: 50,
+                        child: RaisedButton(
+                          onPressed: () async {
+                            //to do
+                            if (model.sameDate == true) {
+                              //同じ日付あるなら更新
+                              await updateData(model, context,
+                                  model.sameDateMuscleData, topModel);
+                            } else if (model.sameDate != true) {
+                              //同じ日付なら保存
+                              await addData(model, context, topModel);
+                            }
+                            await model.fetchData();
+                            await model.judgeDate();
+                          },
+                          child: model.sameDate != true
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '保存',
+                                    style: TextStyle(
+                                        fontSize: 30, color: Colors.white),
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '更新',
+                                    style: TextStyle(
+                                        fontSize: 30, color: Colors.white),
+                                  ),
+                                ),
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                       ),
                     ],
                   ),
