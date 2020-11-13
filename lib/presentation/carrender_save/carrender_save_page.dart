@@ -30,6 +30,7 @@ class CarenderSavePage extends StatelessWidget {
                           lastDate: DateTime.now().add(Duration(days: 1095)),
                         );
                         model.selectDate();
+                        model.judgeDate();
                       },
                       child: Text(model.viewDate),
                     ),
@@ -82,21 +83,21 @@ class CarenderSavePage extends StatelessWidget {
                     RaisedButton(
                       onPressed: () async {
                         //to do
-                        bool dateJudgement;
                         for (int i = 0; i < model.muscleData.length; i++) {
                           if (model.viewDate == model.muscleData[i].date) {
-                            dateJudgement = true;
+                            model.dateJudgement = true;
                             await updateData(
                                 model, context, model.muscleData[i], topModel);
                             break;
                           }
                         }
-                        if (dateJudgement != true) {
+                        if (model.dateJudgement != true) {
                           await addData(model, context, topModel);
                         }
                         await model.fetchData();
                       },
-                      child: Text('保存'),
+                      child:
+                          model.dateJudgement != true ? Text('保存') : Text('更新'),
                     ),
                   ],
                 ),

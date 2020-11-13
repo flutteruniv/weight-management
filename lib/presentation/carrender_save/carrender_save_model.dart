@@ -15,6 +15,19 @@ class CalenderSaveModel extends ChangeNotifier {
   DateTime additionalDate = DateTime.now(); //firestoreに入れる日付
   File imageFile;
   List<MuscleData> muscleData = [];
+  bool dateJudgement = false;
+
+  Future judgeDate() {
+    for (int i = 0; i < muscleData.length; i++) {
+      if (viewDate == muscleData[i].date) {
+        dateJudgement = true;
+        break;
+      } else {
+        dateJudgement = false;
+      }
+    }
+    notifyListeners();
+  }
 
   void selectDate() async {
     //datepickerでとった値を入れる
