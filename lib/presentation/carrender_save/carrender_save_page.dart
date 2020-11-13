@@ -9,12 +9,35 @@ class CarenderSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topModel = Provider.of<TopModel>(context);
+    TextEditingController weightTextController, fatTextController;
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel()..fetchDataJudgeDate(),
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.all(30.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
+            if (model.sameDate == true) {
+              if (model.sameDateMuscleData.bodyFatPercentage != null) {
+                weightTextController = TextEditingController(
+                    text: model.sameDateMuscleData.weight.toString());
+                fatTextController = TextEditingController(
+                    text:
+                        model.sameDateMuscleData.bodyFatPercentage.toString());
+                model.additionalWeight =
+                    double.parse(weightTextController.text);
+                model.additionalBodyFatPercentage =
+                    double.parse(fatTextController.text);
+              } else if (model.sameDateMuscleData.bodyFatPercentage == null) {
+                weightTextController = TextEditingController(
+                    text: model.sameDateMuscleData.weight.toString());
+                fatTextController = TextEditingController(text: '');
+                model.additionalWeight =
+                    double.parse(weightTextController.text);
+              }
+            } else if (model.sameDate == false) {
+              weightTextController = TextEditingController(text: '');
+              fatTextController = TextEditingController(text: '');
+            }
             if (model.loadingData == true) {
               return SingleChildScrollView(
                 child: Center(
@@ -49,9 +72,10 @@ class CarenderSavePage extends StatelessWidget {
                         ),
                       ),
                       TextField(
+                        controller: weightTextController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                            hintText: '体重を入力（Kg）', labelText: '体重'),
+                            hintText: '体重を入力（Kg）', labelText: '体重(Kg)'),
                         onChanged: (number) {
                           //テキストに体重入力
                           model.additionalWeight = double.parse(number);
@@ -60,10 +84,11 @@ class CarenderSavePage extends StatelessWidget {
                       ),
                       Container(
                         child: TextField(
+                          controller: fatTextController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: '体脂肪率を入力（％）',
-                            labelText: '体脂肪率',
+                            labelText: '体脂肪率(%)',
                           ),
                           onChanged: (number) {
                             //テキストに体重入力
@@ -123,7 +148,7 @@ class CarenderSavePage extends StatelessWidget {
                                   child: Text(
                                     '保存',
                                     style: TextStyle(
-                                        fontSize: 30, color: Colors.white),
+                                        fontSize: 20, color: Colors.white),
                                   ),
                                 )
                               : Padding(
@@ -131,7 +156,7 @@ class CarenderSavePage extends StatelessWidget {
                                   child: Text(
                                     '更新',
                                     style: TextStyle(
-                                        fontSize: 30, color: Colors.white),
+                                        fontSize: 20, color: Colors.white),
                                   ),
                                 ),
                           color: Colors.blue,
