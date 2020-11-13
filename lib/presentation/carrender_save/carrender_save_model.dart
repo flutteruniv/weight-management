@@ -8,22 +8,59 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
-  String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
+  String viewDate; //表示する日付
   DateTime pickedDate; //datepickerで取得する日付
   double additionalWeight; //textfieldで入力する値
   double additionalBodyFatPercentage;
   DateTime additionalDate = DateTime.now(); //firestoreに入れる日付
   File imageFile;
   List<MuscleData> muscleData = [];
-  bool dateJudgement = false;
+  bool sameDate;
+  MuscleData sameDateMuscleData;
+  bool loadingData = false;
 
-  Future judgeDate() {
+  Future fetchDataJudgeDate() async {
+    final docs = await FirebaseFirestore.instance
+        .collection('muscleData')
+        .orderBy('date', descending: true)
+        .get();
+    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+    this.muscleData = muscleData;
+
+    viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
     for (int i = 0; i < muscleData.length; i++) {
       if (viewDate == muscleData[i].date) {
-        dateJudgement = true;
+        //更新
+        sameDate = true;
+        sameDateMuscleData = muscleData[i];
         break;
       } else {
-        dateJudgement = false;
+        //保存
+        sameDate = false;
+      }
+    }
+    loadingData = true;
+  }
+
+  Future fetchData() async {
+    final docs = await FirebaseFirestore.instance
+        .collection('muscleData')
+        .orderBy('date', descending: true)
+        .get();
+    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+    this.muscleData = muscleData;
+  }
+
+  Future judgeDate() async {
+    for (int i = 0; i < muscleData.length; i++) {
+      if (viewDate == muscleData[i].date) {
+        //更新
+        sameDate = true;
+        sameDateMuscleData = muscleData[i];
+        break;
+      } else {
+        //保存
+        sameDate = false;
       }
     }
     notifyListeners();
@@ -158,15 +195,39 @@ class CalenderSaveModel extends ChangeNotifier {
     if (additionalWeight == null) {
       throw ('体重を入力してください');
     }
-    final imageURL = await _uploadImage();
-    final document = FirebaseFirestore.instance
-        .collection('muscleData')
-        .doc(muscleData.documentID);
-    await document.update({
-      'weight': additionalWeight,
-      'bodyFatPercentage': additionalBodyFatPercentage,
-      'imageURL': imageURL
-    });
+    if (imageFile != null && additionalBodyFatPercentage != null) {
+      //写真と体脂肪率があるとき
+      final imageURL = await _uploadImage();
+      final document = FirebaseFirestore.instance
+          .collection('muscleData')
+          .doc(muscleData.documentID);
+      await document.update({
+        'weight': additionalWeight,
+        'bodyFatPercentage': additionalBodyFatPercentage,
+        'imageURL': imageURL,
+      });
+    } else if (imageFile == null && additionalBodyFatPercentage != null) {
+      final document = FirebaseFirestore.instance
+          .collection('muscleData')
+          .doc(muscleData.documentID);
+      await document.update({
+        'weight': additionalWeight,
+        'bodyFatPercentage': additionalBodyFatPercentage,
+      });
+    } else if (imageFile != null && additionalBodyFatPercentage == null) {
+      final imageURL = await _uploadImage();
+      final document = FirebaseFirestore.instance
+          .collection('muscleData')
+          .doc(muscleData.documentID);
+      await document.update({'weight': additionalWeight, 'imageURL': imageURL});
+    } else if (imageFile == null && additionalBodyFatPercentage == null) {
+      final document = FirebaseFirestore.instance
+          .collection('muscleData')
+          .doc(muscleData.documentID);
+      await document.update({
+        'weight': additionalWeight,
+      });
+    }
   }
 
   Future<String> _uploadImage() async {
@@ -178,15 +239,5 @@ class CalenderSaveModel extends ChangeNotifier {
         .onComplete;
     final String downloadURL = await snapshot.ref.getDownloadURL();
     return downloadURL;
-  }
-
-  Future fetchData() async {
-    final docs = await FirebaseFirestore.instance
-        .collection('muscleData')
-        .orderBy('date', descending: true)
-        .get();
-    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-    this.muscleData = muscleData;
-    notifyListeners();
   }
 }
