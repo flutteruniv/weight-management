@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/list/list_model.dart';
 import 'package:weight_management/presentation/main/main_model.dart';
 
@@ -37,6 +38,26 @@ class ListPage extends StatelessWidget {
                             subtitle: Text(muscleData.date),
                             trailing: IconButton(
                               icon: Icon(Icons.edit),
+                              onPressed: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('削除しますか？'),
+                                      actions: [
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () async {
+                                            Navigator.of(context).pop();
+                                            await deleteList(
+                                                context, model, muscleData);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           )
                         : ListTile(
@@ -54,7 +75,26 @@ class ListPage extends StatelessWidget {
                             subtitle: Text(muscleData.date),
                             trailing: IconButton(
                               icon: Icon(Icons.edit),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('削除しますか？'),
+                                      actions: [
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () async {
+                                            Navigator.of(context).pop();
+                                            await deleteList(
+                                                context, model, muscleData);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           ),
                   ),
@@ -76,6 +116,39 @@ class ListPage extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Future deleteList(
+      BuildContext context, ListModel model, MuscleData muscleData) async {
+    try {
+      await model.deleteList(muscleData);
+      await model.fetchData();
+    } catch (e) {
+      await _showDialog(context, e.toString());
+      print(e.toString());
+    }
+  }
+
+  Future _showDialog(
+    BuildContext context,
+    String title,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
     );
   }
 }
