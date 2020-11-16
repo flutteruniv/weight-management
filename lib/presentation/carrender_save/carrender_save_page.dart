@@ -67,6 +67,7 @@ class CarenderSavePage extends StatelessWidget {
                             );
                             model.selectDate();
                             model.judgeDate();
+                            if (model.sameDate != true) model.imageFile = null;
                           },
                           label: Text(
                             model.viewDate,

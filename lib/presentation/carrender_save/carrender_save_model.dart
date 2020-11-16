@@ -126,11 +126,13 @@ class CalenderSaveModel extends ChangeNotifier {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.camera);
       imagePath = pickedFile.path;
+      if (sameDate == true) sameDateMuscleData.imagePath = imagePath;
       imageFile = File(imagePath);
     } else if (result == 1) {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
       imagePath = pickedFile.path;
+      if (sameDate == true) sameDateMuscleData.imagePath = imagePath;
       imageFile = File(imagePath);
     }
     notifyListeners();
