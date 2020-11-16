@@ -69,6 +69,13 @@ class ListModel extends ChangeNotifier {
         });
   }
 
+  Future deleteList(MuscleData muscleData) async {
+    await FirebaseFirestore.instance
+        .collection('muscleData')
+        .doc(muscleData.documentID)
+        .delete();
+  }
+
   void showBottomSheet(BuildContext context) async {
     //ボトムシートから受け取った値によって操作を変える
     final sortingType = await showCupertinoBottomBar(context);
