@@ -17,6 +17,13 @@ class ListModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future deleteList(MuscleData muscleData) async {
+    await FirebaseFirestore.instance
+        .collection('muscleData')
+        .doc(muscleData.documentID)
+        .delete();
+  }
+
   Future<int> showCupertinoBottomBar(BuildContext context) {
     //選択するためのボトムシートを表示
     return showCupertinoModalPopup<int>(

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,10 @@ class CarenderSavePage extends StatelessWidget {
         body: Container(
           padding: EdgeInsets.all(30.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
+            if (topModel.savePageUpdate == true) {
+              model.fetchData();
+            }
+
             if (model.sameDate == true) {
               if (model.sameDateMuscleData.bodyFatPercentage != null) {
                 weightTextController = TextEditingController(
@@ -37,6 +42,8 @@ class CarenderSavePage extends StatelessWidget {
             } else if (model.sameDate == false) {
               weightTextController = TextEditingController(text: '');
               fatTextController = TextEditingController(text: '');
+              model.additionalWeight = null;
+              model.additionalBodyFatPercentage = null;
             }
             if (model.loadingData == true) {
               return SingleChildScrollView(
@@ -79,6 +86,8 @@ class CarenderSavePage extends StatelessWidget {
                         onChanged: (number) {
                           //テキストに体重入力
                           model.additionalWeight = double.parse(number);
+                          weightTextController = TextEditingController(
+                              text: double.parse(number).toString());
                         },
                         style: TextStyle(fontSize: 20),
                       ),
@@ -94,6 +103,8 @@ class CarenderSavePage extends StatelessWidget {
                             //テキストに体重入力
                             model.additionalBodyFatPercentage =
                                 double.parse(number);
+                            fatTextController = TextEditingController(
+                                text: double.parse(number).toString());
                           },
                           style: TextStyle(fontSize: 20),
                         ),
@@ -103,26 +114,41 @@ class CarenderSavePage extends StatelessWidget {
                         height: 230,
                         width: 180,
                         child: InkWell(
-                          onTap: () async {
-                            //await model.showImagePicker();
-                            model.showBottomSheet(context);
-                          },
-                          child: model.imageFile != null
-                              ? Image.file(model.imageFile)
-                              : Container(
-                                  color: Colors.blue,
-                                  child: Center(
-                                    child: Text(
-                                      '写真を選ぶ',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 30),
-                                    ),
-                                  ),
-                                ),
-                        ),
+                            onTap: () async {
+                              //await model.showImagePicker();
+                              model.showBottomSheet(context);
+                            },
+                            child: model.sameDate == true
+                                ? model.sameDateMuscleData.imagePath != null
+                                    ? Image.file(model.imageFile)
+                                    : Container(
+                                        color: Colors.blue,
+                                        child: Center(
+                                          child: Text(
+                                            '写真を選ぶ',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 30),
+                                          ),
+                                        ),
+                                      )
+                                : model.imageFile != null
+                                    ? Image.file(model.imageFile)
+                                    : Container(
+                                        color: Colors.blue,
+                                        child: Center(
+                                          child: Text(
+                                            '写真を選ぶ',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 30),
+                                          ),
+                                        ),
+                                      )),
                       ),
                       SizedBox(height: 80),
                       ButtonTheme(

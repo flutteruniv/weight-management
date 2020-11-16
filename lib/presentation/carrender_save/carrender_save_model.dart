@@ -18,6 +18,7 @@ class CalenderSaveModel extends ChangeNotifier {
   bool sameDate;
   MuscleData sameDateMuscleData;
   bool loadingData = false;
+  String imagePath;
 
   Future fetchDataJudgeDate() async {
     final docs = await FirebaseFirestore.instance
@@ -27,19 +28,23 @@ class CalenderSaveModel extends ChangeNotifier {
     final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
     this.muscleData = muscleData;
 
+    loadingData = true;
+
     viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
     for (int i = 0; i < muscleData.length; i++) {
       if (viewDate == muscleData[i].date) {
         //更新
         sameDate = true;
         sameDateMuscleData = muscleData[i];
+        if (sameDateMuscleData.imagePath != null)
+          imageFile = File(sameDateMuscleData.imagePath);
         break;
       } else {
         //保存
         sameDate = false;
       }
     }
-    loadingData = true;
+    notifyListeners();
   }
 
   Future fetchData() async {
@@ -57,6 +62,8 @@ class CalenderSaveModel extends ChangeNotifier {
         //更新
         sameDate = true;
         sameDateMuscleData = muscleData[i];
+        if (sameDateMuscleData.imagePath != null)
+          imageFile = File(sameDateMuscleData.imagePath);
         break;
       } else {
         //保存
@@ -118,23 +125,25 @@ class CalenderSaveModel extends ChangeNotifier {
     if (result == 0) {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.camera);
-      imageFile = File(pickedFile.path);
+      imagePath = pickedFile.path;
+      imageFile = File(imagePath);
     } else if (result == 1) {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
-      imageFile = File(pickedFile.path);
+      imagePath = pickedFile.path;
+      imageFile = File(imagePath);
     }
     notifyListeners();
   }
 
   //写真をカメラロールから選ぶ
-  Future showImagePicker() async {
+  /* Future showImagePicker() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     imageFile = File(pickedFile.path);
     notifyListeners();
   }
-
+*/
   Future addDataToFirebase() async {
     //firebaseに値を追加
     if (additionalWeight == null) {
@@ -150,6 +159,7 @@ class CalenderSaveModel extends ChangeNotifier {
           'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
+          'imagePath': imagePath,
         },
       );
     } else if (imageFile == null && additionalBodyFatPercentage != null) {
@@ -174,6 +184,7 @@ class CalenderSaveModel extends ChangeNotifier {
           'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
+          'imagePath': imagePath,
         },
       );
     } else if (imageFile == null && additionalBodyFatPercentage == null) {
@@ -205,6 +216,7 @@ class CalenderSaveModel extends ChangeNotifier {
         'weight': additionalWeight,
         'bodyFatPercentage': additionalBodyFatPercentage,
         'imageURL': imageURL,
+        'imagePath': imagePath,
       });
     } else if (imageFile == null && additionalBodyFatPercentage != null) {
       final document = FirebaseFirestore.instance
@@ -219,7 +231,11 @@ class CalenderSaveModel extends ChangeNotifier {
       final document = FirebaseFirestore.instance
           .collection('muscleData')
           .doc(muscleData.documentID);
-      await document.update({'weight': additionalWeight, 'imageURL': imageURL});
+      await document.update({
+        'weight': additionalWeight,
+        'imageURL': imageURL,
+        'imagePath': imagePath,
+      });
     } else if (imageFile == null && additionalBodyFatPercentage == null) {
       final document = FirebaseFirestore.instance
           .collection('muscleData')
