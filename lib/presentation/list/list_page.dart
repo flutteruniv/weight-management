@@ -26,87 +26,108 @@ class ListPage extends StatelessWidget {
                         bottom: BorderSide(color: Colors.black38, width: 1),
                       ),
                     ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        splashColor: Color(0x30f010f0),
-                        onTap: () => print('tap!'),
-                        child: muscleData.imageURL != null //写真、体脂肪率あるなしで条件分岐
-                            ? ListTile(
-                                leading: Image.network(muscleData.imageURL),
-                                title: muscleData.bodyFatPercentage != null
-                                    ? Text(muscleData.weight.toString() +
-                                        ' kg       ' +
-                                        muscleData.bodyFatPercentage
-                                            .toString() +
-                                        ' %')
-                                    : Text(
-                                        muscleData.weight.toString() + ' kg'),
-                                subtitle: Text(muscleData.date),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () async {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text('削除しますか？'),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text('OK'),
-                                              onPressed: () async {
-                                                Navigator.of(context).pop();
-                                                await deleteList(
-                                                    context, model, muscleData);
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              content: muscleData.bodyFatPercentage != null
+                                  ? Text(muscleData.weight.toString() +
+                                      ' kg       ' +
+                                      muscleData.bodyFatPercentage.toString() +
+                                      ' %')
+                                  : Text(muscleData.weight.toString() + ' kg'),
+                              actions: <Widget>[
+                                // ボタン領域
+                                FlatButton(
+                                  child: Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
                                   },
                                 ),
-                              )
-                            : ListTile(
-                                leading: Container(
-                                  height: 100,
-                                  width: 40,
-                                  color: Colors.grey,
-                                ),
-                                title: muscleData.bodyFatPercentage != null
-                                    ? Text(muscleData.weight.toString() +
-                                        ' kg       ' +
-                                        muscleData.bodyFatPercentage
-                                            .toString() +
-                                        ' %')
-                                    : Text(
-                                        muscleData.weight.toString() + ' kg'),
-                                subtitle: Text(muscleData.date),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () async {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text('削除しますか？'),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text('OK'),
-                                              onPressed: () async {
-                                                Navigator.of(context).pop();
-                                                await deleteList(
-                                                    context, model, muscleData);
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                FlatButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
                                   },
                                 ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: muscleData.imageURL != null //写真、体脂肪率あるなしで条件分岐
+                          ? ListTile(
+                              leading: Image.network(muscleData.imageURL),
+                              title: muscleData.bodyFatPercentage != null
+                                  ? Text(muscleData.weight.toString() +
+                                      ' kg       ' +
+                                      muscleData.bodyFatPercentage.toString() +
+                                      ' %')
+                                  : Text(muscleData.weight.toString() + ' kg'),
+                              subtitle: Text(muscleData.date),
+                              trailing: IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('削除しますか？'),
+                                        actions: [
+                                          FlatButton(
+                                            child: Text('OK'),
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                              await deleteList(
+                                                  context, model, muscleData);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
                               ),
-                      ),
+                            )
+                          : ListTile(
+                              leading: Container(
+                                height: 100,
+                                width: 40,
+                                color: Colors.grey,
+                              ),
+                              title: muscleData.bodyFatPercentage != null
+                                  ? Text(muscleData.weight.toString() +
+                                      ' kg       ' +
+                                      muscleData.bodyFatPercentage.toString() +
+                                      ' %')
+                                  : Text(muscleData.weight.toString() + ' kg'),
+                              subtitle: Text(muscleData.date),
+                              trailing: IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('削除しますか？'),
+                                        actions: [
+                                          FlatButton(
+                                            child: Text('OK'),
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                              await deleteList(
+                                                  context, model, muscleData);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
                     ),
                   ),
                 )
