@@ -5,7 +5,6 @@ import 'package:weight_management/presentation/carrender_save/carrender_save_pag
 import 'package:weight_management/presentation/list/list_page.dart';
 import 'package:weight_management/presentation/main/main_model.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_management/seni.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,7 +77,7 @@ class TopPage extends StatelessWidget {
     return Stack(
       children: <Widget>[
         _tabPage(currentIndex, 0, CarenderSavePage()),
-        _tabPage(currentIndex, 1, seni()),
+        _tabPage(currentIndex, 1, GraphPage()),
         _tabPage(currentIndex, 2, GraphPage()),
         _tabPage(currentIndex, 3, ListPage()),
       ],

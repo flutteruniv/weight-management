@@ -21,7 +21,7 @@ class CalenderSaveModel extends ChangeNotifier {
   String imagePath;
   TextEditingController weightTextController, fatTextController;
 
-  Future fetchDataJudgeDate() async {
+  Future initData() async {
     final docs = await FirebaseFirestore.instance
         .collection('muscleData')
         .orderBy('date', descending: true)
@@ -122,8 +122,9 @@ class CalenderSaveModel extends ChangeNotifier {
       if (viewDate == muscleData[i].date) {
         //更新
         sameDate = true;
-        sameDateMuscleData = muscleData[i];
+        sameDateMuscleData = muscleData[i]; //日付が同じならそのmuscledataを取得
         if (sameDateMuscleData.imagePath != null) {
+          //写真があれば取得
           imageFile = File(sameDateMuscleData.imagePath);
           imagePath = sameDateMuscleData.imagePath;
         }

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,7 @@ class CarenderSavePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
-      create: (_) => CalenderSaveModel()..fetchDataJudgeDate(),
+      create: (_) => CalenderSaveModel()..initData(),
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.all(30.0),
@@ -41,8 +40,8 @@ class CarenderSavePage extends StatelessWidget {
                                   DateTime.now().add(Duration(days: 1095)),
                             );
                             model.selectDate();
-                            await model.judgeDate();
-                            await model.setText(); //日付を取得した時に同じ日付があるか判断
+                            await model.judgeDate(); //日付を取得した時に同じ日付があるか判断
+                            await model.setText();
                             if (model.sameDate != true) model.imageFile = null;
                           },
                           label: Text(
@@ -68,23 +67,21 @@ class CarenderSavePage extends StatelessWidget {
                         },
                         style: TextStyle(fontSize: 20),
                       ),
-                      Container(
-                        child: TextField(
-                          controller: model.fatTextController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: '体脂肪率を入力（％）',
-                            labelText: '体脂肪率(%)',
-                          ),
-                          onChanged: (number) {
-                            //テキストに体重入力
-                            model.additionalBodyFatPercentage =
-                                double.parse(number);
-                            model.fatTextController = TextEditingController(
-                                text: double.parse(number).toString());
-                          },
-                          style: TextStyle(fontSize: 20),
+                      TextField(
+                        controller: model.fatTextController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: '体脂肪率を入力（％）',
+                          labelText: '体脂肪率(%)',
                         ),
+                        onChanged: (number) {
+                          //テキストに体重入力
+                          model.additionalBodyFatPercentage =
+                              double.parse(number);
+                          model.fatTextController = TextEditingController(
+                              text: double.parse(number).toString());
+                        },
+                        style: TextStyle(fontSize: 20),
                       ),
                       SizedBox(height: 50),
                       SizedBox(
@@ -145,6 +142,7 @@ class CarenderSavePage extends StatelessWidget {
                             }
                             await model.fetchData();
                             await model.judgeDate();
+                            await model.setText();
                           },
                           child: model.sameDate != true
                               ? Padding(
