@@ -10,7 +10,6 @@ class CarenderSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topModel = Provider.of<TopModel>(context);
-    TextEditingController weightTextController, fatTextController;
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel()..fetchDataJudgeDate(),
       child: Scaffold(
@@ -20,32 +19,8 @@ class CarenderSavePage extends StatelessWidget {
             if (topModel.savePageUpdate == true) {
               model.fetchData();
             }
-
-            if (model.sameDate == true) {
-              if (model.sameDateMuscleData.bodyFatPercentage != null) {
-                weightTextController = TextEditingController(
-                    text: model.sameDateMuscleData.weight.toString());
-                fatTextController = TextEditingController(
-                    text:
-                        model.sameDateMuscleData.bodyFatPercentage.toString());
-                model.additionalWeight =
-                    double.parse(weightTextController.text);
-                model.additionalBodyFatPercentage =
-                    double.parse(fatTextController.text);
-              } else if (model.sameDateMuscleData.bodyFatPercentage == null) {
-                weightTextController = TextEditingController(
-                    text: model.sameDateMuscleData.weight.toString());
-                fatTextController = TextEditingController(text: '');
-                model.additionalWeight =
-                    double.parse(weightTextController.text);
-              }
-            } else if (model.sameDate == false) {
-              weightTextController = TextEditingController(text: '');
-              fatTextController = TextEditingController(text: '');
-              model.additionalWeight = null;
-              model.additionalBodyFatPercentage = null;
-            }
             if (model.loadingData == true) {
+              //データローディングが終わればこっちを表示
               return SingleChildScrollView(
                 child: Center(
                   child: Column(
@@ -66,7 +41,8 @@ class CarenderSavePage extends StatelessWidget {
                                   DateTime.now().add(Duration(days: 1095)),
                             );
                             model.selectDate();
-                            model.judgeDate();
+                            await model.judgeDate();
+                            await model.setText(); //日付を取得した時に同じ日付があるか判断
                             if (model.sameDate != true) model.imageFile = null;
                           },
                           label: Text(
@@ -80,21 +56,21 @@ class CarenderSavePage extends StatelessWidget {
                         ),
                       ),
                       TextField(
-                        controller: weightTextController,
+                        controller: model.weightTextController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             hintText: '体重を入力（Kg）', labelText: '体重(Kg)'),
                         onChanged: (number) {
                           //テキストに体重入力
                           model.additionalWeight = double.parse(number);
-                          weightTextController = TextEditingController(
+                          model.weightTextController = TextEditingController(
                               text: double.parse(number).toString());
                         },
                         style: TextStyle(fontSize: 20),
                       ),
                       Container(
                         child: TextField(
-                          controller: fatTextController,
+                          controller: model.fatTextController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: '体脂肪率を入力（％）',
@@ -104,7 +80,7 @@ class CarenderSavePage extends StatelessWidget {
                             //テキストに体重入力
                             model.additionalBodyFatPercentage =
                                 double.parse(number);
-                            fatTextController = TextEditingController(
+                            model.fatTextController = TextEditingController(
                                 text: double.parse(number).toString());
                           },
                           style: TextStyle(fontSize: 20),
@@ -115,41 +91,42 @@ class CarenderSavePage extends StatelessWidget {
                         height: 230,
                         width: 180,
                         child: InkWell(
-                            onTap: () async {
-                              //await model.showImagePicker();
-                              model.showBottomSheet(context);
-                            },
-                            child: model.sameDate == true
-                                ? model.sameDateMuscleData.imagePath != null
-                                    ? Image.file(model.imageFile)
-                                    : Container(
-                                        color: Colors.blue,
-                                        child: Center(
-                                          child: Text(
-                                            '写真を選ぶ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: 30),
-                                          ),
+                          onTap: () async {
+                            model.showBottomSheet(context);
+                          },
+                          child: model.sameDate == true //同じ日付がある
+                              ? model.imageFile != null //写真のパスがある
+                                  ? Image.file(model.imageFile) //写真を表示
+                                  : Container(
+                                      color: Colors.blue,
+                                      child: Center(
+                                        child: Text(
+                                          '写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 30),
                                         ),
-                                      )
-                                : model.imageFile != null
-                                    ? Image.file(model.imageFile)
-                                    : Container(
-                                        color: Colors.blue,
-                                        child: Center(
-                                          child: Text(
-                                            '写真を選ぶ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: 30),
-                                          ),
+                                      ),
+                                    )
+                              //同じ日付がないとき
+                              : model.imageFile != null //写真があるとき
+                                  ? Image.file(model.imageFile)
+                                  : Container(
+                                      color: Colors.blue,
+                                      child: Center(
+                                        child: Text(
+                                          '写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 30),
                                         ),
-                                      )),
+                                      ),
+                                    ),
+                        ),
                       ),
                       SizedBox(height: 80),
                       ButtonTheme(
@@ -163,7 +140,7 @@ class CarenderSavePage extends StatelessWidget {
                               await updateData(model, context,
                                   model.sameDateMuscleData, topModel);
                             } else if (model.sameDate != true) {
-                              //同じ日付なら保存
+                              //同じ日付がないなら保存
                               await addData(model, context, topModel);
                             }
                             await model.fetchData();

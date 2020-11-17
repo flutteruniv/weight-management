@@ -19,6 +19,7 @@ class CalenderSaveModel extends ChangeNotifier {
   MuscleData sameDateMuscleData;
   bool loadingData = false;
   String imagePath;
+  TextEditingController weightTextController, fatTextController;
 
   Future fetchDataJudgeDate() async {
     final docs = await FirebaseFirestore.instance
@@ -36,13 +37,72 @@ class CalenderSaveModel extends ChangeNotifier {
         //更新
         sameDate = true;
         sameDateMuscleData = muscleData[i];
-        if (sameDateMuscleData.imagePath != null)
+        if (sameDateMuscleData.imagePath != null) {
           imageFile = File(sameDateMuscleData.imagePath);
+          imagePath = sameDateMuscleData.imagePath;
+        }
         break;
       } else {
         //保存
         sameDate = false;
       }
+    }
+
+    weightTextController = TextEditingController();
+    fatTextController = TextEditingController();
+    if (sameDate == true) {
+      if (sameDateMuscleData.bodyFatPercentage != null) {
+        //同じ日付があればもともとの体重などを表示
+        weightTextController =
+            TextEditingController(text: sameDateMuscleData.weight.toString());
+        fatTextController = TextEditingController(
+            text: sameDateMuscleData.bodyFatPercentage.toString());
+        additionalWeight = double.parse(weightTextController.text);
+        additionalBodyFatPercentage = double.parse(fatTextController.text);
+      } else if (sameDateMuscleData.bodyFatPercentage == null) {
+        //体脂肪なしだと体脂肪の初期値なし
+        weightTextController =
+            TextEditingController(text: sameDateMuscleData.weight.toString());
+        fatTextController = TextEditingController(text: '');
+        additionalWeight = double.parse(weightTextController.text);
+        additionalBodyFatPercentage = null;
+      }
+    } else if (sameDate == false) {
+      //同じ日付がなければ初期値なし
+      weightTextController = TextEditingController(text: '');
+      fatTextController = TextEditingController(text: '');
+      additionalWeight = null;
+      additionalBodyFatPercentage = null;
+    }
+    notifyListeners();
+  }
+
+  Future setText() {
+    weightTextController = TextEditingController();
+    fatTextController = TextEditingController();
+    if (sameDate == true) {
+      if (sameDateMuscleData.bodyFatPercentage != null) {
+        //同じ日付があればもともとの体重などを表示
+        weightTextController =
+            TextEditingController(text: sameDateMuscleData.weight.toString());
+        fatTextController = TextEditingController(
+            text: sameDateMuscleData.bodyFatPercentage.toString());
+        additionalWeight = double.parse(weightTextController.text);
+        additionalBodyFatPercentage = double.parse(fatTextController.text);
+      } else if (sameDateMuscleData.bodyFatPercentage == null) {
+        //体脂肪なしだと体脂肪の初期値なし
+        weightTextController =
+            TextEditingController(text: sameDateMuscleData.weight.toString());
+        fatTextController = TextEditingController(text: '');
+        additionalWeight = double.parse(weightTextController.text);
+        additionalBodyFatPercentage = null;
+      }
+    } else if (sameDate == false) {
+      //同じ日付がなければ初期値なし
+      weightTextController = TextEditingController(text: '');
+      fatTextController = TextEditingController(text: '');
+      additionalWeight = null;
+      additionalBodyFatPercentage = null;
     }
     notifyListeners();
   }
@@ -54,6 +114,7 @@ class CalenderSaveModel extends ChangeNotifier {
         .get();
     final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
     this.muscleData = muscleData;
+    notifyListeners();
   }
 
   Future judgeDate() async {
@@ -62,8 +123,10 @@ class CalenderSaveModel extends ChangeNotifier {
         //更新
         sameDate = true;
         sameDateMuscleData = muscleData[i];
-        if (sameDateMuscleData.imagePath != null)
+        if (sameDateMuscleData.imagePath != null) {
           imageFile = File(sameDateMuscleData.imagePath);
+          imagePath = sameDateMuscleData.imagePath;
+        }
         break;
       } else {
         //保存
@@ -120,15 +183,16 @@ class CalenderSaveModel extends ChangeNotifier {
 
   void showBottomSheet(BuildContext context) async {
     //ボトムシートから受け取った値によって操作を変える
-    final result = await showCupertinoBottomBar(context);
+    final cameraResult = await showCupertinoBottomBar(context);
 
-    if (result == 0) {
+    if (cameraResult == 0) {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.camera);
       imagePath = pickedFile.path;
-      if (sameDate == true) sameDateMuscleData.imagePath = imagePath;
+      if (sameDate == true)
+        sameDateMuscleData.imagePath = imagePath; //同じ日付のパスを更新する必要がある
       imageFile = File(imagePath);
-    } else if (result == 1) {
+    } else if (cameraResult == 1) {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
       imagePath = pickedFile.path;
@@ -139,13 +203,15 @@ class CalenderSaveModel extends ChangeNotifier {
   }
 
   //写真をカメラロールから選ぶ
-  /* Future showImagePicker() async {
+  Future showImagePicker() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    imageFile = File(pickedFile.path);
+    imagePath = pickedFile.path;
+    if (sameDate == true) sameDateMuscleData.imagePath = imagePath;
+    imageFile = File(imagePath);
     notifyListeners();
   }
-*/
+
   Future addDataToFirebase() async {
     //firebaseに値を追加
     if (additionalWeight == null) {
