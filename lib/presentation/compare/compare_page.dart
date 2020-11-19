@@ -5,7 +5,7 @@ class ComparePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Text("compare"),
+      home: Text("compare作成"),
     );
   }
 }
