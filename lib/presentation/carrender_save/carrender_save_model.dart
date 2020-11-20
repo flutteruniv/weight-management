@@ -46,11 +46,10 @@ class CalenderSaveModel extends ChangeNotifier {
         //保存
         sameDate = false;
       }
+      notifyListeners();
     }
 
-    weightTextController = TextEditingController();
-    fatTextController = TextEditingController();
-    if (sameDate == true) {
+    if (sameDate) {
       if (sameDateMuscleData.bodyFatPercentage != null) {
         //同じ日付があればもともとの体重などを表示
         weightTextController =
@@ -67,7 +66,7 @@ class CalenderSaveModel extends ChangeNotifier {
         additionalWeight = double.parse(weightTextController.text);
         additionalBodyFatPercentage = null;
       }
-    } else if (sameDate == false) {
+    } else {
       //同じ日付がなければ初期値なし
       weightTextController = TextEditingController(text: '');
       fatTextController = TextEditingController(text: '');
@@ -78,9 +77,7 @@ class CalenderSaveModel extends ChangeNotifier {
   }
 
   Future setText() {
-    weightTextController = TextEditingController();
-    fatTextController = TextEditingController();
-    if (sameDate == true) {
+    if (sameDate) {
       if (sameDateMuscleData.bodyFatPercentage != null) {
         //同じ日付があればもともとの体重などを表示
         weightTextController =
@@ -97,7 +94,7 @@ class CalenderSaveModel extends ChangeNotifier {
         additionalWeight = double.parse(weightTextController.text);
         additionalBodyFatPercentage = null;
       }
-    } else if (sameDate == false) {
+    } else {
       //同じ日付がなければ初期値なし
       weightTextController = TextEditingController(text: '');
       fatTextController = TextEditingController(text: '');

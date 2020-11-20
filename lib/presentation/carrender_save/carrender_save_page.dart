@@ -15,10 +15,10 @@ class CarenderSavePage extends StatelessWidget {
         body: Container(
           padding: EdgeInsets.all(30.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
-            if (topModel.savePageUpdate == true) {
+            if (topModel.savePageUpdate) {
               model.fetchData();
             }
-            if (model.loadingData == true) {
+            if (model.loadingData) {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(
                 child: Center(
@@ -62,8 +62,10 @@ class CarenderSavePage extends StatelessWidget {
                         onChanged: (number) {
                           //テキストに体重入力
                           model.additionalWeight = double.parse(number);
-                          model.weightTextController = TextEditingController(
-                              text: double.parse(number).toString());
+                          //    model.weightTextController = TextEditingController(
+                          //      text: double.parse(number).toString());
+                          //  model.weightTextController.text =
+                          //    double.parse(number).toString();
                         },
                         style: TextStyle(fontSize: 20),
                       ),
@@ -78,8 +80,10 @@ class CarenderSavePage extends StatelessWidget {
                           //テキストに体重入力
                           model.additionalBodyFatPercentage =
                               double.parse(number);
-                          model.fatTextController = TextEditingController(
-                              text: double.parse(number).toString());
+                          // model.fatTextController = TextEditingController(
+                          //   text: double.parse(number).toString());
+                          //model.fatTextController.text =
+                          //  double.parse(number).toString();
                         },
                         style: TextStyle(fontSize: 20),
                       ),
