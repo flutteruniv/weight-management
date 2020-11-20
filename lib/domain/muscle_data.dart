@@ -7,6 +7,7 @@ class MuscleData {
     imageURL = doc.data()['imageURL'];
     date = doc.data()['StringDate'];
     bodyFatPercentage = doc.data()['bodyFatPercentage'];
+    imagePath = doc.data()['imagePath'];
   }
 
   String documentID;
@@ -14,4 +15,5 @@ class MuscleData {
   String imageURL;
   String date;
   double bodyFatPercentage;
+  String imagePath;
 }
