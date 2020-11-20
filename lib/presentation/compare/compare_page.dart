@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/compare/compare_model.dart';
+import 'package:weight_management/presentation/compare/select_page.dart';
 
 class ComparePage extends StatelessWidget {
+  ComparePage({this.muscleData});
+  MuscleData muscleData;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CompareModel>(
@@ -24,8 +28,14 @@ class ComparePage extends StatelessWidget {
                             height: 40,
                             child: RaisedButton.icon(
                               // 日付を取得
-                              icon: Icon(Icons.arrow_drop_down),
-                              onPressed: () async {},
+                              icon: Icon(Icons.date_range),
+                              onPressed: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SelectPage(),
+                                    ));
+                              },
                               label: Text(
                                 '日付を選ぶ',
                                 style: TextStyle(fontSize: 15),
@@ -82,7 +92,7 @@ class ComparePage extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Container(
+                      /* Container(
                         height: 300,
                         width: 220,
                         decoration: BoxDecoration(
@@ -95,6 +105,12 @@ class ComparePage extends StatelessWidget {
                           '写真なし',
                           style: TextStyle(fontSize: 30),
                         )),
+                      ),*/
+                      SizedBox(
+                        width: 220,
+                        height: 300,
+                        child: Image.network(
+                            'https://images-na.ssl-images-amazon.com/images/I/71KL76VgswL._CR190,60,810,1440_SY960_.jpg'),
                       ),
                     ],
                   ),
@@ -110,8 +126,15 @@ class ComparePage extends StatelessWidget {
                             height: 40,
                             child: RaisedButton.icon(
                               // 日付を取得
-                              icon: Icon(Icons.arrow_drop_down),
-                              onPressed: () async {},
+                              icon: Icon(Icons.date_range),
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SelectPage(),
+                                  ),
+                                );
+                              },
                               label: Text(
                                 '日付を選ぶ',
                                 style: TextStyle(fontSize: 15),
