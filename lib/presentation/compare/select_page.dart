@@ -10,93 +10,99 @@ class SelectPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SelectModel>(
       create: (_) => SelectModel()..fetchData(),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('選択する'),
-          backgroundColor: Colors.blue,
-        ),
-        body: Consumer<SelectModel>(
-          builder: (context, model, child) {
-            final muscleData = model.muscleData;
-            final listTiles = muscleData
-                .map(
-                  (muscleData) => Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.black38, width: 1),
-                      ),
-                    ),
-                    child: muscleData.imageURL != null //写真、体脂肪率あるなしで条件分岐
-                        ? ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ComparePage(
-                                    muscleData: muscleData,
-                                  ),
-                                ),
-                              );
-                            },
-                            leading: Image.network(muscleData.imageURL),
-                            title: muscleData.bodyFatPercentage != null
-                                ? Text(muscleData.weight.toString() +
-                                    ' kg       ' +
-                                    muscleData.bodyFatPercentage.toString() +
-                                    ' %')
-                                : Text(muscleData.weight.toString() + ' kg'),
-                            subtitle: Text(muscleData.date),
-                            trailing: IconButton(
-                              icon: Icon(Icons.directions_walk),
-                              onPressed: () async {},
-                            ),
-                          )
-                        : ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ComparePage(
-                                    muscleData: muscleData,
-                                  ),
-                                ),
-                              );
-                            },
-                            leading: Container(
-                              height: 100,
-                              width: 40,
-                              color: Colors.grey,
-                            ),
-                            title: muscleData.bodyFatPercentage != null
-                                ? Text(muscleData.weight.toString() +
-                                    ' kg       ' +
-                                    muscleData.bodyFatPercentage.toString() +
-                                    ' %')
-                                : Text(muscleData.weight.toString() + ' kg'),
-                            subtitle: Text(muscleData.date),
-                            trailing: IconButton(
-                              icon: Icon(Icons.directions_walk),
-                              onPressed: () async {},
-                            ),
-                          ),
-                  ),
-                )
-                .toList();
-            return ListView(
-              children: listTiles,
-            );
-          },
-        ),
-        floatingActionButton: Consumer<SelectModel>(
-          builder: (context, model, child) {
-            return FloatingActionButton.extended(
-              label: Text(model.sortName),
-              onPressed: () async {
-                model.showBottomSheet(context);
+      child: WillPopScope(
+        onWillPop: () {
+          Navigator.of(context).pop(MuscleData);
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text('選択する'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
-            );
-          },
+            ),
+            backgroundColor: Colors.blue,
+          ),
+          body: Consumer<SelectModel>(
+            builder: (context, model, child) {
+              final muscleData = model.muscleData;
+              final listTiles = muscleData
+                  .map(
+                    (muscleData) => Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black38, width: 1),
+                        ),
+                      ),
+                      child: muscleData.imageURL != null //写真、体脂肪率あるなしで条件分岐
+                          ? ListTile(
+                              onTap: () {
+                                /*    Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ComparePage(
+                                      muscleData: muscleData,
+                                    ),
+                                  ),
+                                );*/
+                                Navigator.of(context).pop(muscleData);
+                              },
+                              leading: Image.network(muscleData.imageURL),
+                              title: muscleData.bodyFatPercentage != null
+                                  ? Text(muscleData.weight.toString() +
+                                      ' kg       ' +
+                                      muscleData.bodyFatPercentage.toString() +
+                                      ' %')
+                                  : Text(muscleData.weight.toString() + ' kg'),
+                              subtitle: Text(muscleData.date),
+                              trailing: IconButton(
+                                icon: Icon(Icons.directions_walk),
+                                onPressed: () async {},
+                              ),
+                            )
+                          : ListTile(
+                              onTap: () {
+                                Navigator.of(context).pop(muscleData);
+                              },
+                              leading: Container(
+                                height: 100,
+                                width: 40,
+                                color: Colors.grey,
+                              ),
+                              title: muscleData.bodyFatPercentage != null
+                                  ? Text(muscleData.weight.toString() +
+                                      ' kg       ' +
+                                      muscleData.bodyFatPercentage.toString() +
+                                      ' %')
+                                  : Text(muscleData.weight.toString() + ' kg'),
+                              subtitle: Text(muscleData.date),
+                              trailing: IconButton(
+                                icon: Icon(Icons.directions_walk),
+                                onPressed: () async {},
+                              ),
+                            ),
+                    ),
+                  )
+                  .toList();
+              return ListView(
+                children: listTiles,
+              );
+            },
+          ),
+          floatingActionButton: Consumer<SelectModel>(
+            builder: (context, model, child) {
+              return FloatingActionButton.extended(
+                label: Text(model.sortName),
+                onPressed: () async {
+                  model.showBottomSheet(context);
+                },
+              );
+            },
+          ),
         ),
       ),
     );

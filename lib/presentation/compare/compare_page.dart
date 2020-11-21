@@ -30,11 +30,13 @@ class ComparePage extends StatelessWidget {
                               // 日付を取得
                               icon: Icon(Icons.date_range),
                               onPressed: () async {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SelectPage(),
-                                    ));
+                                MuscleData muscleData =
+                                    await Navigator.of(context).push(
+                                  MaterialPageRoute<MuscleData>(
+                                    builder: (context) => SelectPage(),
+                                  ),
+                                );
+                                model.changeUpperWeight(muscleData);
                               },
                               label: Text(
                                 '日付を選ぶ',
@@ -58,7 +60,7 @@ class ComparePage extends StatelessWidget {
                                 ),
                                 Center(
                                   child: Text(
-                                    '50kg',
+                                    model.upperWeight.toString() + ' kg',
                                     style: TextStyle(fontSize: 25),
                                   ),
                                 ),
@@ -128,12 +130,13 @@ class ComparePage extends StatelessWidget {
                               // 日付を取得
                               icon: Icon(Icons.date_range),
                               onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                                MuscleData muscleData =
+                                    await Navigator.of(context).push(
+                                  MaterialPageRoute<MuscleData>(
                                     builder: (context) => SelectPage(),
                                   ),
                                 );
+                                model.changeLowerWeight(muscleData);
                               },
                               label: Text(
                                 '日付を選ぶ',
@@ -157,7 +160,7 @@ class ComparePage extends StatelessWidget {
                                 ),
                                 Center(
                                   child: Text(
-                                    '50kg',
+                                    model.lowerWeight + ' kg',
                                     style: TextStyle(fontSize: 25),
                                   ),
                                 ),
