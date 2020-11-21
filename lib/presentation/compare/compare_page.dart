@@ -42,11 +42,10 @@ class ComparePage extends StatelessWidget {
                                         builder: (context) => SelectPage(),
                                       ),
                                     );
-                                    await model.changeUpperValue(muscleData);
-                                    // await model.changeValue(muscleData, 0);
+                                    await model.changeValue(muscleData, 0);
                                   },
                                   label: Text(
-                                    model.upperDate,
+                                    model.date[0],
                                     style: TextStyle(fontSize: 15),
                                   ),
                                   color: Colors.white,
@@ -66,9 +65,9 @@ class ComparePage extends StatelessWidget {
                                       ),
                                     ),
                                     Center(
-                                      child: model.upperWeight != null
+                                      child: model.weight[0] != null
                                           ? Text(
-                                              model.upperWeight.toString() +
+                                              model.weight[0].toString() +
                                                   ' kg',
                                               style: TextStyle(fontSize: 25),
                                             )
@@ -94,9 +93,9 @@ class ComparePage extends StatelessWidget {
                                       ),
                                     ),
                                     Center(
-                                        child: model.upperFatPercentage != null
+                                        child: model.fatPercentage[0] != null
                                             ? Text(
-                                                model.upperFatPercentage
+                                                model.fatPercentage[0]
                                                         .toString() +
                                                     ' %',
                                                 style: TextStyle(fontSize: 25),
@@ -118,7 +117,7 @@ class ComparePage extends StatelessWidget {
                                   // クリアする
                                   icon: Icon(Icons.delete),
                                   onPressed: () async {
-                                    await model.clearUpperValue();
+                                    await model.clearValue(0);
                                   },
                                   label: Text(
                                     'クリア',
@@ -143,8 +142,8 @@ class ComparePage extends StatelessWidget {
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: model.upperImageURL != null
-                                ? Image.network(model.upperImageURL)
+                            child: model.imageURL[0] != null
+                                ? Image.network(model.imageURL[0])
                                 : Center(
                                     child: Text(
                                     '写真なし',
@@ -174,10 +173,10 @@ class ComparePage extends StatelessWidget {
                                         builder: (context) => SelectPage(),
                                       ),
                                     );
-                                    model.changeLowerValue(muscleData);
+                                    model.changeValue(muscleData, 1);
                                   },
                                   label: Text(
-                                    model.lowerDate,
+                                    model.date[1],
                                     style: TextStyle(fontSize: 15),
                                   ),
                                   color: Colors.white,
@@ -197,9 +196,9 @@ class ComparePage extends StatelessWidget {
                                       ),
                                     ),
                                     Center(
-                                      child: model.lowerWeight != null
+                                      child: model.weight[1] != null
                                           ? Text(
-                                              model.lowerWeight.toString() +
+                                              model.weight[1].toString() +
                                                   ' kg',
                                               style: TextStyle(fontSize: 25),
                                             )
@@ -225,9 +224,9 @@ class ComparePage extends StatelessWidget {
                                       ),
                                     ),
                                     Center(
-                                      child: model.lowerFatPercentage != null
+                                      child: model.fatPercentage[1] != null
                                           ? Text(
-                                              model.lowerFatPercentage
+                                              model.fatPercentage[1]
                                                       .toString() +
                                                   ' %',
                                               style: TextStyle(fontSize: 25),
@@ -250,7 +249,7 @@ class ComparePage extends StatelessWidget {
                                   // クリアする
                                   icon: Icon(Icons.delete),
                                   onPressed: () async {
-                                    await model.clearLowerValue();
+                                    await model.clearValue(1);
                                   },
                                   label: Text(
                                     'クリア',
@@ -275,8 +274,8 @@ class ComparePage extends StatelessWidget {
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: model.lowerImageURL != null
-                                ? Image.network(model.lowerImageURL)
+                            child: model.imageURL[1] != null
+                                ? Image.network(model.imageURL[1])
                                 : Center(
                                     child: Text(
                                       '写真なし',
