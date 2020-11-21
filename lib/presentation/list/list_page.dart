@@ -145,8 +145,11 @@ class ListPage extends StatelessWidget {
                                             child: Text('OK'),
                                             onPressed: () async {
                                               Navigator.of(context).pop();
+
                                               await deleteList(
                                                   context, model, muscleData);
+                                              await topModel
+                                                  .updateListPageTrue();
                                             },
                                           ),
                                         ],
@@ -184,6 +187,8 @@ class ListPage extends StatelessWidget {
                                               Navigator.of(context).pop();
                                               await deleteList(
                                                   context, model, muscleData);
+                                              await topModel
+                                                  .updateListPageTrue();
                                             },
                                           ),
                                         ],

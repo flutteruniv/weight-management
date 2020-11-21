@@ -5,6 +5,17 @@ import 'package:weight_management/domain/muscle_data.dart';
 
 class TopModel extends ChangeNotifier {
   bool savePageUpdate = false;
+  bool listPageUpdate = false;
+
+  Future updateListPageTrue() {
+    listPageUpdate = true;
+    notifyListeners();
+  }
+
+  Future updateListPageFalse() {
+    listPageUpdate = false;
+    notifyListeners();
+  }
 
   Future updatePageTrue() {
     savePageUpdate = true;
@@ -24,6 +35,7 @@ class TopModel extends ChangeNotifier {
 
   void onTabTapped(int index) async {
     currentIndex = index;
+    updateListPageFalse();
     notifyListeners();
   }
 }
