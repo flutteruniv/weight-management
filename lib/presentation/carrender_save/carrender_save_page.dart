@@ -8,12 +8,15 @@ import 'package:weight_management/presentation/main/main_model.dart';
 class CarenderSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    final double deviceWidth = MediaQuery.of(context).size.width;
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel()..initData(),
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(30.0),
+          padding: EdgeInsets.only(
+              top: deviceHeight * 0.03, right: 20.0, left: 20.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
             if (topModel.savePageUpdate == true) {
               model.fetchData();
@@ -26,7 +29,7 @@ class CarenderSavePage extends StatelessWidget {
                     children: <Widget>[
                       ButtonTheme(
                         minWidth: 250,
-                        height: 50,
+                        height: deviceHeight * 0.07,
                         child: RaisedButton.icon(
                           // 日付を取得
                           icon: Icon(Icons.arrow_drop_down),
@@ -83,10 +86,10 @@ class CarenderSavePage extends StatelessWidget {
                         },
                         style: TextStyle(fontSize: 20),
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: deviceHeight * 0.03),
                       SizedBox(
-                        height: 230,
-                        width: 180,
+                        height: deviceHeight * 0.35,
+                        width: deviceWidth * 0.45,
                         child: InkWell(
                           onTap: () async {
                             model.showBottomSheet(context);
@@ -125,7 +128,7 @@ class CarenderSavePage extends StatelessWidget {
                                     ),
                         ),
                       ),
-                      SizedBox(height: 80),
+                      SizedBox(height: deviceHeight * 0.03),
                       ButtonTheme(
                         minWidth: 20000,
                         height: 50,
