@@ -11,7 +11,20 @@ class CompareModel extends ChangeNotifier {
   String lowerImageURL;
   String upperDate = '日付を選ぶ';
   String lowerDate = '日付を選ぶ';
+  /*
+  List<String> weight = [null, null];
+  List<String> fatPercentage = [];
+  List<String> imageURL = [];
+  List<String> date = ['日付を選ぶu', '日付を選ぶi'];
 
+  Future clearValue(int i) {
+    weight[i] = null;
+    fatPercentage[i] = null;
+    imageURL[i] = null;
+    date[i] = '日付を選ぶ';
+    notifyListeners();
+  }
+*/
   Future clearUpperValue() {
     upperWeight = null;
     upperFatPercentage = null;
@@ -28,25 +41,37 @@ class CompareModel extends ChangeNotifier {
     notifyListeners();
   }
 
+/*
+  Future changeValue(MuscleData selectMuscleData, int i) {
+    weight[i] = selectMuscleData.weight.toString();
+    date[i] = selectMuscleData.date;
+    if (selectMuscleData.bodyFatPercentage != null) {
+      fatPercentage[i] = selectMuscleData.bodyFatPercentage.toString();
+      selectMuscleData.imageURL != null
+          ? imageURL[i] = selectMuscleData.imageURL
+          : imageURL[i] = null;
+    } else {
+      fatPercentage[i] = null;
+      selectMuscleData.imageURL != null
+          ? imageURL[i] = selectMuscleData.imageURL
+          : imageURL[i] = null;
+    }
+    notifyListeners();
+  }
+*/
   Future changeUpperValue(MuscleData selectMuscleData) {
     upperWeight = selectMuscleData.weight.toString();
     upperDate = selectMuscleData.date;
-    if (selectMuscleData.bodyFatPercentage != null && //ありあり
-        selectMuscleData.imageURL != null) {
+    if (selectMuscleData.bodyFatPercentage != null) {
       upperFatPercentage = selectMuscleData.bodyFatPercentage.toString();
-      upperImageURL = selectMuscleData.imageURL;
-    } else if (selectMuscleData.bodyFatPercentage == null && //なしあり
-        selectMuscleData.imageURL != null) {
+      selectMuscleData.imageURL != null
+          ? upperImageURL = selectMuscleData.imageURL
+          : upperImageURL = null;
+    } else {
       upperFatPercentage = null;
-      upperImageURL = selectMuscleData.imageURL;
-    } else if (selectMuscleData.bodyFatPercentage != null && //ありなし
-        selectMuscleData.imageURL == null) {
-      upperFatPercentage = selectMuscleData.bodyFatPercentage.toString();
-      upperImageURL = selectMuscleData.imageURL;
-    } else if (selectMuscleData.bodyFatPercentage == null && //なしなし
-        selectMuscleData.imageURL == null) {
-      upperFatPercentage = null;
-      upperImageURL = null;
+      selectMuscleData.imageURL != null
+          ? upperImageURL = selectMuscleData.imageURL
+          : upperImageURL = null;
     }
     notifyListeners();
   }
@@ -54,22 +79,16 @@ class CompareModel extends ChangeNotifier {
   Future changeLowerValue(MuscleData selectMuscleData) {
     lowerWeight = selectMuscleData.weight.toString();
     lowerDate = selectMuscleData.date;
-    if (selectMuscleData.bodyFatPercentage != null && //ありあり
-        selectMuscleData.imageURL != null) {
+    if (selectMuscleData.bodyFatPercentage != null) {
       lowerFatPercentage = selectMuscleData.bodyFatPercentage.toString();
-      lowerImageURL = selectMuscleData.imageURL;
-    } else if (selectMuscleData.bodyFatPercentage == null && //なしあり
-        selectMuscleData.imageURL != null) {
-      lowerFatPercentage = null;
-      lowerImageURL = selectMuscleData.imageURL;
-    } else if (selectMuscleData.bodyFatPercentage != null && //ありなし
-        selectMuscleData.imageURL == null) {
-      lowerFatPercentage = selectMuscleData.bodyFatPercentage.toString();
-      lowerImageURL = selectMuscleData.imageURL;
-    } else if (selectMuscleData.bodyFatPercentage == null && //なしなし
-        selectMuscleData.imageURL == null) {
-      lowerFatPercentage = null;
-      lowerImageURL = null;
+      selectMuscleData.imageURL != null
+          ? lowerImageURL = selectMuscleData.imageURL
+          : lowerImageURL = null;
+    } else {
+      upperFatPercentage = null;
+      selectMuscleData.imageURL != null
+          ? lowerImageURL = selectMuscleData.imageURL
+          : lowerImageURL = null;
     }
     notifyListeners();
   }
