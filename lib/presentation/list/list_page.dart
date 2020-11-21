@@ -31,32 +31,74 @@ class ListPage extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (_) {
-                            return AlertDialog(
-                              content: muscleData.bodyFatPercentage != null
-                                  ? Text('体重：' +
-                                      muscleData.weight.toString() +
-                                      ' kg       ' +
-                                      '体脂肪率：' +
-                                      muscleData.bodyFatPercentage.toString() +
-                                      ' %')
-                                  : Text('体重：' +
-                                      muscleData.weight.toString() +
-                                      ' kg'),
-                              actions: <Widget>[
-                                // ボタン領域
-                                FlatButton(
-                                  child: Text("Cancel"),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
+                            return Center(
+                              child: AlertDialog(
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: [
+                                      muscleData.imageURL != null
+                                          ? Column(
+                                              children: [
+                                                Image.network(
+                                                    muscleData.imageURL),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: muscleData
+                                                              .bodyFatPercentage !=
+                                                          null
+                                                      ? Text('体重：' +
+                                                          muscleData.weight
+                                                              .toString() +
+                                                          ' kg       ' +
+                                                          '体脂肪率：' +
+                                                          muscleData
+                                                              .bodyFatPercentage
+                                                              .toString() +
+                                                          ' %')
+                                                      : Text('体重：' +
+                                                          muscleData.weight
+                                                              .toString() +
+                                                          ' kg'),
+                                                ),
+                                              ],
+                                            )
+                                          : Column(children: [
+                                              muscleData.bodyFatPercentage !=
+                                                      null
+                                                  ? Text('体重：' +
+                                                      muscleData.weight
+                                                          .toString() +
+                                                      ' kg       ' +
+                                                      '体脂肪率：' +
+                                                      muscleData
+                                                          .bodyFatPercentage
+                                                          .toString() +
+                                                      ' %')
+                                                  : Text('体重：' +
+                                                      muscleData.weight
+                                                          .toString() +
+                                                      ' kg'),
+                                            ])
+                                    ],
+                                  ),
                                 ),
-                                FlatButton(
-                                  child: Text("OK"),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                                actions: <Widget>[
+                                  // ボタン領域
+                                  FlatButton(
+                                    child: Text("Cancel"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         );
