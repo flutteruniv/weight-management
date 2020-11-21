@@ -3,34 +3,34 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>710494621049-6rlamuuh0muphst5lj41rnutq0pttomb.apps.googleusercontent.com</string>
+	<string>732257714985-tlop6so7ljjech1qhvs0fd7m8drnpn2t.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.710494621049-6rlamuuh0muphst5lj41rnutq0pttomb</string>
+	<string>com.googleusercontent.apps.732257714985-tlop6so7ljjech1qhvs0fd7m8drnpn2t</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAiUvNC3AxOBA2EqDi0zcQOANJSgor1LfI</string>
+	<string>AIzaSyCS_0rZpLN68LT49knwWf9wbv7ob6Df0h4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>710494621049</string>
+	<string>732257714985</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.gmail.sepak.kou.weightManagement</string>
 	<key>PROJECT_ID</key>
-	<string>todo-app-2a8fb</string>
+	<string>weight-management-864b6</string>
 	<key>STORAGE_BUCKET</key>
-	<string>todo-app-2a8fb.appspot.com</string>
+	<string>weight-management-864b6.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:710494621049:ios:f0d7b2984a67be74f533a8</string>
+	<string>1:732257714985:ios:4e3f5a9a339212fee16d38</string>
 	<key>DATABASE_URL</key>
-	<string>https://todo-app-2a8fb.firebaseio.com</string>
+	<string>https://weight-management-864b6.firebaseio.com</string>
 </dict>
 </plist>
