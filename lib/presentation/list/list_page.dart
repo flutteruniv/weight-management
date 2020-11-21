@@ -33,11 +33,15 @@ class ListPage extends StatelessWidget {
                           builder: (_) {
                             return AlertDialog(
                               content: muscleData.bodyFatPercentage != null
-                                  ? Text(muscleData.weight.toString() +
+                                  ? Text('体重：' +
+                                      muscleData.weight.toString() +
                                       ' kg       ' +
+                                      '体脂肪率：' +
                                       muscleData.bodyFatPercentage.toString() +
                                       ' %')
-                                  : Text(muscleData.weight.toString() + ' kg'),
+                                  : Text('体重：' +
+                                      muscleData.weight.toString() +
+                                      ' kg'),
                               actions: <Widget>[
                                 // ボタン領域
                                 FlatButton(
