@@ -61,6 +61,16 @@ class ListPage extends StatelessWidget {
                                                               .toString() +
                                                           ' kg'),
                                                 ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 16.0),
+                                                  child: Text(
+                                                    muscleData.date,
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ),
+                                                )
                                               ],
                                             )
                                           : Column(children: [
@@ -79,6 +89,15 @@ class ListPage extends StatelessWidget {
                                                       muscleData.weight
                                                           .toString() +
                                                       ' kg'),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 16.0),
+                                                child: Text(
+                                                  muscleData.date,
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                              )
                                             ])
                                     ],
                                   ),
