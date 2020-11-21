@@ -30,16 +30,16 @@ class ComparePage extends StatelessWidget {
                               // 日付を取得
                               icon: Icon(Icons.date_range),
                               onPressed: () async {
-                                MuscleData muscleData =
-                                    await Navigator.of(context).push(
+                                MuscleData muscleData = await Navigator.push(
+                                  context,
                                   MaterialPageRoute<MuscleData>(
                                     builder: (context) => SelectPage(),
                                   ),
                                 );
-                                model.changeUpperWeight(muscleData);
+                                model.changeUpperValue(muscleData);
                               },
                               label: Text(
-                                '日付を選ぶ',
+                                model.upperDate,
                                 style: TextStyle(fontSize: 15),
                               ),
                               color: Colors.white,
@@ -59,10 +59,15 @@ class ComparePage extends StatelessWidget {
                                   ),
                                 ),
                                 Center(
-                                  child: Text(
-                                    model.upperWeight.toString() + ' kg',
-                                    style: TextStyle(fontSize: 25),
-                                  ),
+                                  child: model.upperWeight != null
+                                      ? Text(
+                                          model.upperWeight.toString() + ' kg',
+                                          style: TextStyle(fontSize: 25),
+                                        )
+                                      : Text(
+                                          'なし',
+                                          style: TextStyle(fontSize: 25),
+                                        ),
                                 ),
                               ],
                             ),
@@ -81,12 +86,40 @@ class ComparePage extends StatelessWidget {
                                   ),
                                 ),
                                 Center(
-                                  child: Text(
-                                    '10.5%',
-                                    style: TextStyle(fontSize: 25),
-                                  ),
-                                ),
+                                    child: model.upperFatPercentage != null
+                                        ? Text(
+                                            model.upperFatPercentage
+                                                    .toString() +
+                                                ' %',
+                                            style: TextStyle(fontSize: 25),
+                                          )
+                                        : Text(
+                                            'なし',
+                                            style: TextStyle(fontSize: 25),
+                                          )),
                               ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ButtonTheme(
+                            minWidth: 20,
+                            height: 30,
+                            child: RaisedButton.icon(
+                              // クリアする
+                              icon: Icon(Icons.delete),
+                              onPressed: () async {
+                                await model.clearUpperValue();
+                              },
+                              label: Text(
+                                'クリア',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                             ),
                           ),
                         ],
@@ -94,25 +127,21 @@ class ComparePage extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      /* Container(
+                      Container(
                         height: 300,
                         width: 220,
                         decoration: BoxDecoration(
                           color: Colors.white70,
                           border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        child: Center(
-                            child: Text(
-                          '写真なし',
-                          style: TextStyle(fontSize: 30),
-                        )),
-                      ),*/
-                      SizedBox(
-                        width: 220,
-                        height: 300,
-                        child: Image.network(
-                            'https://images-na.ssl-images-amazon.com/images/I/71KL76VgswL._CR190,60,810,1440_SY960_.jpg'),
+                        child: model.upperImageURL != null
+                            ? Image.network(model.upperImageURL)
+                            : Center(
+                                child: Text(
+                                '写真なし',
+                                style: TextStyle(fontSize: 30),
+                              )),
                       ),
                     ],
                   ),
@@ -130,16 +159,16 @@ class ComparePage extends StatelessWidget {
                               // 日付を取得
                               icon: Icon(Icons.date_range),
                               onPressed: () async {
-                                MuscleData muscleData =
-                                    await Navigator.of(context).push(
+                                MuscleData muscleData = await Navigator.push(
+                                  context,
                                   MaterialPageRoute<MuscleData>(
                                     builder: (context) => SelectPage(),
                                   ),
                                 );
-                                model.changeLowerWeight(muscleData);
+                                model.changeLowerValue(muscleData);
                               },
                               label: Text(
-                                '日付を選ぶ',
+                                model.lowerDate,
                                 style: TextStyle(fontSize: 15),
                               ),
                               color: Colors.white,
@@ -159,10 +188,15 @@ class ComparePage extends StatelessWidget {
                                   ),
                                 ),
                                 Center(
-                                  child: Text(
-                                    model.lowerWeight + ' kg',
-                                    style: TextStyle(fontSize: 25),
-                                  ),
+                                  child: model.lowerWeight != null
+                                      ? Text(
+                                          model.lowerWeight.toString() + ' kg',
+                                          style: TextStyle(fontSize: 25),
+                                        )
+                                      : Text(
+                                          'なし',
+                                          style: TextStyle(fontSize: 25),
+                                        ),
                                 ),
                               ],
                             ),
@@ -181,12 +215,40 @@ class ComparePage extends StatelessWidget {
                                   ),
                                 ),
                                 Center(
-                                  child: Text(
-                                    '10.5%',
-                                    style: TextStyle(fontSize: 25),
-                                  ),
+                                  child: model.lowerFatPercentage != null
+                                      ? Text(
+                                          model.lowerFatPercentage.toString() +
+                                              ' %',
+                                          style: TextStyle(fontSize: 25),
+                                        )
+                                      : Text(
+                                          'なし',
+                                          style: TextStyle(fontSize: 25),
+                                        ),
                                 ),
                               ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ButtonTheme(
+                            minWidth: 20,
+                            height: 30,
+                            child: RaisedButton.icon(
+                              // クリアする
+                              icon: Icon(Icons.delete),
+                              onPressed: () async {
+                                await model.clearLowerValue();
+                              },
+                              label: Text(
+                                'クリア',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                             ),
                           ),
                         ],
@@ -200,13 +262,15 @@ class ComparePage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.white70,
                           border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        child: Center(
-                            child: Text(
-                          '写真なし',
-                          style: TextStyle(fontSize: 30),
-                        )),
+                        child: model.lowerImageURL != null
+                            ? Image.network(model.lowerImageURL)
+                            : Center(
+                                child: Text(
+                                '写真なし',
+                                style: TextStyle(fontSize: 30),
+                              )),
                       ),
                     ],
                   ),
