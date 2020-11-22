@@ -18,9 +18,11 @@ class CarenderSavePage extends StatelessWidget {
           padding: EdgeInsets.only(
               top: deviceHeight * 0.03, right: 20.0, left: 20.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
-            if (topModel.savePageUpdate) {
-              model.fetchData();
+            if (topModel.listPageUpdate == true) {
+              model.initData();
+              model.imageFile = null;
             }
+
             if (model.loadingData) {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(

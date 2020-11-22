@@ -21,6 +21,14 @@ class CalenderSaveModel extends ChangeNotifier {
   String imagePath;
   TextEditingController weightTextController, fatTextController;
 
+  Future deleteDate() {
+    weightTextController = TextEditingController(text: '');
+    fatTextController = TextEditingController(text: '');
+    additionalWeight = null;
+    additionalBodyFatPercentage = null;
+    imageFile = null;
+  }
+
   Future initData() async {
     final docs = await FirebaseFirestore.instance
         .collection('muscleData')
