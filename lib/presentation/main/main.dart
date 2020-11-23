@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:weight_management/presentation/Graph/graph_page.dart';
 import 'package:weight_management/presentation/carrender_save/carrender_save_page.dart';
 import 'package:weight_management/presentation/compare/compare_page.dart';
+import 'file:///C:/Users/rockw/AndroidStudioProjects/weight-management/lib/presentation/introduction/introduction_model.dart';
+import 'file:///C:/Users/rockw/AndroidStudioProjects/weight-management/lib/presentation/introduction/introduction_page.dart';
 import 'package:weight_management/presentation/list/list_page.dart';
 import 'package:weight_management/presentation/main/main_model.dart';
 import 'package:provider/provider.dart';
@@ -13,11 +15,30 @@ void main() async {
   runApp(MyApp());
 }
 
+/*
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: TopPage(),
+    );
+  }
+}*/
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ChangeNotifierProvider<IntroductionModel>(
+        create: (_) => IntroductionModel()..getPrefItems(),
+        child: Scaffold(
+          body: Consumer<IntroductionModel>(
+            builder: (context, model, child) {
+              return model.intro != true ? TopPage() : IntroductionPage();
+            },
+          ),
+        ),
+      ),
     );
   }
 }
