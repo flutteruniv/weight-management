@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ChangeNotifierProvider<IntroductionModel>(
-        create: (_) => IntroductionModel()..getPrefItems(),
+        create: (_) => IntroductionModel()..getPrefIntro(),
         child: Scaffold(
           body: Consumer<IntroductionModel>(
             builder: (context, model, child) {

@@ -18,7 +18,7 @@ class IntroductionPage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => TopPage()),
                 );
-                model.setStringListData();
+                model.setIntro();
               },
               showSkipButton: true,
               skip: const Text("スキップ"),

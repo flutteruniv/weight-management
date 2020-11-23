@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class IntroductionModel extends ChangeNotifier {
   bool intro;
 
-  getPrefItems() async {
+  getPrefIntro() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // 以下の「intro」がキー名。見つからなければtrueを返す
     intro = prefs.getBool('intro') ?? true;
     notifyListeners();
   }
 
-  setStringListData() async {
+  setIntro() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("intro", false);
     notifyListeners();
@@ -21,27 +21,27 @@ class IntroductionModel extends ChangeNotifier {
   var listPagesViewModel = [
     PageViewModel(
       title: "体重管理アプリの使い方",
-      body: "見た目の変化を記録したい。そんなあなたにお勧めです",
+      body: "アプリをインストールしていただきありがとうございます。\n見た目の変化を記録したい。そんなあなたにお勧めです",
       image: const Center(
           child: Icon(
-        Icons.analytics,
+        Icons.fitness_center,
         size: 200,
       )),
       decoration: const PageDecoration(
-        titleTextStyle: TextStyle(color: Colors.orange, fontSize: 30),
+        titleTextStyle: TextStyle(color: Colors.blue, fontSize: 30),
         bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
       ),
     ),
     PageViewModel(
       title: "保存画面",
-      body: '体重、体脂肪率、写真を保存しよう',
+      body: '体重、体脂肪率、写真を保存してみよう',
       image: const Center(
           child: Icon(
-        Icons.analytics,
+        Icons.edit,
         size: 200,
       )),
       decoration: const PageDecoration(
-        titleTextStyle: TextStyle(color: Colors.orange, fontSize: 30),
+        titleTextStyle: TextStyle(color: Colors.blue, fontSize: 30),
         bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
       ),
     ),
@@ -50,11 +50,11 @@ class IntroductionModel extends ChangeNotifier {
       body: '身体の変化を写真で楽しもう',
       image: const Center(
           child: Icon(
-        Icons.analytics,
+        Icons.group,
         size: 200,
       )),
       decoration: const PageDecoration(
-        titleTextStyle: TextStyle(color: Colors.orange, fontSize: 30),
+        titleTextStyle: TextStyle(color: Colors.blue, fontSize: 30),
         bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
       ),
     ),
@@ -63,11 +63,11 @@ class IntroductionModel extends ChangeNotifier {
       body: 'グラフで体重、体脂肪率の遷移を見てみよう',
       image: const Center(
           child: Icon(
-        Icons.analytics,
+        Icons.insights,
         size: 200,
       )),
       decoration: const PageDecoration(
-        titleTextStyle: TextStyle(color: Colors.orange, fontSize: 30),
+        titleTextStyle: TextStyle(color: Colors.blue, fontSize: 30),
         bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
       ),
     ),
@@ -76,11 +76,11 @@ class IntroductionModel extends ChangeNotifier {
       body: 'これまでの記録を一覧で見てみよう',
       image: const Center(
           child: Icon(
-        Icons.analytics,
+        Icons.list_alt,
         size: 200,
       )),
       decoration: const PageDecoration(
-        titleTextStyle: TextStyle(color: Colors.orange, fontSize: 30),
+        titleTextStyle: TextStyle(color: Colors.blue, fontSize: 30),
         bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
       ),
     ),
