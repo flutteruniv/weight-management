@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TopModel extends ChangeNotifier {
   bool savePageUpdate = false;
   bool listPageUpdate = false;
-  bool introduction = true;
+  //bool introduction = true;
 
   Future updateListPageTrue() {
     listPageUpdate = true;

@@ -13,7 +13,7 @@ class ListPage extends StatelessWidget {
       child: Scaffold(
         body: Consumer<ListModel>(
           builder: (context, model, child) {
-            if (topModel.savePageUpdate == true) {
+            if (topModel.savePageUpdate) {
               model.fetchData();
             }
 
