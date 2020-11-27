@@ -8,6 +8,7 @@ import 'package:weight_management/presentation/introduction/introduction_page.da
 import 'package:weight_management/presentation/list/list_page.dart';
 import 'package:weight_management/presentation/main/main_model.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/presentation/mypage/mypage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,7 @@ class TopPage extends StatelessWidget {
     "比較",
     "グラフ",
     "一覧",
+    "マイページ",
   ];
 
   @override
@@ -82,8 +84,12 @@ class TopPage extends StatelessWidget {
                     title: Text(_tabNames[2]),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
+                    icon: Icon(Icons.list),
                     title: Text(_tabNames[3]),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    title: Text(_tabNames[4]),
                   ),
                 ],
               ));
@@ -102,6 +108,7 @@ class TopPage extends StatelessWidget {
         _tabPage(currentIndex, 1, ComparePage()),
         _tabPage(currentIndex, 2, GraphPage()),
         _tabPage(currentIndex, 3, ListPage()),
+        _tabPage(currentIndex, 4, MyPage()),
       ],
     );
   }
