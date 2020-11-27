@@ -150,6 +150,8 @@ class ListPage extends StatelessWidget {
                                                   context, model, muscleData);
                                               await topModel
                                                   .updateListPageTrue();
+                                              await topModel
+                                                  .updateGraphPageTrue();
                                             },
                                           ),
                                         ],
@@ -189,6 +191,8 @@ class ListPage extends StatelessWidget {
                                                   context, model, muscleData);
                                               await topModel
                                                   .updateListPageTrue();
+                                              await topModel
+                                                  .updateGraphPageTrue();
                                             },
                                           ),
                                         ],
