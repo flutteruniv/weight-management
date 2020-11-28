@@ -28,6 +28,7 @@ class CarenderSavePage extends StatelessWidget {
               return SingleChildScrollView(
                 child: Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       ButtonTheme(
                         minWidth: 250,
