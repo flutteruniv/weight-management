@@ -62,7 +62,10 @@ class TopPage extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 centerTitle: true,
-                title: Text(_tabNames[model.currentIndex]),
+                title: Text(
+                  _tabNames[model.currentIndex],
+                  style: TextStyle(fontSize: 25),
+                ),
                 backgroundColor: Colors.blue,
               ),
               body: _topPageBody(context),
@@ -72,19 +75,19 @@ class TopPage extends StatelessWidget {
                 type: BottomNavigationBarType.fixed,
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
+                    icon: Icon(Icons.edit),
                     title: Text(_tabNames[0]),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.movie),
+                    icon: Icon(Icons.group),
                     title: Text(_tabNames[1]),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.speaker_notes),
+                    icon: Icon(Icons.insights),
                     title: Text(_tabNames[2]),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.list),
+                    icon: Icon(Icons.list_alt),
                     title: Text(_tabNames[3]),
                   ),
                   BottomNavigationBarItem(
