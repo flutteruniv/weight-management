@@ -49,7 +49,7 @@ class MyPageModel extends ChangeNotifier {
   Future addDataToFirebase() async {
     //firebaseに値を追加
     if (idealWeight == null) {
-      throw ('体重を入力してください');
+      throw ('体重は入力するんだ！');
     }
     if (idealImageFile != null && idealFat != null) {
       //写真と体脂肪率があるとき
@@ -92,7 +92,7 @@ class MyPageModel extends ChangeNotifier {
 
   Future updateData(IdealMuscleData muscleData) async {
     if (idealWeight == null) {
-      throw ('体重を入力してください');
+      throw ('体重は入力するんだ！');
     }
     if (idealImageFile != null && idealFat != null) {
       //写真と体脂肪率があるとき

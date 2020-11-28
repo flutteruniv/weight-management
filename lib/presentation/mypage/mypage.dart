@@ -25,7 +25,7 @@ class MyPage extends StatelessWidget {
                         style: TextStyle(fontSize: 20),
                       ),
                       TextField(
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(fontSize: 25),
                         controller: model.idealWeightTextController,
                         keyboardType: TextInputType.number,
                         onChanged: (number) {
@@ -59,7 +59,7 @@ class MyPage extends StatelessWidget {
                         style: TextStyle(fontSize: 20),
                       ),
                       TextField(
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(fontSize: 25),
                         controller: model.idealFatTextController,
                         keyboardType: TextInputType.number,
                         onChanged: (number) {
