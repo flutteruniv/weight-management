@@ -72,7 +72,7 @@ class GraphPage extends StatelessWidget {
                     height: deviceHeight * 0.6,
                     width: double.infinity,
                     child: charts.TimeSeriesChart(
-                      model.weight
+                      model.isSelectedWeight
                           ? _createWeightData(model.seriesWeightList)
                           : _createFatData(model.seriesFatList),
                       domainAxis: charts.DateTimeAxisSpec(
@@ -100,7 +100,7 @@ class GraphPage extends StatelessWidget {
                         height: 30,
                         child: RaisedButton(
                           onPressed: () async {
-                            await model.setOneWeek();
+                            await model.chagePeriod(model.sevenDaysAgo);
                           },
                           child: Text(
                             '1週間',
@@ -117,7 +117,7 @@ class GraphPage extends StatelessWidget {
                         height: 30,
                         child: RaisedButton(
                           onPressed: () async {
-                            await model.setOneMonth();
+                            await model.chagePeriod(model.thirtyDaysAgo);
                           },
                           child: Text(
                             '1か月間',
@@ -134,7 +134,7 @@ class GraphPage extends StatelessWidget {
                         height: 30,
                         child: RaisedButton(
                           onPressed: () async {
-                            await model.setThreeMonths();
+                            await model.chagePeriod(model.threeMonthsAgo);
                           },
                           child: Text(
                             '3か月間',

@@ -10,15 +10,15 @@ class GraphModel extends ChangeNotifier {
   DateTime sevenDaysAgo;
   DateTime thirtyDaysAgo;
   DateTime threeMonthsAgo;
-  bool weight = true;
+  bool isSelectedWeight = true;
 
   Future weightTrue() {
-    weight = true;
+    isSelectedWeight = true;
     notifyListeners();
   }
 
   Future weightFalse() {
-    weight = false;
+    isSelectedWeight = false;
     notifyListeners();
   }
 
@@ -48,39 +48,11 @@ class GraphModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future setOneWeek() {
+  Future chagePeriod(DateTime time) {
     seriesWeightList.clear();
     seriesFatList.clear();
     for (int i = 0; i < muscleData.length; i++) {
-      if (muscleData[i].timestamp.toDate().isBefore(sevenDaysAgo)) break;
-      seriesWeightList.add(
-          weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
-      if (muscleData[i].bodyFatPercentage != null)
-        seriesFatList.add(fatData(
-            muscleData[i].timestamp.toDate(), muscleData[i].bodyFatPercentage));
-    }
-    notifyListeners();
-  }
-
-  Future setOneMonth() {
-    seriesWeightList.clear();
-    seriesFatList.clear();
-    for (int i = 0; i < muscleData.length; i++) {
-      if (muscleData[i].timestamp.toDate().isBefore(thirtyDaysAgo)) break;
-      seriesWeightList.add(
-          weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
-      if (muscleData[i].bodyFatPercentage != null)
-        seriesFatList.add(fatData(
-            muscleData[i].timestamp.toDate(), muscleData[i].bodyFatPercentage));
-    }
-    notifyListeners();
-  }
-
-  Future setThreeMonths() {
-    seriesWeightList.clear();
-    seriesFatList.clear();
-    for (int i = 0; i < muscleData.length; i++) {
-      if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
+      if (muscleData[i].timestamp.toDate().isBefore(time)) break;
       seriesWeightList.add(
           weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
       if (muscleData[i].bodyFatPercentage != null)
