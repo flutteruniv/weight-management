@@ -4,7 +4,17 @@ import 'package:flutter/material.dart';
 class TopModel extends ChangeNotifier {
   bool savePageUpdate = false;
   bool listPageUpdate = false;
-  bool introduction = true;
+  bool graphPageUpdate = false;
+
+  Future updateGraphPageTrue() {
+    graphPageUpdate = true;
+    notifyListeners();
+  }
+
+  Future updateGraphPageFalse() {
+    graphPageUpdate = false;
+    notifyListeners();
+  }
 
   Future updateListPageTrue() {
     listPageUpdate = true;
@@ -35,6 +45,7 @@ class TopModel extends ChangeNotifier {
   void onTabTapped(int index) async {
     currentIndex = index;
     updateListPageFalse();
+    updateGraphPageFalse();
     notifyListeners();
   }
 }

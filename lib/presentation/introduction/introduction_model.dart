@@ -3,7 +3,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionModel extends ChangeNotifier {
-  bool intro;
+  bool intro = false;
 
   getPrefIntro() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -18,7 +18,7 @@ class CarenderSavePage extends StatelessWidget {
           padding: EdgeInsets.only(
               top: deviceHeight * 0.03, right: 20.0, left: 20.0),
           child: Consumer<CalenderSaveModel>(builder: (context, model, child) {
-            if (topModel.listPageUpdate == true) {
+            if (topModel.listPageUpdate) {
               model.initData();
               model.imageFile = null;
             }
@@ -94,7 +94,7 @@ class CarenderSavePage extends StatelessWidget {
                       ),
                       SizedBox(height: deviceHeight * 0.03),
                       SizedBox(
-                        height: deviceHeight * 0.35,
+                        height: deviceHeight * 0.33,
                         width: deviceWidth * 0.45,
                         child: InkWell(
                           onTap: () async {
@@ -141,11 +141,11 @@ class CarenderSavePage extends StatelessWidget {
                         child: RaisedButton(
                           onPressed: () async {
                             //to do
-                            if (model.sameDate == true) {
+                            if (model.sameDate) {
                               //同じ日付あるなら更新
                               await updateData(model, context,
                                   model.sameDateMuscleData, topModel);
-                            } else if (model.sameDate != true) {
+                            } else {
                               //同じ日付がないなら保存
                               await addData(model, context, topModel);
                             }
@@ -196,6 +196,7 @@ class CarenderSavePage extends StatelessWidget {
     try {
       await model.addDataToFirebase();
       topModel.updatePageTrue();
+      topModel.updateGraphPageTrue();
 
       showDialog(
         context: context,
@@ -207,6 +208,7 @@ class CarenderSavePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                   topModel.updatePageFalse();
+                  topModel.updateGraphPageFalse();
                 },
                 child: Text('OK'),
               )
@@ -238,6 +240,7 @@ class CarenderSavePage extends StatelessWidget {
     try {
       await model.updateData(muscleData);
       topModel.updatePageTrue();
+      topModel.updateGraphPageTrue();
 
       showDialog(
         context: context,
@@ -265,6 +268,7 @@ class CarenderSavePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                     topModel.updatePageFalse();
+                    topModel.updateGraphPageFalse();
                   },
                   child: Text('OK'))
             ],

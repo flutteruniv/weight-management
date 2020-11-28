@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         child: Scaffold(
           body: Consumer<IntroductionModel>(
             builder: (context, model, child) {
-              return model.intro != true ? TopPage() : IntroductionPage();
+              return model.intro == true ? IntroductionPage() : TopPage();
             },
           ),
         ),

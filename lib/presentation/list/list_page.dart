@@ -13,7 +13,7 @@ class ListPage extends StatelessWidget {
       child: Scaffold(
         body: Consumer<ListModel>(
           builder: (context, model, child) {
-            if (topModel.savePageUpdate == true) {
+            if (topModel.savePageUpdate) {
               model.fetchData();
             }
 
@@ -150,6 +150,8 @@ class ListPage extends StatelessWidget {
                                                   context, model, muscleData);
                                               await topModel
                                                   .updateListPageTrue();
+                                              await topModel
+                                                  .updateGraphPageTrue();
                                             },
                                           ),
                                         ],
@@ -189,6 +191,8 @@ class ListPage extends StatelessWidget {
                                                   context, model, muscleData);
                                               await topModel
                                                   .updateListPageTrue();
+                                              await topModel
+                                                  .updateGraphPageTrue();
                                             },
                                           ),
                                         ],
