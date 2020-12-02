@@ -41,5 +41,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>画像のアップロードのため</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>ギャラリーからの画像のアップロードのため</string>
+    <key>NSCameraUsageDescription</key>
+    <string>カメラでの画像のアップロードのため</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>画像のアップロードのため</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>ギャラリーからの画像のアップロードのため</string>
+    <key>NSCameraUsageDescription</key>
+    <string>カメラでの画像のアップロードのため</string>
 </dict>
 </plist>
