@@ -129,6 +129,25 @@ class ComparePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              ButtonTheme(
+                                minWidth: 20,
+                                height: 30,
+                                child: RaisedButton.icon(
+                                  // クリアする
+                                  icon: Icon(Icons.fitness_center_rounded),
+                                  onPressed: () async {
+                                    await setIdealData(model, context, 0);
+                                  },
+                                  label: Text(
+                                    '理想',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(
@@ -261,6 +280,25 @@ class ComparePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              ButtonTheme(
+                                minWidth: 20,
+                                height: 30,
+                                child: RaisedButton.icon(
+                                  // クリアする
+                                  icon: Icon(Icons.fitness_center_rounded),
+                                  onPressed: () async {
+                                    await setIdealData(model, context, 1);
+                                  },
+                                  label: Text(
+                                    '理想',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(
@@ -294,5 +332,27 @@ class ComparePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future setIdealData(CompareModel model, BuildContext context, int i) async {
+    try {
+      await model.setIdealBody(i);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('理想の身体を設定しよう！'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        },
+      );
+    }
   }
 }
