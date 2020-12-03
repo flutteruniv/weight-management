@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/presentation/mypage/mypage_model.dart';
@@ -159,7 +160,12 @@ class MyPage extends StatelessWidget {
                       ),
                       RaisedButton(
                         child: Text('ログアウト'),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AuthenticationPage()),
+                          );
+                        },
                       ),
                     ],
                   ),
