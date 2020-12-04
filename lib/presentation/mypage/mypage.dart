@@ -159,34 +159,45 @@ class MyPage extends StatelessWidget {
                       SizedBox(
                         height: deviceHeight * 0.02,
                       ),
-                      RaisedButton(
-                        child: Text('ログアウト'),
-                        onPressed: () async {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('ログアウトしますか？'),
-                                actions: [
-                                  FlatButton(
-                                    child: Text('OK'),
-                                    onPressed: () async {
-                                      await FirebaseAuth.instance.signOut();
-                                      // ログイン画面に遷移＋チャット画面を破棄
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              AuthenticationPage(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
+                      ButtonTheme(
+                        minWidth: 150,
+                        height: 40,
+                        child: RaisedButton(
+                          child: Text(
+                            'ログアウト',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          color: Colors.white,
+                          shape: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('ログアウトしますか？'),
+                                  actions: [
+                                    FlatButton(
+                                      child: Text('OK'),
+                                      onPressed: () async {
+                                        await FirebaseAuth.instance.signOut();
+                                        // ログイン画面に遷移＋チャット画面を破棄
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AuthenticationPage(),
+                                            ),
+                                            (_) => false);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),

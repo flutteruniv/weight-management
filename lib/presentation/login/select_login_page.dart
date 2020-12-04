@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/presentation/login/login_page.dart';
 import 'package:weight_management/presentation/signup/signup_page.dart';
 
 class SelectLoginUpPage extends StatelessWidget {
@@ -21,7 +22,7 @@ class SelectLoginUpPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignUpPage()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
               ),
