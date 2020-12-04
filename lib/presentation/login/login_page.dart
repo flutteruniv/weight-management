@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                       try {
                         await model.login();
                         await _showDialog(context, 'ログインしました');
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => TopPage()),
                         );

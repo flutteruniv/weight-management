@@ -51,7 +51,7 @@ class CarenderSavePage extends StatelessWidget {
                             model.selectDate();
                             await model.judgeDate(); //日付を取得した時に同じ日付があるか判断
                             await model.setText();
-                            if (model.sameDate != true) model.imageFile = null;
+                            // if (model.sameDate != true) model.imageFile = null;
                           },
                           label: Text(
                             model.viewDate,
@@ -153,9 +153,10 @@ class CarenderSavePage extends StatelessWidget {
                               //同じ日付がないなら保存
                               await addData(model, context, topModel);
                             }
-                            await model.fetchData();
+                            /*  await model.fetchData();
                             await model.judgeDate();
-                            await model.setText();
+                            await model.setText();*/
+                            await model.initData();
                           },
                           child: model.sameDate != true
                               ? Padding(

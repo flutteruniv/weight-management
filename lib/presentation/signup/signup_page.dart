@@ -47,7 +47,7 @@ class SignUpPage extends StatelessWidget {
                       try {
                         await model.signUp();
                         _showDialog(context, '登録完了しました');
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => TopPage()),
                         );
