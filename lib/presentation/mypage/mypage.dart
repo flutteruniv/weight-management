@@ -162,12 +162,29 @@ class MyPage extends StatelessWidget {
                       RaisedButton(
                         child: Text('ログアウト'),
                         onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                          // ログイン画面に遷移＋チャット画面を破棄
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AuthenticationPage()),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('ログアウトしますか？'),
+                                actions: [
+                                  FlatButton(
+                                    child: Text('OK'),
+                                    onPressed: () async {
+                                      await FirebaseAuth.instance.signOut();
+                                      // ログイン画面に遷移＋チャット画面を破棄
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AuthenticationPage(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                       ),
