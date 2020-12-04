@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class SignUpModel extends ChangeNotifier {
   String mail = '';
   String password = '';
+  String uid;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -22,13 +23,19 @@ class SignUpModel extends ChangeNotifier {
       password: password,
     ))
         .user;
+
+    if (user != null) {
+      uid = user.uid;
+    }
     final email = user.email;
 
     FirebaseFirestore.instance.collection('users').add(
       {
         'email': email,
         'createdAt': Timestamp.now(),
+        'userID': uid,
       },
     );
+    notifyListeners();
   }
 }

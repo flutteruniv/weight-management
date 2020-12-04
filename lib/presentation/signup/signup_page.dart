@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/presentation/main/main.dart';
 import 'package:weight_management/presentation/signup/signup_model.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -39,12 +40,17 @@ class SignUpPage extends StatelessWidget {
                       model.password = text;
                     },
                   ),
+                  model.uid != null ? Text(model.uid) : Text('なし'),
                   RaisedButton(
                     child: Text('登録する'),
                     onPressed: () async {
                       try {
                         await model.signUp();
                         _showDialog(context, '登録完了しました');
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => TopPage()),
+                        );
                       } catch (e) {
                         _showDialog(context, e.toString());
                       }

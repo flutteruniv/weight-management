@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:provider/provider.dart';
@@ -160,10 +161,13 @@ class MyPage extends StatelessWidget {
                       ),
                       RaisedButton(
                         child: Text('ログアウト'),
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          // ログイン画面に遷移＋チャット画面を破棄
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => AuthenticationPage()),
+                            MaterialPageRoute(
+                                builder: (context) => AuthenticationPage()),
                           );
                         },
                       ),

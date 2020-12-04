@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/login/login_model.dart';
-
-import '../list/list_page.dart';
+import 'package:weight_management/presentation/main/main.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -47,9 +46,9 @@ class LoginPage extends StatelessWidget {
                       try {
                         await model.login();
                         await _showDialog(context, 'ログインしました');
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => ListPage()),
+                          MaterialPageRoute(builder: (context) => TopPage()),
                         );
                       } catch (e) {
                         _showDialog(context, e.toString());
