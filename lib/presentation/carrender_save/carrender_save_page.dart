@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/carrender_save/carrender_save_model.dart';
 import 'package:weight_management/presentation/main/main_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CarenderSavePage extends StatelessWidget {
   @override
@@ -30,6 +31,8 @@ class CarenderSavePage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
+                      Text(FirebaseAuth.instance.currentUser.uid),
+                      Text(model.userDocID),
                       ButtonTheme(
                         minWidth: 250,
                         height: deviceHeight * 0.07,

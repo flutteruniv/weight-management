@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:weight_management/domain/muscle_data.dart';
+import 'package:weight_management/domain/user.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
   String viewDate; //表示する日付
@@ -22,6 +23,9 @@ class CalenderSaveModel extends ChangeNotifier {
   String imagePath;
   TextEditingController weightTextController, fatTextController;
 
+  List<Users> userData = [];
+  String userDocID;
+
   Future deleteDate() {
     weightTextController = TextEditingController(text: '');
     fatTextController = TextEditingController(text: '');
@@ -31,6 +35,16 @@ class CalenderSaveModel extends ChangeNotifier {
   }
 
   Future initData() async {
+    final docss = await FirebaseFirestore.instance.collection('users').get();
+    final userData = docss.docs.map((doc) => Users(doc)).toList();
+    this.userData = userData;
+    for (int i = 0; i < userData.length; i++) {
+      if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
+        userDocID = userData[i].documentID;
+        break;
+      }
+    }
+
     final docs = await FirebaseFirestore.instance
         .collection('muscleData')
         .orderBy('date', descending: true)
@@ -281,7 +295,7 @@ class CalenderSaveModel extends ChangeNotifier {
       //   final imageURL = await _uploadImage();
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(firebaseUser.uid)
+          .doc(userDocID)
           .collection('muscleData')
           .add(
         {
