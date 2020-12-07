@@ -78,17 +78,14 @@ class LoginPage extends StatelessWidget {
                     height: 30,
                   ),
                   ButtonTheme(
-                    minWidth: 200,
+                    minWidth: double.infinity,
                     height: 50,
                     child: RaisedButton(
                       child: Text(
                         'ログインする',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
-                      color: Colors.white,
-                      shape: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
+                      color: Colors.blue,
                       onPressed: () async {
                         try {
                           await model.login();
