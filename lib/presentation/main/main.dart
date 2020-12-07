@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:weight_management/domain/user.dart';
 import 'package:weight_management/presentation/Graph/graph_page.dart';
+import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:weight_management/presentation/carrender_save/carrender_save_page.dart';
 import 'package:weight_management/presentation/compare/compare_page.dart';
 import 'package:weight_management/presentation/introduction/introduction_model.dart';
@@ -29,6 +32,7 @@ class MyApp extends StatelessWidget {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final User currentUser = FirebaseAuth.instance.currentUser;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<IntroductionModel>(
@@ -36,7 +40,11 @@ class MyApp extends StatelessWidget {
         child: Scaffold(
           body: Consumer<IntroductionModel>(
             builder: (context, model, child) {
-              return model.intro == true ? IntroductionPage() : TopPage();
+              return model.intro == true
+                  ? IntroductionPage()
+                  : currentUser != null
+                      ? TopPage()
+                      : AuthenticationPage();
             },
           ),
         ),

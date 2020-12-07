@@ -5,6 +5,7 @@ class TopModel extends ChangeNotifier {
   bool savePageUpdate = false;
   bool listPageUpdate = false;
   bool graphPageUpdate = false;
+  String uid;
 
   Future updateGraphPageTrue() {
     graphPageUpdate = true;

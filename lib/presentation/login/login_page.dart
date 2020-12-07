@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/login/login_model.dart';
-
-import '../list/list_page.dart';
+import 'package:weight_management/presentation/main/main.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -24,7 +23,7 @@ class LoginPage extends StatelessWidget {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'example@kboy.com',
+                      hintText: 'example@gmail.com',
                     ),
                     controller: mailController,
                     onChanged: (text) {
@@ -41,20 +40,35 @@ class LoginPage extends StatelessWidget {
                       model.password = text;
                     },
                   ),
-                  RaisedButton(
-                    child: Text('ログインする'),
-                    onPressed: () async {
-                      try {
-                        await model.login();
-                        await _showDialog(context, 'ログインしました');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ListPage()),
-                        );
-                      } catch (e) {
-                        _showDialog(context, e.toString());
-                      }
-                    },
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ButtonTheme(
+                    minWidth: 200,
+                    height: 50,
+                    child: RaisedButton(
+                      child: Text(
+                        'ログインする',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      color: Colors.white,
+                      shape: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      onPressed: () async {
+                        try {
+                          await model.login();
+                          await _showDialog(context, 'ログインしました');
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TopPage()),
+                              (_) => false);
+                        } catch (e) {
+                          _showDialog(context, e.toString());
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
