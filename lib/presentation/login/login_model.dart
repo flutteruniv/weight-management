@@ -64,12 +64,34 @@ class LoginModel extends ChangeNotifier {
     if (password.isEmpty) {
       throw ('パスワードを入力してください');
     }
-
-    final result = await _auth.signInWithEmailAndPassword(
-      email: mail,
-      password: password,
-    );
-    final uid = result.user.uid;
+    try {
+      final result = await _auth.signInWithEmailAndPassword(
+        email: mail,
+        password: password,
+      );
+      final uid = result.user.uid;
+    } catch (e) {
+      print(e.code);
+      throw (_convertErrorMessage(e.code));
+    }
     // TODO 端末に保存
+    notifyListeners();
+  }
+
+  String _convertErrorMessage(e) {
+    switch (e) {
+      case 'invalid-email':
+        return 'メールアドレスを正しい形式で入力してください';
+      case 'wrong-password':
+        return 'パスワードが間違っています';
+      case 'user-not-found':
+        return 'ユーザーが見つかりません';
+      case 'user-disabled':
+        return 'ユーザーが無効です';
+      case 'too-many-requests':
+        return 'しばらく待ってからお試し下さい';
+      default:
+        return '不明なエラーです';
+    }
   }
 }
