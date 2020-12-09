@@ -17,25 +17,45 @@ class SignUpModel extends ChangeNotifier {
     if (password.isEmpty) {
       throw ('パスワードを入力してください');
     }
+    try {
+      final User user = (await _auth.createUserWithEmailAndPassword(
+        email: mail,
+        password: password,
+      ))
+          .user;
 
-    final User user = (await _auth.createUserWithEmailAndPassword(
-      email: mail,
-      password: password,
-    ))
-        .user;
+      if (user != null) {
+        uid = user.uid;
+      }
+      final email = user.email;
 
-    if (user != null) {
-      uid = user.uid;
+      FirebaseFirestore.instance.collection('users').add(
+        {
+          'email': email,
+          'createdAt': Timestamp.now(),
+          'userID': uid,
+        },
+      );
+    } catch (e) {
+      print(e.code);
+      throw (_convertErrorMessage(e.code));
     }
-    final email = user.email;
-
-    FirebaseFirestore.instance.collection('users').add(
-      {
-        'email': email,
-        'createdAt': Timestamp.now(),
-        'userID': uid,
-      },
-    );
     notifyListeners();
+  }
+
+  String _convertErrorMessage(e) {
+    switch (e) {
+      case 'invalid-email':
+        return 'メールアドレスを正しい形式で入力してください';
+      case 'too-many-requests':
+        return 'しばらく待ってからお試し下さい';
+      case 'email-already-in-use':
+        return 'このメールアドレスはすでに登録されています。';
+      case 'weak-password':
+        return 'パスワードを6文字以上に設定してください';
+
+      default:
+        return '不明なエラーです';
+    }
   }
 }
