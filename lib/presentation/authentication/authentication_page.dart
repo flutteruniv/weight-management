@@ -34,8 +34,7 @@ class AuthenticationPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectSignUpPage()),
+                      MaterialPageRoute(builder: (context) => SignUpPage()),
                     );
                   },
                 ),
@@ -58,8 +57,7 @@ class AuthenticationPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectLoginUpPage()),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
                 ),

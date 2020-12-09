@@ -34,7 +34,6 @@ class MyPageModel extends ChangeNotifier {
         .collection('users')
         .doc(userDocID)
         .collection('idealMuscleData')
-        .orderBy('date', descending: true)
         .get();
     final muscleData = docs.docs.map((doc) => IdealMuscleData(doc)).toList();
     this.idealMuscleList = muscleData;
