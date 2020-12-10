@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:weight_management/presentation/introduction/introduction_model.dart';
 import 'package:weight_management/presentation/main/main.dart';
 
@@ -16,7 +17,8 @@ class IntroductionPage extends StatelessWidget {
               pages: model.listPagesViewModel,
               onDone: () {
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => TopPage()), (_) => false);
+                    MaterialPageRoute(builder: (_) => AuthenticationPage()),
+                    (_) => false);
                 model.setIntro();
               },
               showSkipButton: true,
