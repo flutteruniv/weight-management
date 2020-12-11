@@ -107,19 +107,21 @@ class CarenderSavePage extends StatelessWidget {
                           child: model.sameDate == true //同じ日付がある
                               ? model.imageFile != null //写真のパスがある
                                   ? Image.file(model.imageFile) //写真を表示
-                                  : Container(
-                                      color: Colors.blue,
-                                      child: Center(
-                                        child: Text(
-                                          '写真を選ぶ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: 30),
-                                        ),
-                                      ),
-                                    )
+                                  : model.imageURL != null
+                                      ? Image.network(model.imageURL)
+                                      : Container(
+                                          color: Colors.blue,
+                                          child: Center(
+                                            child: Text(
+                                              '写真を選ぶ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  fontSize: 30),
+                                            ),
+                                          ),
+                                        )
                               //同じ日付がないとき
                               : model.imageFile != null //写真があるとき
                                   ? Image.file(model.imageFile)
@@ -283,3 +285,35 @@ class CarenderSavePage extends StatelessWidget {
     }
   }
 }
+/* model.sameDate == true //同じ日付がある
+                              ? model.imageFile != null //写真のパスがある
+                                  ? Image.file(model.imageFile) //写真を表示
+                                  : Container(
+                                      color: Colors.blue,
+                                      child: Center(
+                                        child: Text(
+                                          '写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                    )
+                              //同じ日付がないとき
+                              : model.imageFile != null //写真があるとき
+                                  ? Image.file(model.imageFile)
+                                  : Container(
+                                      color: Colors.blue,
+                                      child: Center(
+                                        child: Text(
+                                          '写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                    ),*/
