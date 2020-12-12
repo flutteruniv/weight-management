@@ -103,20 +103,22 @@ class MyPage extends StatelessWidget {
                           },
                           child: model.idealImageFile != null
                               ? Image.file(model.idealImageFile)
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white70,
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '理想の身体\nの写真を選ぶ',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 25),
+                              : model.idealImageURL != null //DBからの写真がある
+                                  ? Image.network(model.idealImageURL)
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white70,
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '理想の身体\nの写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 25),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
                         ),
                       ),
                       SizedBox(
