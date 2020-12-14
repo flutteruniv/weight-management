@@ -10,6 +10,7 @@ class ListModel extends ChangeNotifier {
   String userDocID;
   List<MuscleData> muscleData = [];
   String sortName = '日付順（降順）';
+  bool hasData = false;
 
   Future fetchData() async {
     final docss = await FirebaseFirestore.instance.collection('users').get();
@@ -21,16 +22,20 @@ class ListModel extends ChangeNotifier {
         break;
       }
     }
-
-    final docs = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userDocID)
-        .collection('muscleData')
-        .orderBy('date', descending: true)
-        .get();
-    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-    this.muscleData = muscleData;
-    notifyListeners();
+    try {
+      final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
+          .collection('muscleData')
+          .orderBy('date', descending: true)
+          .get();
+      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+      this.muscleData = muscleData;
+      if (muscleData[0] != null) hasData = true;
+      notifyListeners();
+    } catch (e) {
+      hasData = false;
+    }
   }
 
   Future deleteList(MuscleData muscleData) async {

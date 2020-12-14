@@ -13,6 +13,7 @@ class GraphModel extends ChangeNotifier {
   DateTime thirtyDaysAgo;
   DateTime threeMonthsAgo;
   bool isSelectedWeight = true;
+  bool hasData = false;
 
   List<Users> userData = [];
   String userDocID;
@@ -39,28 +40,35 @@ class GraphModel extends ChangeNotifier {
         break;
       }
     }
+    try {
+      final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
+          .collection('muscleData')
+          .orderBy('date', descending: true)
+          .get();
+      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+      this.muscleData = muscleData;
+      if (muscleData[0] != null) hasData = true;
+    } catch (e) {
+      hasData = false;
+    }
 
-    final docs = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userDocID)
-        .collection('muscleData')
-        .orderBy('date', descending: true)
-        .get();
-    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-    this.muscleData = muscleData;
+    if (hasData) {
+      sevenDaysAgo =
+          muscleData[0].timestamp.toDate().add(Duration(days: 7) * -1);
+      thirtyDaysAgo =
+          muscleData[0].timestamp.toDate().add(Duration(days: 30) * -1);
+      threeMonthsAgo =
+          muscleData[0].timestamp.toDate().add(Duration(days: 90) * -1);
 
-    sevenDaysAgo = muscleData[0].timestamp.toDate().add(Duration(days: 7) * -1);
-    thirtyDaysAgo =
-        muscleData[0].timestamp.toDate().add(Duration(days: 30) * -1);
-    threeMonthsAgo =
-        muscleData[0].timestamp.toDate().add(Duration(days: 90) * -1);
-
-    for (int i = 0; i < muscleData.length; i++) {
-      if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
-      seriesWeightList.add(
-          weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
-      seriesFatList.add(fatData(
-          muscleData[i].timestamp.toDate(), muscleData[i].bodyFatPercentage));
+      for (int i = 0; i < muscleData.length; i++) {
+        if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
+        seriesWeightList.add(
+            weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
+        seriesFatList.add(fatData(
+            muscleData[i].timestamp.toDate(), muscleData[i].bodyFatPercentage));
+      }
     }
     notifyListeners();
   }
