@@ -38,14 +38,6 @@ class SignUpModel extends ChangeNotifier {
         'documentID': newDoc.id,
       },
     );
-
-    /*FirebaseFirestore.instance.collection('users').add(
-      {
-        'email': email,
-        'createdAt': Timestamp.now(),
-        'userID': uid,
-      },
-    );*/
     notifyListeners();
   }
 }
