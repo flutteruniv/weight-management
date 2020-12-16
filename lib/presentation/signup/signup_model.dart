@@ -29,28 +29,28 @@ class SignUpModel extends ChangeNotifier {
       }
       final email = user.email;
 
-      FirebaseFirestore.instance.collection('users').add(
+      final newDoc = FirebaseFirestore.instance.collection('users').doc();
+      newDoc.set(
+        {
+          'email': email,
+          'createdAt': Timestamp.now(),
+          'userID': uid,
+          'documentID': newDoc.id,
+        },
+      );
+
+      /* FirebaseFirestore.instance.collection('users').add(
         {
           'email': email,
           'createdAt': Timestamp.now(),
           'userID': uid,
         },
-      );
+      );*/
     } catch (e) {
       print(e.code);
       throw (_convertErrorMessage(e.code));
     }
-    final email = user.email;
 
-    final newDoc = FirebaseFirestore.instance.collection('users').doc();
-    newDoc.set(
-      {
-        'email': email,
-        'createdAt': Timestamp.now(),
-        'userID': uid,
-        'documentID': newDoc.id,
-      },
-    );
     notifyListeners();
   }
 
