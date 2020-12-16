@@ -19,6 +19,16 @@ class AuthenticationPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                '筋肉日記',
+                style: TextStyle(
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54),
+              ),
+              SizedBox(
+                height: 30,
+              ),
               ButtonTheme(
                 minWidth: 200,
                 height: 50,

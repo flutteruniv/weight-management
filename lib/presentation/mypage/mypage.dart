@@ -119,6 +119,9 @@ class MyPage extends StatelessWidget {
                   ButtonTheme(
                     minWidth: 20000,
                     height: 40,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: RaisedButton(
                       onPressed: () async {
                         if (model.hasIdealMuscle) {

@@ -178,7 +178,7 @@ class CarenderSavePage extends StatelessWidget {
                             ),
                       color: Colors.blue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
