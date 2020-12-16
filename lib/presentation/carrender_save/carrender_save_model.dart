@@ -64,8 +64,8 @@ class CalenderSaveModel extends ChangeNotifier {
         sameDate = true;
         sameDateMuscleData = muscleData[i];
         if (sameDateMuscleData.imageURL != null) {
-          //  imageFile = File(sameDateMuscleData.imagePath);
-          //   imagePath = sameDateMuscleData.imagePath;
+          // imageFile = File(sameDateMuscleData.imagePath);
+          // imagePath = sameDateMuscleData.imagePath;
           imageURL = sameDateMuscleData.imageURL;
         }
         break;
@@ -95,7 +95,8 @@ class CalenderSaveModel extends ChangeNotifier {
         additionalBodyFatPercentage = null;
       }
       if (sameDateMuscleData.imageURL != null) {
-        //    imageFile = File(sameDateMuscleData.imagePath);
+        // imageFile = File(sameDateMuscleData.imagePath);
+
         imageURL = sameDateMuscleData.imageURL;
       } else {
         imageFile = null;
@@ -131,10 +132,12 @@ class CalenderSaveModel extends ChangeNotifier {
         additionalBodyFatPercentage = null;
       }
       if (sameDateMuscleData.imageURL != null) {
+
         //   imageFile = File(sameDateMuscleData.imagePath);
         imageURL = sameDateMuscleData.imageURL;
       } else {
         //   imageFile = null;
+
         imageURL = null;
       }
     } else {
