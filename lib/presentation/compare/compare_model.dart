@@ -36,14 +36,16 @@ class CompareModel extends ChangeNotifier {
   }
 
   Future changeValue(MuscleData selectMuscleData, int i) {
-    weight[i] = selectMuscleData.weight.toString();
-    date[i] = selectMuscleData.date;
+    try {
+      weight[i] = selectMuscleData.weight.toString();
+      date[i] = selectMuscleData.date;
 
-    fatPercentage[i] = selectMuscleData.bodyFatPercentage != null
-        ? selectMuscleData.bodyFatPercentage.toString()
-        : null;
-    imageURL[i] =
-        selectMuscleData.imageURL != null ? selectMuscleData.imageURL : null;
+      fatPercentage[i] = selectMuscleData.bodyFatPercentage != null
+          ? selectMuscleData.bodyFatPercentage.toString()
+          : null;
+      imageURL[i] =
+          selectMuscleData.imageURL != null ? selectMuscleData.imageURL : null;
+    } catch (e) {}
     notifyListeners();
   }
 }

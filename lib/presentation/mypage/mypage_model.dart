@@ -30,27 +30,29 @@ class MyPageModel extends ChangeNotifier {
       }
     }
 
-    final docs = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userDocID)
-        .collection('idealMuscleData')
-        .get();
-    final muscleData = docs.docs.map((doc) => IdealMuscleData(doc)).toList();
-    this.idealMuscleList = muscleData;
-    idealMuscle = idealMuscleList[0];
-    if (idealMuscle != null) hasIdealMuscle = true;
-    if (hasIdealMuscle) {
-      idealWeight = idealMuscle.weight;
-      idealWeightTextController =
-          TextEditingController(text: idealWeight.toString());
-      if (idealMuscle.bodyFatPercentage != null) {
-        idealFat = idealMuscle.bodyFatPercentage;
-        idealFatTextController =
-            TextEditingController(text: idealFat.toString());
+    try {
+      final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
+          .collection('idealMuscleData')
+          .get();
+      final muscleData = docs.docs.map((doc) => IdealMuscleData(doc)).toList();
+      this.idealMuscleList = muscleData;
+      idealMuscle = idealMuscleList[0];
+      if (idealMuscle != null) hasIdealMuscle = true;
+      if (hasIdealMuscle) {
+        idealWeight = idealMuscle.weight;
+        idealWeightTextController =
+            TextEditingController(text: idealWeight.toString());
+        if (idealMuscle.bodyFatPercentage != null) {
+          idealFat = idealMuscle.bodyFatPercentage;
+          idealFatTextController =
+              TextEditingController(text: idealFat.toString());
+        }
+        if (idealMuscle.imagePath != null)
+          idealImageFile = File(idealMuscle.imagePath);
       }
-      if (idealMuscle.imagePath != null)
-        idealImageFile = File(idealMuscle.imagePath);
-    }
+    } catch (e) {}
 
     notifyListeners();
   }
