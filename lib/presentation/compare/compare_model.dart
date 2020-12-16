@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/muscle_data.dart';
+import 'package:weight_management/domain/user.dart';
 
 class CompareModel extends ChangeNotifier {
   MuscleData muscleData;
@@ -12,9 +14,25 @@ class CompareModel extends ChangeNotifier {
   List<IdealMuscleData> idealMuscleList = [];
   IdealMuscleData idealMuscle;
 
+  List<Users> userData = [];
+  String userDocID;
+
   Future setIdealBody(int i) async {
-    final docs =
-        await FirebaseFirestore.instance.collection('idealMuscleData').get();
+    final docss = await FirebaseFirestore.instance.collection('users').get();
+    final userData = docss.docs.map((doc) => Users(doc)).toList();
+    this.userData = userData;
+    for (int i = 0; i < userData.length; i++) {
+      if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
+        userDocID = userData[i].documentID;
+        break;
+      }
+    }
+
+    final docs = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userDocID)
+        .collection('idealMuscleData')
+        .get();
     final muscleData = docs.docs.map((doc) => IdealMuscleData(doc)).toList();
     this.idealMuscleList = muscleData;
     idealMuscle = idealMuscleList[0];
