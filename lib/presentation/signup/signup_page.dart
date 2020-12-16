@@ -18,21 +18,55 @@ class SignUpPage extends StatelessWidget {
         body: Consumer<SignUpModel>(
           builder: (context, model, child) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
+                  SizedBox(
+                    height: 15,
+                  ),
                   TextField(
                     decoration: InputDecoration(
                       hintText: 'example@gmail.com',
+                      labelText: "メールアドレス",
+                      enabledBorder: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(4.0),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(4.0),
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 3.0,
+                        ),
+                      ),
                     ),
                     controller: mailController,
                     onChanged: (text) {
                       model.mail = text;
                     },
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'パスワード',
+                      hintText: '6文字以上',
+                      labelText: "パスワード",
+                      enabledBorder: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(4.0),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(4.0),
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 3.0,
+                        ),
+                      ),
                     ),
                     obscureText: true,
                     controller: passwordController,
@@ -40,21 +74,32 @@ class SignUpPage extends StatelessWidget {
                       model.password = text;
                     },
                   ),
-                  model.uid != null ? Text(model.uid) : Text('なし'),
-                  RaisedButton(
-                    child: Text('登録する'),
-                    onPressed: () async {
-                      try {
-                        await model.signUp();
-                        _showDialog(context, '登録完了しました');
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => TopPage()),
-                        );
-                      } catch (e) {
-                        _showDialog(context, e.toString());
-                      }
-                    },
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ButtonTheme(
+                    minWidth: double.infinity,
+                    height: 50,
+                    child: RaisedButton(
+                      child: Text(
+                        '登録する',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      color: Colors.blue,
+                      onPressed: () async {
+                        try {
+                          await model.signUp();
+                          _showDialog(context, '登録完了しました');
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TopPage()),
+                              (_) => false);
+                        } catch (e) {
+                          _showDialog(context, e.toString());
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),

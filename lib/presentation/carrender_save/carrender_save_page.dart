@@ -105,9 +105,11 @@ class CarenderSavePage extends StatelessWidget {
                             model.showBottomSheet(context);
                           },
                           child: model.sameDate == true //同じ日付がある
-                              ? model.imageFile != null //写真のパスがある
-                                  ? Image.file(model.imageFile) //写真を表示
-                                  : model.imageURL != null
+
+                              ? model.imageFile != null //pickした写真がある
+                                  ? Image.file(model.imageFile) //pickした写真を表示
+                                  : model.imageURL != null //DBからの写真がある
+
                                       ? Image.network(model.imageURL)
                                       : Container(
                                           color: Colors.blue,

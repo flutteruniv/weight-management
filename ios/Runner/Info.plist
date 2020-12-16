@@ -53,5 +53,8 @@
     <string>ギャラリーからの画像のアップロードのため</string>
     <key>NSCameraUsageDescription</key>
     <string>カメラでの画像のアップロードのため</string>
+	<key>UIStatusBarHidden</key>
+	<true/>
+
 </dict>
 </plist>

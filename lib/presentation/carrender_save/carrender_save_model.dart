@@ -96,6 +96,7 @@ class CalenderSaveModel extends ChangeNotifier {
       }
       if (sameDateMuscleData.imageURL != null) {
         // imageFile = File(sameDateMuscleData.imagePath);
+
         imageURL = sameDateMuscleData.imageURL;
       } else {
         imageFile = null;
@@ -131,10 +132,12 @@ class CalenderSaveModel extends ChangeNotifier {
         additionalBodyFatPercentage = null;
       }
       if (sameDateMuscleData.imageURL != null) {
-        // imageFile = File(sameDateMuscleData.imagePath);
+
+        //   imageFile = File(sameDateMuscleData.imagePath);
         imageURL = sameDateMuscleData.imageURL;
       } else {
-        // imageFile = null;
+        //   imageFile = null;
+
         imageURL = null;
       }
     } else {

@@ -12,6 +12,7 @@ class MyPageModel extends ChangeNotifier {
   double idealFat;
   File idealImageFile;
   String idealImagePath;
+  String idealImageURL;
   List<Users> userData = [];
   String userDocID;
   List<IdealMuscleData> idealMuscleList = [];
@@ -49,8 +50,9 @@ class MyPageModel extends ChangeNotifier {
           idealFatTextController =
               TextEditingController(text: idealFat.toString());
         }
-        if (idealMuscle.imagePath != null)
-          idealImageFile = File(idealMuscle.imagePath);
+        if (idealMuscle.imageURL != null)
+         // idealImageFile = File(idealMuscle.imagePath);
+           idealImageURL = idealMuscle.imageURL;
       }
     } catch (e) {}
 
