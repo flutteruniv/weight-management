@@ -106,7 +106,6 @@ class CarenderSavePage extends StatelessWidget {
                           ? model.imageFile != null //pickした写真がある
                               ? Image.file(model.imageFile) //pickした写真を表示
                               : model.imageURL != null //DBからの写真がある
-
                                   ? Image.network(model.imageURL)
                                   : Container(
                                       color: Colors.blue,
@@ -124,19 +123,21 @@ class CarenderSavePage extends StatelessWidget {
                           //同じ日付がないとき
                           : model.imageFile != null //写真があるとき
                               ? Image.file(model.imageFile)
-                              : Container(
-                                  color: Colors.blue,
-                                  child: Center(
-                                    child: Text(
-                                      '写真を選ぶ',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 30),
+                              : model.imageURL != null //DBからの写真がある
+                                  ? Image.network(model.imageURL)
+                                  : Container(
+                                      color: Colors.blue,
+                                      child: Center(
+                                        child: Text(
+                                          '写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 30),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
                     ),
                   ),
                   SizedBox(height: deviceHeight * 0.03),

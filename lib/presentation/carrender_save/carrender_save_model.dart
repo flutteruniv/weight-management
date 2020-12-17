@@ -58,6 +58,8 @@ class CalenderSaveModel extends ChangeNotifier {
 
     viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
 
+    imageFile = null;
+
     for (int i = 0; i < muscleData.length; i++) {
       if (viewDate == muscleData[i].date) {
         //更新
@@ -132,7 +134,6 @@ class CalenderSaveModel extends ChangeNotifier {
         additionalBodyFatPercentage = null;
       }
       if (sameDateMuscleData.imageURL != null) {
-
         //   imageFile = File(sameDateMuscleData.imagePath);
         imageURL = sameDateMuscleData.imageURL;
       } else {
