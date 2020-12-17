@@ -96,6 +96,8 @@ class SelectModel extends ChangeNotifier {
     if (sortingType == 0) {
       sortName = '日付順（降順）';
       final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
           .collection('muscleData')
           .orderBy('date', descending: true)
           .get();
@@ -104,6 +106,8 @@ class SelectModel extends ChangeNotifier {
     } else if (sortingType == 1) {
       sortName = '日付順（昇順）';
       final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
           .collection('muscleData')
           .orderBy('date', descending: false)
           .get();
@@ -112,6 +116,8 @@ class SelectModel extends ChangeNotifier {
     } else if (sortingType == 2) {
       sortName = '体重順（降順）';
       final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
           .collection('muscleData')
           .orderBy('weight', descending: true)
           .get();
@@ -120,6 +126,8 @@ class SelectModel extends ChangeNotifier {
     } else if (sortingType == 3) {
       sortName = '体重順（昇順）';
       final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
           .collection('muscleData')
           .orderBy('weight', descending: false)
           .get();
