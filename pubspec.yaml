@@ -34,9 +34,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_native_splash: ^0.1.9
+  flutter_launcher_icons: "^0.8.0"
 flutter_native_splash:
   image: "assets/images/splash.png"
   color: "ffffff"
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/splash.png"
 
 flutter:
 
