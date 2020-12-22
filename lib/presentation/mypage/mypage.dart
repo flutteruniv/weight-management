@@ -164,7 +164,7 @@ class MyPage extends StatelessWidget {
                       child: RaisedButton(
                         child: Text(
                           'ログアウト',
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 15),
                         ),
                         color: Colors.white,
                         shape: const OutlineInputBorder(

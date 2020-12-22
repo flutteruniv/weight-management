@@ -39,7 +39,7 @@ class GraphPage extends StatelessWidget {
                             onHighlightChanged: (value) {},
                             child: Text(
                               '体重',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 20),
                             ),
                             color: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -59,7 +59,7 @@ class GraphPage extends StatelessWidget {
                             onHighlightChanged: (value) {},
                             child: Text(
                               '体脂肪率',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 20),
                             ),
                             color: Colors.white,
                             shape: RoundedRectangleBorder(

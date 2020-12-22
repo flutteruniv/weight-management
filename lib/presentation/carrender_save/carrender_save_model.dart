@@ -181,6 +181,7 @@ class CalenderSaveModel extends ChangeNotifier {
         sameDate = false;
       }
     }
+    imageFile = null;
     notifyListeners();
   }
 

@@ -78,10 +78,6 @@ class CarenderSavePage extends StatelessWidget {
                       onChanged: (number) {
                         //テキストに体重入力
                         model.additionalWeight = double.parse(number);
-                        //    model.weightTextController = TextEditingController(
-                        //      text: double.parse(number).toString());
-                        //  model.weightTextController.text =
-                        //    double.parse(number).toString();
                       },
                       style: TextStyle(fontSize: 20),
                     ),
@@ -96,63 +92,105 @@ class CarenderSavePage extends StatelessWidget {
                         //テキストに体重入力
                         model.additionalBodyFatPercentage =
                             double.parse(number);
-                        // model.fatTextController = TextEditingController(
-                        //   text: double.parse(number).toString());
-                        //model.fatTextController.text =
-                        //  double.parse(number).toString();
                       },
                       style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(height: deviceHeight * 0.03),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black54),
-                      ),
-                      child: SizedBox(
-                        height: deviceHeight * 0.33,
-                        width: deviceWidth * 0.45,
-                        child: InkWell(
-                          onTap: () async {
-                            model.showBottomSheet(context);
-                          },
-                          child: model.sameDate == true //同じ日付がある
-
-                              ? model.imageFile != null //pickした写真がある
-                                  ? Image.file(model.imageFile) //pickした写真を表示
-                                  : model.imageURL != null //DBからの写真がある
-                                      ? Image.network(model.imageURL)
-                                      : Container(
-                                          child: Center(
-                                            child: Text(
-                                              '写真を選ぶ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 20),
-                                            ),
-                                          ),
-                                        )
-                              //同じ日付がないとき
-                              : model.imageFile != null //写真があるとき
-                                  ? Image.file(model.imageFile)
-                                  : model.imageURL != null //DBからの写真がある
-                                      ? Image.network(model.imageURL)
-                                      : Container(
-                                          child: Center(
-                                            child: Text(
-                                              '写真を選ぶ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 25),
-                                            ),
+                    model.sameDate == true
+                        ? model.imageFile != null
+                            ? SizedBox(
+                                height: deviceHeight * 0.33,
+                                width: deviceWidth * 0.45,
+                                child: InkWell(
+                                  onTap: () async {
+                                    model.showBottomSheet(context);
+                                  },
+                                  child: Image.file(model.imageFile),
+                                ),
+                              )
+                            : model.imageURL != null
+                                ? SizedBox(
+                                    height: deviceHeight * 0.33,
+                                    width: deviceWidth * 0.45,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        model.showBottomSheet(context);
+                                      },
+                                      child: Image.network(model.imageURL),
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black54),
+                                    ),
+                                    child: SizedBox(
+                                      height: deviceHeight * 0.33,
+                                      width: deviceWidth * 0.45,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          model.showBottomSheet(context);
+                                        },
+                                        child: Center(
+                                          child: Text(
+                                            '写真を選ぶ',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20),
                                           ),
                                         ),
-                        ),
-                      ),
-                    ),
+                                      ),
+                                    ),
+                                  )
+                        : model.imageFile != null
+                            ? SizedBox(
+                                height: deviceHeight * 0.33,
+                                width: deviceWidth * 0.45,
+                                child: InkWell(
+                                  onTap: () async {
+                                    model.showBottomSheet(context);
+                                  },
+                                  child: Image.file(model.imageFile),
+                                ),
+                              )
+                            : model.imageURL != null
+                                ? SizedBox(
+                                    height: deviceHeight * 0.33,
+                                    width: deviceWidth * 0.45,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        model.showBottomSheet(context);
+                                      },
+                                      child: Image.network(model.imageURL),
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black54),
+                                    ),
+                                    child: SizedBox(
+                                      height: deviceHeight * 0.33,
+                                      width: deviceWidth * 0.45,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          model.showBottomSheet(context);
+                                        },
+                                        child: Center(
+                                          child: Text(
+                                            '写真を選ぶ',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                     SizedBox(height: deviceHeight * 0.03),
                     ButtonTheme(
                       minWidth: 20000,
