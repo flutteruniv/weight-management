@@ -19,16 +19,6 @@ void main() async {
   runApp(MyApp());
 }
 
-/*
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TopPage(),
-    );
-  }
-}*/
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -73,7 +63,7 @@ class TopPage extends StatelessWidget {
                 centerTitle: true,
                 title: Text(
                   _tabNames[model.currentIndex],
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 20),
                 ),
                 backgroundColor: Colors.blue,
               ),

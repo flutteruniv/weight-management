@@ -220,7 +220,7 @@ class ListPage extends StatelessWidget {
                   child: Text(
                 'データなし',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                 ),
               ));
             }
