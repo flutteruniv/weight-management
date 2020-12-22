@@ -12,34 +12,33 @@ class CarenderSavePage extends StatelessWidget {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     final topModel = Provider.of<TopModel>(context);
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: ChangeNotifierProvider<CalenderSaveModel>(
-        create: (_) => CalenderSaveModel()..initData(),
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: SingleChildScrollView(
-            reverse: true,
-            child:
-                Consumer<CalenderSaveModel>(builder: (context, model, child) {
-              if (topModel.listPageUpdate) {
-                model.initData();
-                model.imageFile = null;
-              }
-              if (model.loadingData) {
-                //データローディングが終わればこっちを表示
-                return Padding(
-                  padding: EdgeInsets.only(
-                    right: 20,
-                    left: 20,
-                    top: deviceHeight * 0.02,
-                    bottom: deviceHeight * 0.02,
-                  ),
+    return ChangeNotifierProvider<CalenderSaveModel>(
+      create: (_) => CalenderSaveModel()..initData(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Consumer<CalenderSaveModel>(builder: (context, model, child) {
+          if (topModel.listPageUpdate) {
+            model.initData();
+            model.imageFile = null;
+          }
+          if (model.loadingData) {
+            //データローディングが終わればこっちを表示
+            return Padding(
+              padding: EdgeInsets.only(
+                right: 20,
+                left: 20,
+                top: deviceHeight * 0.02,
+                bottom: deviceHeight * 0.02,
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                },
+                child: SingleChildScrollView(
+                  reverse: true,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.max,
@@ -170,8 +169,8 @@ class CarenderSavePage extends StatelessWidget {
                               await addData(model, context, topModel);
                             }
                             /*  await model.fetchData();
-                            await model.judgeDate();
-                            await model.setText();*/
+                        await model.judgeDate();
+                        await model.setText();*/
                             await model.initData();
                           },
                           child: model.sameDate != true
@@ -199,15 +198,15 @@ class CarenderSavePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }),
-          ),
-        ),
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }),
       ),
     );
   }
