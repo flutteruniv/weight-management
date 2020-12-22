@@ -19,6 +19,15 @@ class AuthenticationPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                  height: 150,
+                  width: 150,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Image.asset('assets/images/splash.png'))),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 '筋肉日記',
                 style: TextStyle(
