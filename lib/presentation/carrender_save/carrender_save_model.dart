@@ -26,6 +26,8 @@ class CalenderSaveModel extends ChangeNotifier {
   List<Users> userData = [];
   String userDocID;
 
+  bool hasData;
+
   Future deleteDate() {
     weightTextController = TextEditingController(text: '');
     fatTextController = TextEditingController(text: '');
@@ -44,74 +46,86 @@ class CalenderSaveModel extends ChangeNotifier {
         break;
       }
     }
-
-    final docs = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userDocID)
-        .collection('muscleData')
-        .orderBy('date', descending: true)
-        .get();
-    final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-    this.muscleData = muscleData;
-
+    //データがあるかないか判断
+    try {
+      final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDocID)
+          .collection('muscleData')
+          .orderBy('date', descending: true)
+          .get();
+      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+      this.muscleData = muscleData;
+      if (muscleData[0] != null) hasData = true;
+    } catch (e) {
+      hasData = false;
+    }
     loadingData = true;
 
     viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
-
     imageFile = null;
 
-    for (int i = 0; i < muscleData.length; i++) {
-      if (viewDate == muscleData[i].date) {
-        //更新
-        sameDate = true;
-        sameDateMuscleData = muscleData[i];
+    if (hasData) {
+      for (int i = 0; i < muscleData.length; i++) {
+        if (viewDate == muscleData[i].date) {
+          //更新
+          sameDate = true;
+          sameDateMuscleData = muscleData[i];
+          if (sameDateMuscleData.imageURL != null) {
+            // imageFile = File(sameDateMuscleData.imagePath);
+            // imagePath = sameDateMuscleData.imagePath;
+            imageURL = sameDateMuscleData.imageURL;
+          }
+          break;
+        } else {
+          //保存
+          sameDate = false;
+        }
+      }
+
+      if (sameDate) {
+        if (sameDateMuscleData.bodyFatPercentage != null) {
+          //同じ日付があればもともとの体重などを表示
+          weightTextController =
+              TextEditingController(text: sameDateMuscleData.weight.toString());
+          fatTextController = TextEditingController(
+              text: sameDateMuscleData.bodyFatPercentage.toString());
+          additionalWeight = double.parse(weightTextController.text);
+          additionalBodyFatPercentage = double.parse(fatTextController.text);
+        } else if (sameDateMuscleData.bodyFatPercentage == null) {
+          //体脂肪なしだと体脂肪の初期値なし
+          weightTextController =
+              TextEditingController(text: sameDateMuscleData.weight.toString());
+          fatTextController = TextEditingController(text: '');
+          additionalWeight = double.parse(weightTextController.text);
+          additionalBodyFatPercentage = null;
+        }
         if (sameDateMuscleData.imageURL != null) {
           // imageFile = File(sameDateMuscleData.imagePath);
-          // imagePath = sameDateMuscleData.imagePath;
+
           imageURL = sameDateMuscleData.imageURL;
+        } else {
+          imageFile = null;
         }
-        break;
       } else {
-        //保存
-        sameDate = false;
-      }
-
-      notifyListeners();
-    }
-
-    if (sameDate) {
-      if (sameDateMuscleData.bodyFatPercentage != null) {
-        //同じ日付があればもともとの体重などを表示
-        weightTextController =
-            TextEditingController(text: sameDateMuscleData.weight.toString());
-        fatTextController = TextEditingController(
-            text: sameDateMuscleData.bodyFatPercentage.toString());
-        additionalWeight = double.parse(weightTextController.text);
-        additionalBodyFatPercentage = double.parse(fatTextController.text);
-      } else if (sameDateMuscleData.bodyFatPercentage == null) {
-        //体脂肪なしだと体脂肪の初期値なし
-        weightTextController =
-            TextEditingController(text: sameDateMuscleData.weight.toString());
+        //同じ日付がなければ初期値なし
+        weightTextController = TextEditingController(text: '');
         fatTextController = TextEditingController(text: '');
-        additionalWeight = double.parse(weightTextController.text);
+        additionalWeight = null;
         additionalBodyFatPercentage = null;
-      }
-      if (sameDateMuscleData.imageURL != null) {
-        // imageFile = File(sameDateMuscleData.imagePath);
-
-        imageURL = sameDateMuscleData.imageURL;
-      } else {
         imageFile = null;
+        imageURL = null;
       }
     } else {
-      //同じ日付がなければ初期値なし
       weightTextController = TextEditingController(text: '');
       fatTextController = TextEditingController(text: '');
       additionalWeight = null;
       additionalBodyFatPercentage = null;
       imageFile = null;
       imageURL = null;
+      sameDate = false;
     }
+
     notifyListeners();
   }
 
@@ -149,6 +163,7 @@ class CalenderSaveModel extends ChangeNotifier {
       additionalBodyFatPercentage = null;
       imageFile = null;
       imageURL = null;
+      sameDate = false;
     }
     notifyListeners();
   }

@@ -54,6 +54,7 @@ class TopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return ChangeNotifierProvider<TopModel>(
       create: (_) => TopModel()..init(),
       child: Consumer<TopModel>(
@@ -68,32 +69,35 @@ class TopPage extends StatelessWidget {
                 backgroundColor: Colors.blue,
               ),
               body: _topPageBody(context),
-              bottomNavigationBar: BottomNavigationBar(
-                onTap: model.onTabTapped,
-                currentIndex: model.currentIndex,
-                type: BottomNavigationBarType.fixed,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.edit),
-                    title: Text(_tabNames[0]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.group),
-                    title: Text(_tabNames[1]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.insights),
-                    title: Text(_tabNames[2]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.list_alt),
-                    title: Text(_tabNames[3]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    title: Text(_tabNames[4]),
-                  ),
-                ],
+              bottomNavigationBar: SizedBox(
+                height: 60,
+                child: BottomNavigationBar(
+                  onTap: model.onTabTapped,
+                  currentIndex: model.currentIndex,
+                  type: BottomNavigationBarType.fixed,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.edit),
+                      title: Text(_tabNames[0]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.group),
+                      title: Text(_tabNames[1]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.insights),
+                      title: Text(_tabNames[2]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.list_alt),
+                      title: Text(_tabNames[3]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      title: Text(_tabNames[4]),
+                    ),
+                  ],
+                ),
               ));
         },
       ),
