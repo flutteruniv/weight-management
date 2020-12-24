@@ -83,7 +83,7 @@ class GraphPage extends StatelessWidget {
                                 format: 'dd', transitionFormat: 'MM/dd'),
                           ),
                         ),
-                        //animate: false,
+                        animate: false,
                         behaviors: [
                           charts.SlidingViewport(),
                           charts.PanAndZoomBehavior(),
