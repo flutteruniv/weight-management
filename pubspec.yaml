@@ -44,6 +44,7 @@ flutter_icons:
   image_path: "assets/images/splash.png"
 
 flutter:
-
+  assets:
+    - assets/images/splash.png
 
   uses-material-design: true

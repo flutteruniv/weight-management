@@ -19,16 +19,6 @@ void main() async {
   runApp(MyApp());
 }
 
-/*
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TopPage(),
-    );
-  }
-}*/
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -64,6 +54,7 @@ class TopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return ChangeNotifierProvider<TopModel>(
       create: (_) => TopModel()..init(),
       child: Consumer<TopModel>(
@@ -73,37 +64,40 @@ class TopPage extends StatelessWidget {
                 centerTitle: true,
                 title: Text(
                   _tabNames[model.currentIndex],
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 20),
                 ),
                 backgroundColor: Colors.blue,
               ),
               body: _topPageBody(context),
-              bottomNavigationBar: BottomNavigationBar(
-                onTap: model.onTabTapped,
-                currentIndex: model.currentIndex,
-                type: BottomNavigationBarType.fixed,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.edit),
-                    title: Text(_tabNames[0]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.group),
-                    title: Text(_tabNames[1]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.insights),
-                    title: Text(_tabNames[2]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.list_alt),
-                    title: Text(_tabNames[3]),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    title: Text(_tabNames[4]),
-                  ),
-                ],
+              bottomNavigationBar: SizedBox(
+                height: 60,
+                child: BottomNavigationBar(
+                  onTap: model.onTabTapped,
+                  currentIndex: model.currentIndex,
+                  type: BottomNavigationBarType.fixed,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.edit),
+                      title: Text(_tabNames[0]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.group),
+                      title: Text(_tabNames[1]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.insights),
+                      title: Text(_tabNames[2]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.list_alt),
+                      title: Text(_tabNames[3]),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      title: Text(_tabNames[4]),
+                    ),
+                  ],
+                ),
               ));
         },
       ),

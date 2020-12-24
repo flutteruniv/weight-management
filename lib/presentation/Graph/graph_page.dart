@@ -39,7 +39,7 @@ class GraphPage extends StatelessWidget {
                             onHighlightChanged: (value) {},
                             child: Text(
                               '体重',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 20),
                             ),
                             color: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -59,7 +59,7 @@ class GraphPage extends StatelessWidget {
                             onHighlightChanged: (value) {},
                             child: Text(
                               '体脂肪率',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 20),
                             ),
                             color: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -83,7 +83,7 @@ class GraphPage extends StatelessWidget {
                                 format: 'dd', transitionFormat: 'MM/dd'),
                           ),
                         ),
-                        //animate: false,
+                        animate: false,
                         behaviors: [
                           charts.SlidingViewport(),
                           charts.PanAndZoomBehavior(),
@@ -175,7 +175,7 @@ class GraphPage extends StatelessWidget {
                 child: Text(
                   'データなし',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 25,
                   ),
                 ),
               );

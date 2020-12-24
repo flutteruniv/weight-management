@@ -153,22 +153,26 @@ class ComparePage extends StatelessWidget {
                             SizedBox(
                               width: deviceWidth * 0.05,
                             ),
-                            Container(
-                              height: deviceHeight * 0.35,
-                              width: deviceWidth * 0.5,
-                              decoration: BoxDecoration(
-                                color: Colors.white70,
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: model.imageURL[0] != null
-                                  ? Image.network(model.imageURL[0])
-                                  : Center(
-                                      child: Text(
+                            model.imageURL[0] != null
+                                ? Container(
+                                    height: deviceHeight * 0.35,
+                                    width: deviceWidth * 0.5,
+                                    child: Image.network(model.imageURL[0]),
+                                  )
+                                : Container(
+                                    height: deviceHeight * 0.35,
+                                    width: deviceWidth * 0.5,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white70,
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                        child: Text(
                                       '写真なし',
-                                      style: TextStyle(fontSize: 30),
+                                      style: TextStyle(fontSize: 25),
                                     )),
-                            ),
+                                  ),
                           ],
                         ),
                         SizedBox(
@@ -300,23 +304,26 @@ class ComparePage extends StatelessWidget {
                             SizedBox(
                               width: deviceWidth * 0.03,
                             ),
-                            Container(
-                              height: deviceHeight * 0.35,
-                              width: deviceWidth * 0.5,
-                              decoration: BoxDecoration(
-                                color: Colors.white70,
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: model.imageURL[1] != null
-                                  ? Image.network(model.imageURL[1])
-                                  : Center(
-                                      child: Text(
-                                        '写真なし',
-                                        style: TextStyle(fontSize: 30),
-                                      ),
+                            model.imageURL[1] != null
+                                ? Container(
+                                    height: deviceHeight * 0.35,
+                                    width: deviceWidth * 0.5,
+                                    child: Image.network(model.imageURL[1]),
+                                  )
+                                : Container(
+                                    height: deviceHeight * 0.35,
+                                    width: deviceWidth * 0.5,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white70,
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
-                            ),
+                                    child: Center(
+                                        child: Text(
+                                      '写真なし',
+                                      style: TextStyle(fontSize: 25),
+                                    )),
+                                  ),
                           ],
                         ),
                       ],
