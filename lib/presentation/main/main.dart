@@ -61,6 +61,7 @@ class TopPage extends StatelessWidget {
         builder: (context, model, child) {
           return Scaffold(
               appBar: AppBar(
+                toolbarHeight: deviceHeight * 0.06,
                 centerTitle: true,
                 title: Text(
                   _tabNames[model.currentIndex],
@@ -70,7 +71,7 @@ class TopPage extends StatelessWidget {
               ),
               body: _topPageBody(context),
               bottomNavigationBar: SizedBox(
-                height: 60,
+                height: deviceHeight * 0.1,
                 child: BottomNavigationBar(
                   onTap: model.onTabTapped,
                   currentIndex: model.currentIndex,

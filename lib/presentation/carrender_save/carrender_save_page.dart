@@ -33,7 +33,7 @@ class CarenderSavePage extends StatelessWidget {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(
                 child: Container(
-                  height: deviceHeight - appbarHeight - 60,
+                  height: deviceHeight - appbarHeight - deviceHeight * 0.14,
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: 20,
@@ -47,7 +47,7 @@ class CarenderSavePage extends StatelessWidget {
                       children: <Widget>[
                         ButtonTheme(
                           minWidth: 250,
-                          height: 50,
+                          height: deviceHeight * 0.05,
                           child: RaisedButton.icon(
                             // 日付を取得
                             icon: Icon(Icons.arrow_drop_down),
@@ -100,9 +100,9 @@ class CarenderSavePage extends StatelessWidget {
                           },
                           style: TextStyle(fontSize: 20),
                         ),
-                        SizedBox(height: deviceHeight * 0.03),
+                        SizedBox(height: deviceHeight * 0.01),
                         SizedBox(
-                          height: deviceHeight * 0.33,
+                          height: deviceHeight * 0.25,
                           width: deviceWidth * 0.45,
                           child: InkWell(
                             onTap: () async {
@@ -149,10 +149,10 @@ class CarenderSavePage extends StatelessWidget {
                                       ),
                           ),
                         ),
-                        SizedBox(height: deviceHeight * 0.03),
+                        SizedBox(height: deviceHeight * 0.01),
                         ButtonTheme(
                           minWidth: 20000,
-                          height: 40,
+                          height: deviceHeight * 0.01,
                           child: RaisedButton(
                             onPressed: () async {
                               //to do
