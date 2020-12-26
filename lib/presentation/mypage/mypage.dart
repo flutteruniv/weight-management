@@ -26,7 +26,7 @@ class MyPage extends StatelessWidget {
             builder: (context, model, child) {
               return SingleChildScrollView(
                 child: Container(
-                  height: deviceHeight - appbarHeight - 60,
+                  height: deviceHeight - appbarHeight - 70,
                   child: Padding(
                     padding: EdgeInsets.only(
                         right: 20, left: 20, top: deviceHeight * 0.02),

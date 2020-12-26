@@ -70,7 +70,7 @@ class TopPage extends StatelessWidget {
               ),
               body: _topPageBody(context),
               bottomNavigationBar: SizedBox(
-                height: 60,
+                height: 70,
                 child: BottomNavigationBar(
                   onTap: model.onTabTapped,
                   currentIndex: model.currentIndex,

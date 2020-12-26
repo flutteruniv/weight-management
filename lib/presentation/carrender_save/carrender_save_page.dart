@@ -33,7 +33,7 @@ class CarenderSavePage extends StatelessWidget {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(
                 child: Container(
-                  height: deviceHeight - appbarHeight - 60,
+                  height: deviceHeight - appbarHeight - 70,
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: 20,

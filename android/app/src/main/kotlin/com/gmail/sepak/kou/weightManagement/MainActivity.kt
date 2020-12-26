@@ -1,4 +1,4 @@
-package com.gmail.sepak.kou.weight_management
+package com.gmail.sepak.kou.weightManagement
 
 import io.flutter.embedding.android.FlutterActivity
 
