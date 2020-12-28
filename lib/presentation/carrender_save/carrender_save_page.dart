@@ -33,13 +33,11 @@ class CarenderSavePage extends StatelessWidget {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(
                 child: Container(
-                  height: deviceHeight - appbarHeight - deviceHeight * 0.14,
+                  height: deviceHeight - appbarHeight - 50,
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: 20,
                       left: 20,
-                      top: deviceHeight * 0.02,
-                      bottom: deviceHeight * 0.02,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,7 +45,7 @@ class CarenderSavePage extends StatelessWidget {
                       children: <Widget>[
                         ButtonTheme(
                           minWidth: 250,
-                          height: deviceHeight * 0.05,
+                          height: deviceHeight * 0.055,
                           child: RaisedButton.icon(
                             // 日付を取得
                             icon: Icon(Icons.arrow_drop_down),
@@ -102,7 +100,7 @@ class CarenderSavePage extends StatelessWidget {
                         ),
                         SizedBox(height: deviceHeight * 0.01),
                         SizedBox(
-                          height: deviceHeight * 0.25,
+                          height: deviceHeight * 0.33,
                           width: deviceWidth * 0.45,
                           child: InkWell(
                             onTap: () async {
