@@ -77,7 +77,8 @@ class CarenderSavePage extends StatelessWidget {
                         height: deviceHeight * 0.1,
                         child: TextField(
                           controller: model.weightTextController,
-                          keyboardType: TextInputType.number,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           decoration: InputDecoration(
                               hintText: '体重を入力（Kg）', labelText: '体重(Kg)'),
                           onChanged: (number) {
@@ -91,7 +92,8 @@ class CarenderSavePage extends StatelessWidget {
                         height: deviceHeight * 0.1,
                         child: TextField(
                           controller: model.fatTextController,
-                          keyboardType: TextInputType.number,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           decoration: InputDecoration(
                             hintText: '体脂肪率を入力（％）',
                             labelText: '体脂肪率(%)',
