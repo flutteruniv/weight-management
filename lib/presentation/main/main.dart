@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       home: ChangeNotifierProvider<IntroductionModel>(
         create: (_) => IntroductionModel()..getPrefIntro(),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Consumer<IntroductionModel>(
             builder: (context, model, child) {
               return model.intro == true
