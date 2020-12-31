@@ -115,31 +115,36 @@ class MyPage extends StatelessWidget {
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
-                      SizedBox(
-                        height: deviceHeight * 0.35,
-                        width: deviceWidth * 0.45,
-                        child: InkWell(
-                          onTap: () async {
-                            model.showImagePicker();
-                          },
-                          child: model.idealImageFile != null
-                              ? Image.file(model.idealImageFile)
-                              : model.idealImageURL != null //DBからの写真がある
-                                  ? Image.network(model.idealImageURL)
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white70,
-                                        border: Border.all(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '理想の身体\nの写真を選ぶ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 25),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: SizedBox(
+                          height: deviceHeight * 0.33,
+                          width: deviceWidth * 0.45,
+                          child: InkWell(
+                            onTap: () async {
+                              model.showImagePicker();
+                            },
+                            child: model.idealImageFile != null
+                                ? Image.file(model.idealImageFile)
+                                : model.idealImageURL != null //DBからの写真がある
+                                    ? Image.network(model.idealImageURL)
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white70,
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            '理想の身体\nの写真を選ぶ',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 25),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                          ),
                         ),
                       ),
                       ButtonTheme(
