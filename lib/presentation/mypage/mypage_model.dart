@@ -185,7 +185,7 @@ class MyPageModel extends ChangeNotifier {
     final storage = FirebaseStorage.instance;
     StorageTaskSnapshot snapshot = await storage
         .ref()
-        .child("idealMuscle/$userDocID")
+        .child("idealMuscle/$userDocID/$idealWeight")
         .putFile(idealImageFile)
         .onComplete;
     final String downloadURL = await snapshot.ref.getDownloadURL();
