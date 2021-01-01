@@ -218,9 +218,11 @@ class CarenderSavePage extends StatelessWidget {
   Future addData(
       CalenderSaveModel model, BuildContext context, TopModel topModel) async {
     try {
+      model.showProgressDialog(context);
       await model.addDataToFirebase();
       topModel.updatePageTrue();
       topModel.updateGraphPageTrue();
+      Navigator.of(context).pop();
 
       showDialog(
         context: context,
@@ -262,9 +264,12 @@ class CarenderSavePage extends StatelessWidget {
   Future updateData(CalenderSaveModel model, BuildContext context,
       MuscleData muscleData, TopModel topModel) async {
     try {
+      model.showProgressDialog(context);
+
       await model.updateData(muscleData);
       topModel.updatePageTrue();
       topModel.updateGraphPageTrue();
+      Navigator.of(context).pop();
 
       showDialog(
         context: context,

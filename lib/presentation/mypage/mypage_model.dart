@@ -185,10 +185,23 @@ class MyPageModel extends ChangeNotifier {
     final storage = FirebaseStorage.instance;
     StorageTaskSnapshot snapshot = await storage
         .ref()
-        .child("idealMuscle/$userDocID/$idealWeight")
+        .child("idealMuscle/$idealWeight")
         .putFile(idealImageFile)
         .onComplete;
     final String downloadURL = await snapshot.ref.getDownloadURL();
     return downloadURL;
+  }
+
+  void showProgressDialog(context) {
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5),
+        pageBuilder: (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 }

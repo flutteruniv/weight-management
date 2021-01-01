@@ -240,7 +240,10 @@ class MyPage extends StatelessWidget {
 
   Future addData(MyPageModel model, BuildContext context) async {
     try {
+      model.showProgressDialog(context);
       await model.addDataToFirebase();
+      Navigator.of(context).pop();
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -279,7 +282,9 @@ class MyPage extends StatelessWidget {
   Future updateData(MyPageModel model, BuildContext context,
       IdealMuscleData muscleData) async {
     try {
+      model.showProgressDialog(context);
       await model.updateData(muscleData);
+      Navigator.of(context).pop();
 
       showDialog(
         context: context,
