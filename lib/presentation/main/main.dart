@@ -22,7 +22,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User currentUser = FirebaseAuth.instance.currentUser;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<IntroductionModel>(
@@ -31,11 +30,7 @@ class MyApp extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           body: Consumer<IntroductionModel>(
             builder: (context, model, child) {
-              return model.intro == true
-                  ? IntroductionPage()
-                  : currentUser != null
-                      ? TopPage()
-                      : AuthenticationPage();
+              return model.intro == true ? IntroductionPage() : TopPage();
             },
           ),
         ),

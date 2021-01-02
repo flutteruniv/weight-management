@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
+import 'package:weight_management/presentation/main/main.dart';
 import 'package:weight_management/presentation/mypage/mypage_model.dart';
 
 class MyPage extends StatelessWidget {
@@ -10,7 +11,8 @@ class MyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double appbarHeight = AppBar().preferredSize.height;
+    final User currentUser = FirebaseAuth.instance.currentUser;
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -155,13 +157,17 @@ class MyPage extends StatelessWidget {
                         ),
                         child: RaisedButton(
                           onPressed: () async {
-                            if (model.hasIdealMuscle) {
-                              await updateData(
-                                  model, context, model.idealMuscleList[0]);
+                            if (currentUser != null) {
+                              if (model.hasIdealMuscle) {
+                                await updateData(
+                                    model, context, model.idealMuscleList[0]);
+                              } else {
+                                await addData(model, context);
+                              }
+                              await model.fetchData();
                             } else {
-                              await addData(model, context);
+                              _showDialog(context);
                             }
-                            await model.fetchData();
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -187,42 +193,57 @@ class MyPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: RaisedButton(
-                            child: Text(
-                              'ログアウト',
-                              style: TextStyle(fontSize: 15),
-                            ),
+                            child: currentUser != null
+                                ? Text(
+                                    'ログアウト',
+                                    style: TextStyle(fontSize: 15),
+                                  )
+                                : Text(
+                                    'ログイン',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
                             color: Colors.white,
                             shape: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
                             onPressed: () async {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'ログアウトしますか？',
-                                    ),
-                                    actions: [
-                                      FlatButton(
-                                        child: Text('OK'),
-                                        onPressed: () async {
-                                          await FirebaseAuth.instance.signOut();
-                                          // ログイン画面に遷移＋チャット画面を破棄
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AuthenticationPage(),
-                                              ),
-                                              (_) => false);
-                                        },
+                              if (currentUser != null) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        'ログアウトしますか？',
                                       ),
-                                    ],
-                                  );
-                                },
-                              );
+                                      actions: [
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () async {
+                                            await FirebaseAuth.instance
+                                                .signOut();
+                                            // ログイン画面に遷移＋チャット画面を破棄
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TopPage(),
+                                                ),
+                                                (_) => false);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AuthenticationPage(),
+                                    ));
+                              }
                             },
                           ),
                         ),
@@ -261,6 +282,7 @@ class MyPage extends StatelessWidget {
         },
       );
     } catch (e) {
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -302,6 +324,7 @@ class MyPage extends StatelessWidget {
         },
       );
     } catch (e) {
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -318,5 +341,26 @@ class MyPage extends StatelessWidget {
         },
       );
     }
+  }
+
+  Future _showDialog(
+    BuildContext context,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('ログインが必要です'),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }

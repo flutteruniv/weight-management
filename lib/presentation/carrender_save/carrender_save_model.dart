@@ -29,6 +29,8 @@ class CalenderSaveModel extends ChangeNotifier {
 
   bool hasData;
 
+  final User currentUser = FirebaseAuth.instance.currentUser;
+
   Future deleteDate() {
     weightTextController = TextEditingController(text: '');
     fatTextController = TextEditingController(text: '');
@@ -38,95 +40,99 @@ class CalenderSaveModel extends ChangeNotifier {
   }
 
   Future initData() async {
-    final docss = await FirebaseFirestore.instance.collection('users').get();
-    final userData = docss.docs.map((doc) => Users(doc)).toList();
-    this.userData = userData;
-    for (int i = 0; i < userData.length; i++) {
-      if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-        userDocID = userData[i].documentID;
-        break;
+    if (currentUser != null) {
+      final docss = await FirebaseFirestore.instance.collection('users').get();
+      final userData = docss.docs.map((doc) => Users(doc)).toList();
+      this.userData = userData;
+      for (int i = 0; i < userData.length; i++) {
+        if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
+          userDocID = userData[i].documentID;
+          break;
+        }
       }
-    }
-    //データがあるかないか判断
-    try {
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('date', descending: true)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
-      if (muscleData[0] != null) hasData = true;
-    } catch (e) {
-      hasData = false;
-    }
-    loadingData = true;
+      //データがあるかないか判断
+      try {
+        final docs = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userDocID)
+            .collection('muscleData')
+            .orderBy('date', descending: true)
+            .get();
+        final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+        this.muscleData = muscleData;
+        if (muscleData[0] != null) hasData = true;
+      } catch (e) {
+        hasData = false;
+      }
+      loadingData = true;
 
-    viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
-    imageFile = null;
+      viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
+      imageFile = null;
 
-    if (hasData) {
-      for (int i = 0; i < muscleData.length; i++) {
-        if (viewDate == muscleData[i].date) {
-          //更新
-          sameDate = true;
-          sameDateMuscleData = muscleData[i];
+      if (hasData) {
+        for (int i = 0; i < muscleData.length; i++) {
+          if (viewDate == muscleData[i].date) {
+            //更新
+            sameDate = true;
+            sameDateMuscleData = muscleData[i];
+            if (sameDateMuscleData.imageURL != null) {
+              // imageFile = File(sameDateMuscleData.imagePath);
+              // imagePath = sameDateMuscleData.imagePath;
+              imageURL = sameDateMuscleData.imageURL;
+            }
+            break;
+          } else {
+            //保存
+            sameDate = false;
+          }
+        }
+
+        if (sameDate) {
+          if (sameDateMuscleData.bodyFatPercentage != null) {
+            //同じ日付があればもともとの体重などを表示
+            weightTextController = TextEditingController(
+                text: sameDateMuscleData.weight.toString());
+            fatTextController = TextEditingController(
+                text: sameDateMuscleData.bodyFatPercentage.toString());
+            additionalWeight = double.parse(weightTextController.text);
+            additionalBodyFatPercentage = double.parse(fatTextController.text);
+          } else if (sameDateMuscleData.bodyFatPercentage == null) {
+            //体脂肪なしだと体脂肪の初期値なし
+            weightTextController = TextEditingController(
+                text: sameDateMuscleData.weight.toString());
+            fatTextController = TextEditingController(text: '');
+            additionalWeight = double.parse(weightTextController.text);
+            additionalBodyFatPercentage = null;
+          }
           if (sameDateMuscleData.imageURL != null) {
             // imageFile = File(sameDateMuscleData.imagePath);
-            // imagePath = sameDateMuscleData.imagePath;
+
             imageURL = sameDateMuscleData.imageURL;
+          } else {
+            imageFile = null;
           }
-          break;
         } else {
-          //保存
-          sameDate = false;
-        }
-      }
-
-      if (sameDate) {
-        if (sameDateMuscleData.bodyFatPercentage != null) {
-          //同じ日付があればもともとの体重などを表示
-          weightTextController =
-              TextEditingController(text: sameDateMuscleData.weight.toString());
-          fatTextController = TextEditingController(
-              text: sameDateMuscleData.bodyFatPercentage.toString());
-          additionalWeight = double.parse(weightTextController.text);
-          additionalBodyFatPercentage = double.parse(fatTextController.text);
-        } else if (sameDateMuscleData.bodyFatPercentage == null) {
-          //体脂肪なしだと体脂肪の初期値なし
-          weightTextController =
-              TextEditingController(text: sameDateMuscleData.weight.toString());
+          //同じ日付がなければ初期値なし
+          weightTextController = TextEditingController(text: '');
           fatTextController = TextEditingController(text: '');
-          additionalWeight = double.parse(weightTextController.text);
+          additionalWeight = null;
           additionalBodyFatPercentage = null;
-        }
-        if (sameDateMuscleData.imageURL != null) {
-          // imageFile = File(sameDateMuscleData.imagePath);
-
-          imageURL = sameDateMuscleData.imageURL;
-        } else {
           imageFile = null;
+          imageURL = null;
         }
       } else {
-        //同じ日付がなければ初期値なし
         weightTextController = TextEditingController(text: '');
         fatTextController = TextEditingController(text: '');
         additionalWeight = null;
         additionalBodyFatPercentage = null;
         imageFile = null;
         imageURL = null;
+        sameDate = false;
       }
     } else {
-      weightTextController = TextEditingController(text: '');
-      fatTextController = TextEditingController(text: '');
-      additionalWeight = null;
-      additionalBodyFatPercentage = null;
-      imageFile = null;
-      imageURL = null;
-      sameDate = false;
+      loadingData = true;
+      viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
     }
-
     notifyListeners();
   }
 

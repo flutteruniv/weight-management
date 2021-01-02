@@ -11,7 +11,7 @@ class CarenderSavePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double appbarHeight = AppBar().preferredSize.height;
+    final User currentUser = FirebaseAuth.instance.currentUser;
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel()..initData(),
@@ -163,19 +163,23 @@ class CarenderSavePage extends StatelessWidget {
                         height: 50,
                         child: RaisedButton(
                           onPressed: () async {
-                            //to do
-                            if (model.sameDate) {
-                              //同じ日付あるなら更新
-                              await updateData(model, context,
-                                  model.sameDateMuscleData, topModel);
-                            } else {
-                              //同じ日付がないなら保存
-                              await addData(model, context, topModel);
-                            }
-                            /*  await model.fetchData();
+                            if (currentUser != null) {
+                              //to do
+                              if (model.sameDate) {
+                                //同じ日付あるなら更新
+                                await updateData(model, context,
+                                    model.sameDateMuscleData, topModel);
+                              } else {
+                                //同じ日付がないなら保存
+                                await addData(model, context, topModel);
+                              }
+                              /*  await model.fetchData();
                         await model.judgeDate();
                         await model.setText();*/
-                            await model.initData();
+                              await model.initData();
+                            } else {
+                              _showDialog(context);
+                            }
                           },
                           child: model.sameDate != true
                               ? Padding(
@@ -243,6 +247,7 @@ class CarenderSavePage extends StatelessWidget {
         },
       );
     } catch (e) {
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -287,6 +292,7 @@ class CarenderSavePage extends StatelessWidget {
         },
       );
     } catch (e) {
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -305,5 +311,26 @@ class CarenderSavePage extends StatelessWidget {
         },
       );
     }
+  }
+
+  Future _showDialog(
+    BuildContext context,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('ログインが必要です'),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }

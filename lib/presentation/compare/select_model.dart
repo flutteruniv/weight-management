@@ -11,29 +11,32 @@ class SelectModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
   String sortName = '日付順（降順）';
   bool hasData = false;
+  final User currentUser = FirebaseAuth.instance.currentUser;
 
   Future fetchData() async {
-    final docss = await FirebaseFirestore.instance.collection('users').get();
-    final userData = docss.docs.map((doc) => Users(doc)).toList();
-    this.userData = userData;
-    for (int i = 0; i < userData.length; i++) {
-      if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-        userDocID = userData[i].documentID;
-        break;
+    if (currentUser != null) {
+      final docss = await FirebaseFirestore.instance.collection('users').get();
+      final userData = docss.docs.map((doc) => Users(doc)).toList();
+      this.userData = userData;
+      for (int i = 0; i < userData.length; i++) {
+        if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
+          userDocID = userData[i].documentID;
+          break;
+        }
       }
-    }
-    try {
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('date', descending: true)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
-      if (muscleData[0] != null) hasData = true;
-    } catch (e) {
-      hasData = false;
+      try {
+        final docs = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userDocID)
+            .collection('muscleData')
+            .orderBy('date', descending: true)
+            .get();
+        final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+        this.muscleData = muscleData;
+        if (muscleData[0] != null) hasData = true;
+      } catch (e) {
+        hasData = false;
+      }
     }
     notifyListeners();
   }
