@@ -11,7 +11,7 @@ class CarenderSavePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double appbarHeight = AppBar().preferredSize.height;
+    final User currentUser = FirebaseAuth.instance.currentUser;
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
       create: (_) => CalenderSaveModel()..initData(),
@@ -32,52 +32,54 @@ class CarenderSavePage extends StatelessWidget {
             if (model.loadingData) {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(
-                child: Container(
-                  height: deviceHeight - appbarHeight - 70,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      right: 20,
-                      left: 20,
-                      top: deviceHeight * 0.02,
-                      bottom: deviceHeight * 0.02,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        ButtonTheme(
-                          minWidth: 250,
-                          height: 50,
-                          child: RaisedButton.icon(
-                            // 日付を取得
-                            icon: Icon(Icons.arrow_drop_down),
-                            onPressed: () async {
-                              model.pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate:
-                                    DateTime.now().add(Duration(days: -1095)),
-                                lastDate:
-                                    DateTime.now().add(Duration(days: 1095)),
-                              );
-                              model.selectDate();
-                              await model.judgeDate(); //日付を取得した時に同じ日付があるか判断
-                              await model.setText();
-                              // if (model.sameDate != true) model.imageFile = null;
-                            },
-                            label: Text(
-                              model.viewDate,
-                              style: TextStyle(fontSize: 22),
-                            ),
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: 20,
+                    left: 20,
+                    top: deviceHeight * 0.02,
+                    bottom: deviceHeight * 0.02,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      ButtonTheme(
+                        minWidth: 250,
+                        height: 50,
+                        child: RaisedButton.icon(
+                          // 日付を取得
+                          icon: Icon(Icons.arrow_drop_down),
+                          onPressed: () async {
+                            model.pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: new DateTime.now(),
+                              firstDate:
+                                  DateTime.now().add(Duration(days: -1095)),
+                              lastDate:
+                                  DateTime.now().add(Duration(days: 1095)),
+                            );
+                            model.selectDate();
+                            await model.judgeDate(); //日付を取得した時に同じ日付があるか判断
+                            await model.setText();
+                            // if (model.sameDate != true) model.imageFile = null;
+                          },
+                          label: Text(
+                            model.viewDate,
+                            style: TextStyle(fontSize: 22),
+                          ),
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        TextField(
+                      ),
+                      Container(
+                        height: deviceHeight * 0.1,
+                        child: TextField(
                           controller: model.weightTextController,
-                          keyboardType: TextInputType.number,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           decoration: InputDecoration(
                               hintText: '体重を入力（Kg）', labelText: '体重(Kg)'),
                           onChanged: (number) {
@@ -86,9 +88,13 @@ class CarenderSavePage extends StatelessWidget {
                           },
                           style: TextStyle(fontSize: 20),
                         ),
-                        TextField(
+                      ),
+                      Container(
+                        height: deviceHeight * 0.1,
+                        child: TextField(
                           controller: model.fatTextController,
-                          keyboardType: TextInputType.number,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           decoration: InputDecoration(
                             hintText: '体脂肪率を入力（％）',
                             labelText: '体脂肪率(%)',
@@ -100,61 +106,65 @@ class CarenderSavePage extends StatelessWidget {
                           },
                           style: TextStyle(fontSize: 20),
                         ),
-                        SizedBox(height: deviceHeight * 0.03),
-                        SizedBox(
-                          height: deviceHeight * 0.33,
-                          width: deviceWidth * 0.45,
-                          child: InkWell(
-                            onTap: () async {
-                              model.showBottomSheet(context);
-                            },
-                            child: model.sameDate == true
-                                ? model.imageFile != null
-                                    ? Image.file(model.imageFile)
-                                    : model.imageURL != null
-                                        ? Image.network(model.imageURL)
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white70,
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                '写真を選ぶ',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(fontSize: 25),
-                                              ),
-                                            ),
-                                          )
-                                : model.imageFile != null
-                                    ? Image.file(model.imageFile)
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white70,
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '写真を選ぶ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 25),
+                      ),
+                      Container(
+                        height: deviceHeight * 0.07,
+                      ),
+                      SizedBox(
+                        height: deviceHeight * 0.3,
+                        width: deviceWidth * 0.45,
+                        child: InkWell(
+                          onTap: () async {
+                            model.showBottomSheet(context);
+                          },
+                          child: model.sameDate == true
+                              ? model.imageFile != null
+                                  ? Image.file(model.imageFile)
+                                  : model.imageURL != null
+                                      ? Image.network(model.imageURL)
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white70,
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
+                                          child: Center(
+                                            child: Text(
+                                              '写真を選ぶ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(fontSize: 25),
+                                            ),
+                                          ),
+                                        )
+                              : model.imageFile != null
+                                  ? Image.file(model.imageFile)
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white70,
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '写真を選ぶ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 25),
                                         ),
                                       ),
-                          ),
+                                    ),
                         ),
-                        SizedBox(height: deviceHeight * 0.03),
-                        ButtonTheme(
-                          minWidth: 20000,
-                          height: 40,
-                          child: RaisedButton(
-                            onPressed: () async {
+                      ),
+                      Container(
+                        height: deviceHeight * 0.07,
+                      ),
+                      ButtonTheme(
+                        minWidth: 20000,
+                        height: 50,
+                        child: RaisedButton(
+                          onPressed: () async {
+                            if (currentUser != null) {
                               //to do
                               if (model.sameDate) {
                                 //同じ日付あるなら更新
@@ -165,35 +175,37 @@ class CarenderSavePage extends StatelessWidget {
                                 await addData(model, context, topModel);
                               }
                               /*  await model.fetchData();
-                          await model.judgeDate();
-                          await model.setText();*/
+                        await model.judgeDate();
+                        await model.setText();*/
                               await model.initData();
-                            },
-                            child: model.sameDate != true
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '保存',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '更新',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
+                            } else {
+                              _showDialog(context);
+                            }
+                          },
+                          child: model.sameDate != true
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '保存',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
                                   ),
-                            color: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '更新',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  ),
+                                ),
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -211,9 +223,11 @@ class CarenderSavePage extends StatelessWidget {
   Future addData(
       CalenderSaveModel model, BuildContext context, TopModel topModel) async {
     try {
+      model.showProgressDialog(context);
       await model.addDataToFirebase();
       topModel.updatePageTrue();
       topModel.updateGraphPageTrue();
+      Navigator.of(context).pop();
 
       showDialog(
         context: context,
@@ -234,6 +248,7 @@ class CarenderSavePage extends StatelessWidget {
         },
       );
     } catch (e) {
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -255,9 +270,12 @@ class CarenderSavePage extends StatelessWidget {
   Future updateData(CalenderSaveModel model, BuildContext context,
       MuscleData muscleData, TopModel topModel) async {
     try {
+      model.showProgressDialog(context);
+
       await model.updateData(muscleData);
       topModel.updatePageTrue();
       topModel.updateGraphPageTrue();
+      Navigator.of(context).pop();
 
       showDialog(
         context: context,
@@ -275,6 +293,7 @@ class CarenderSavePage extends StatelessWidget {
         },
       );
     } catch (e) {
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -293,5 +312,26 @@ class CarenderSavePage extends StatelessWidget {
         },
       );
     }
+  }
+
+  Future _showDialog(
+    BuildContext context,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('ログインが必要です'),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }

@@ -22,19 +22,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User currentUser = FirebaseAuth.instance.currentUser;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<IntroductionModel>(
         create: (_) => IntroductionModel()..getPrefIntro(),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Consumer<IntroductionModel>(
             builder: (context, model, child) {
-              return model.intro == true
-                  ? IntroductionPage()
-                  : currentUser != null
-                      ? TopPage()
-                      : AuthenticationPage();
+              return model.intro == true ? IntroductionPage() : TopPage();
             },
           ),
         ),
@@ -61,6 +57,7 @@ class TopPage extends StatelessWidget {
         builder: (context, model, child) {
           return Scaffold(
               appBar: AppBar(
+                toolbarHeight: deviceHeight * 0.06,
                 centerTitle: true,
                 title: Text(
                   _tabNames[model.currentIndex],
@@ -70,7 +67,9 @@ class TopPage extends StatelessWidget {
               ),
               body: _topPageBody(context),
               bottomNavigationBar: SizedBox(
-                height: 70,
+
+                height: deviceHeight * 0.1,
+
                 child: BottomNavigationBar(
                   onTap: model.onTabTapped,
                   currentIndex: model.currentIndex,

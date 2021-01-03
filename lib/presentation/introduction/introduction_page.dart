@@ -17,8 +17,7 @@ class IntroductionPage extends StatelessWidget {
               pages: model.listPagesViewModel,
               onDone: () {
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => AuthenticationPage()),
-                    (_) => false);
+                    MaterialPageRoute(builder: (_) => TopPage()), (_) => false);
                 model.setIntro();
               },
               showSkipButton: true,

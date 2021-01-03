@@ -18,6 +18,8 @@ class GraphModel extends ChangeNotifier {
   List<Users> userData = [];
   String userDocID;
 
+  final User currentUser = FirebaseAuth.instance.currentUser;
+
   Future weightTrue() {
     isSelectedWeight = true;
     notifyListeners();
@@ -29,45 +31,47 @@ class GraphModel extends ChangeNotifier {
   }
 
   Future fetchData() async {
-    seriesFatList.clear();
-    seriesWeightList.clear();
-    final docss = await FirebaseFirestore.instance.collection('users').get();
-    final userData = docss.docs.map((doc) => Users(doc)).toList();
-    this.userData = userData;
-    for (int i = 0; i < userData.length; i++) {
-      if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-        userDocID = userData[i].documentID;
-        break;
+    if (currentUser != null) {
+      seriesFatList.clear();
+      seriesWeightList.clear();
+      final docss = await FirebaseFirestore.instance.collection('users').get();
+      final userData = docss.docs.map((doc) => Users(doc)).toList();
+      this.userData = userData;
+      for (int i = 0; i < userData.length; i++) {
+        if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
+          userDocID = userData[i].documentID;
+          break;
+        }
       }
-    }
-    try {
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('date', descending: true)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
-      if (muscleData[0] != null) hasData = true;
-    } catch (e) {
-      hasData = false;
-    }
+      try {
+        final docs = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userDocID)
+            .collection('muscleData')
+            .orderBy('date', descending: true)
+            .get();
+        final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
+        this.muscleData = muscleData;
+        if (muscleData[0] != null) hasData = true;
+      } catch (e) {
+        hasData = false;
+      }
 
-    if (hasData) {
-      sevenDaysAgo =
-          muscleData[0].timestamp.toDate().add(Duration(days: 7) * -1);
-      thirtyDaysAgo =
-          muscleData[0].timestamp.toDate().add(Duration(days: 30) * -1);
-      threeMonthsAgo =
-          muscleData[0].timestamp.toDate().add(Duration(days: 90) * -1);
+      if (hasData) {
+        sevenDaysAgo =
+            muscleData[0].timestamp.toDate().add(Duration(days: 7) * -1);
+        thirtyDaysAgo =
+            muscleData[0].timestamp.toDate().add(Duration(days: 30) * -1);
+        threeMonthsAgo =
+            muscleData[0].timestamp.toDate().add(Duration(days: 90) * -1);
 
-      for (int i = 0; i < muscleData.length; i++) {
-        if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
-        seriesWeightList.add(
-            weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
-        seriesFatList.add(fatData(
-            muscleData[i].timestamp.toDate(), muscleData[i].bodyFatPercentage));
+        for (int i = 0; i < muscleData.length; i++) {
+          if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
+          seriesWeightList.add(weightData(
+              muscleData[i].timestamp.toDate(), muscleData[i].weight));
+          seriesFatList.add(fatData(muscleData[i].timestamp.toDate(),
+              muscleData[i].bodyFatPercentage));
+        }
       }
     }
     notifyListeners();
