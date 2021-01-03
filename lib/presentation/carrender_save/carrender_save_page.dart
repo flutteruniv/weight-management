@@ -32,6 +32,7 @@ class CarenderSavePage extends StatelessWidget {
             if (model.loadingData) {
               //データローディングが終わればこっちを表示
               return SingleChildScrollView(
+
                 child: Padding(
                   padding: EdgeInsets.only(
                     right: 20,

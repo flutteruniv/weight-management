@@ -27,6 +27,7 @@ class MyPage extends StatelessWidget {
           body: Consumer<MyPageModel>(
             builder: (context, model, child) {
               return SingleChildScrollView(
+
                 child: Padding(
                   padding: EdgeInsets.only(
                       right: 20,
@@ -40,6 +41,7 @@ class MyPage extends StatelessWidget {
                       Container(
                         height: deviceHeight * 0.05,
                         child: Text(
+
                           '目標体重(Kg)',
                           style: TextStyle(fontSize: 18),
                         ),
