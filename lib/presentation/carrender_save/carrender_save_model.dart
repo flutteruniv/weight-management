@@ -29,7 +29,15 @@ class CalenderSaveModel extends ChangeNotifier {
 
   bool hasData;
 
+  int angle = 0;
+
   final User currentUser = FirebaseAuth.instance.currentUser;
+
+  Future changeAngle() {
+    angle = angle + 45;
+    if (angle == 360) angle = 0;
+    notifyListeners();
+  }
 
   Future deleteDate() {
     weightTextController = TextEditingController(text: '');
@@ -79,6 +87,8 @@ class CalenderSaveModel extends ChangeNotifier {
               // imageFile = File(sameDateMuscleData.imagePath);
               // imagePath = sameDateMuscleData.imagePath;
               imageURL = sameDateMuscleData.imageURL;
+              if (sameDateMuscleData.angle != null)
+                angle = sameDateMuscleData.angle;
             }
             break;
           } else {
@@ -108,6 +118,8 @@ class CalenderSaveModel extends ChangeNotifier {
             // imageFile = File(sameDateMuscleData.imagePath);
 
             imageURL = sameDateMuscleData.imageURL;
+            if (sameDateMuscleData.angle != null)
+              angle = sameDateMuscleData.angle;
           } else {
             imageFile = null;
           }
@@ -119,6 +131,7 @@ class CalenderSaveModel extends ChangeNotifier {
           additionalBodyFatPercentage = null;
           imageFile = null;
           imageURL = null;
+          angle = 0;
         }
       } else {
         weightTextController = TextEditingController(text: '');
@@ -128,6 +141,7 @@ class CalenderSaveModel extends ChangeNotifier {
         imageFile = null;
         imageURL = null;
         sameDate = false;
+        angle = 0;
       }
     } else {
       loadingData = true;
@@ -157,6 +171,7 @@ class CalenderSaveModel extends ChangeNotifier {
       if (sameDateMuscleData.imageURL != null) {
         //   imageFile = File(sameDateMuscleData.imagePath);
         imageURL = sameDateMuscleData.imageURL;
+        if (sameDateMuscleData.angle != null) angle = sameDateMuscleData.angle;
       } else {
         //   imageFile = null;
 
@@ -289,6 +304,7 @@ class CalenderSaveModel extends ChangeNotifier {
           'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
+          'angle': angle,
         },
       );
     } else if (imageFile == null && additionalBodyFatPercentage != null) {
@@ -320,6 +336,7 @@ class CalenderSaveModel extends ChangeNotifier {
           'date': Timestamp.fromDate(additionalDate),
           'StringDate': viewDate,
           'imageURL': imageURL,
+          'angle': angle,
         },
       );
     } else if (imageFile == null && additionalBodyFatPercentage == null) {
@@ -358,6 +375,7 @@ class CalenderSaveModel extends ChangeNotifier {
         'weight': additionalWeight,
         'bodyFatPercentage': additionalBodyFatPercentage,
         'imageURL': imageURL,
+        'angle': angle,
       });
     } else if (imageFile == null && additionalBodyFatPercentage != null) {
       final document = FirebaseFirestore.instance
@@ -368,6 +386,7 @@ class CalenderSaveModel extends ChangeNotifier {
       await document.update({
         'weight': additionalWeight,
         'bodyFatPercentage': additionalBodyFatPercentage,
+        'angle': angle,
       });
     } else if (imageFile != null && additionalBodyFatPercentage == null) {
       final imageURL = await _uploadImage();
@@ -379,6 +398,7 @@ class CalenderSaveModel extends ChangeNotifier {
       await document.update({
         'weight': additionalWeight,
         'imageURL': imageURL,
+        'angle': angle,
       });
     } else if (imageFile == null && additionalBodyFatPercentage == null) {
       final document = FirebaseFirestore.instance
@@ -388,6 +408,7 @@ class CalenderSaveModel extends ChangeNotifier {
           .doc(muscleData.documentID);
       await document.update({
         'weight': additionalWeight,
+        'angle': angle,
       });
     }
   }

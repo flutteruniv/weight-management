@@ -39,7 +39,11 @@ class SelectPage extends StatelessWidget {
                               onTap: () {
                                 Navigator.pop(context, muscleData);
                               },
-                              leading: Image.network(muscleData.imageURL),
+                              leading: RotatedBox(
+                                  quarterTurns: muscleData.angle == null
+                                      ? 0
+                                      : muscleData.angle,
+                                  child: Image.network(muscleData.imageURL)),
                               title: muscleData.bodyFatPercentage != null
                                   ? Text(muscleData.weight.toString() +
                                       ' kg       ' +
@@ -82,6 +86,7 @@ class SelectPage extends StatelessWidget {
           builder: (context, model, child) {
             if (model.hasData) {
               return FloatingActionButton.extended(
+                heroTag: 'hero1',
                 label: Text(model.sortName),
                 onPressed: () async {
                   model.showBottomSheet(context);
