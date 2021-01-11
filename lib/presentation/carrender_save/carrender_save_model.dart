@@ -11,7 +11,7 @@ import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/user.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
-  String viewDate; //表示する日付
+  String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
   DateTime pickedDate; //datepickerで取得する日付
   double additionalWeight; //textfieldで入力する値
   double additionalBodyFatPercentage;
@@ -74,7 +74,6 @@ class CalenderSaveModel extends ChangeNotifier {
       }
       loadingData = true;
 
-      viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now());
       imageFile = null;
 
       if (hasData) {
