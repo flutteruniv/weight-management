@@ -111,55 +111,26 @@ class CarenderSavePage extends StatelessWidget {
                       Container(
                         height: deviceHeight * 0.07,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 53),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: deviceHeight * 0.3,
-                                width: deviceWidth * 0.45,
-                                child: InkWell(
-                                  onTap: () async {
-                                    model.showBottomSheet(context);
-                                  },
-                                  child: model.sameDate == true
-                                      ? model.imageFile != null
+                      Stack(
+                        alignment: AlignmentDirectional(1.3, 1.3),
+                        children: [
+                          SizedBox(
+                            height: deviceHeight * 0.3,
+                            width: deviceWidth * 0.45,
+                            child: InkWell(
+                              onTap: () async {
+                                model.showBottomSheet(context);
+                              },
+                              child: model.sameDate == true
+                                  ? model.imageFile != null
+                                      ? RotatedBox(
+                                          quarterTurns: model.angle,
+                                          child: Image.file(model.imageFile))
+                                      : model.imageURL != null
                                           ? RotatedBox(
                                               quarterTurns: model.angle,
                                               child:
-                                                  Image.file(model.imageFile))
-                                          : model.imageURL != null
-                                              ? RotatedBox(
-                                                  quarterTurns: model.angle,
-                                                  child: Image.network(
-                                                      model.imageURL))
-                                              : Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white70,
-                                                    border: Border.all(
-                                                        color: Colors.grey),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      '写真を選ぶ',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: 25),
-                                                    ),
-                                                  ),
-                                                )
-                                      : model.imageFile != null
-                                          ? RotatedBox(
-                                              quarterTurns: model.angle,
-                                              child:
-                                                  Image.file(model.imageFile))
+                                                  Image.network(model.imageURL))
                                           : Container(
                                               decoration: BoxDecoration(
                                                 color: Colors.white70,
@@ -176,26 +147,37 @@ class CarenderSavePage extends StatelessWidget {
                                                       TextStyle(fontSize: 25),
                                                 ),
                                               ),
+                                            )
+                                  : model.imageFile != null
+                                      ? RotatedBox(
+                                          quarterTurns: model.angle,
+                                          child: Image.file(model.imageFile))
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white70,
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '写真を選ぶ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(fontSize: 25),
                                             ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: deviceHeight * 0.3 / 2),
-                                child: FloatingActionButton(
-                                  heroTag: 'hero1',
-                                  onPressed: () {
-                                    model.changeAngle();
-                                  },
-                                  child: Icon(Icons.rotate_right_outlined),
-                                ),
-                              ),
-                            ],
+                                          ),
+                                        ),
+                            ),
                           ),
-                        ),
+                          FloatingActionButton(
+                            heroTag: 'hero1',
+                            onPressed: () {
+                              model.changeAngle();
+                            },
+                            child: Icon(Icons.rotate_right_outlined),
+                          ),
+                        ],
                       ),
                       Container(
                         height: deviceHeight * 0.07,

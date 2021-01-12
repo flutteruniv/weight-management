@@ -20,8 +20,15 @@ class MyPageModel extends ChangeNotifier {
   IdealMuscleData idealMuscle;
   TextEditingController idealWeightTextController, idealFatTextController;
   bool hasIdealMuscle = false;
+  int angle = 0;
 
   final User currentUser = FirebaseAuth.instance.currentUser;
+
+  Future changeAngle() {
+    angle = angle + 45;
+    if (angle == 360) angle = 0;
+    notifyListeners();
+  }
 
   Future fetchData() async {
     if (currentUser != null) {
