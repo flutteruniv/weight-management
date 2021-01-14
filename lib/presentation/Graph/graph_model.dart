@@ -12,6 +12,9 @@ class GraphModel extends ChangeNotifier {
   DateTime sevenDaysAgo;
   DateTime thirtyDaysAgo;
   DateTime threeMonthsAgo;
+  DateTime fatSevenDaysAgo;
+  DateTime fatThirtyDaysAgo;
+  DateTime fatThreeMonthsAgo;
   bool isSelectedWeight = true;
   bool hasData = false;
 
@@ -69,8 +72,27 @@ class GraphModel extends ChangeNotifier {
           if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
           seriesWeightList.add(weightData(
               muscleData[i].timestamp.toDate(), muscleData[i].weight));
-          seriesFatList.add(fatData(muscleData[i].timestamp.toDate(),
-              muscleData[i].bodyFatPercentage));
+          /*  seriesFatList.add(fatData(muscleData[i].timestamp.toDate(),
+              muscleData[i].bodyFatPercentage));*/
+        }
+        for (int i = 0; i < muscleData.length; i++) {
+          if (muscleData[i].bodyFatPercentage != null) {
+            fatSevenDaysAgo =
+                muscleData[i].timestamp.toDate().add(Duration(days: 7) * -1);
+            fatThirtyDaysAgo =
+                muscleData[i].timestamp.toDate().add(Duration(days: 30) * -1);
+            fatThreeMonthsAgo =
+                muscleData[i].timestamp.toDate().add(Duration(days: 90) * -1);
+            break;
+          }
+        }
+        for (int i = 0; i < muscleData.length; i++) {
+          if (muscleData[i].timestamp.toDate().isBefore(fatThreeMonthsAgo))
+            break;
+          if (muscleData[i].bodyFatPercentage != null) {
+            seriesFatList.add(fatData(muscleData[i].timestamp.toDate(),
+                muscleData[i].bodyFatPercentage));
+          }
         }
       }
     }
