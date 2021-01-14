@@ -39,8 +39,14 @@ class ListPage extends StatelessWidget {
                                         muscleData.imageURL != null
                                             ? Column(
                                                 children: [
-                                                  Image.network(
-                                                      muscleData.imageURL),
+                                                  RotatedBox(
+                                                    quarterTurns:
+                                                        muscleData.angle == null
+                                                            ? 0
+                                                            : muscleData.angle,
+                                                    child: Image.network(
+                                                        muscleData.imageURL),
+                                                  ),
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -126,7 +132,11 @@ class ListPage extends StatelessWidget {
                         },
                         child: muscleData.imageURL != null //写真、体脂肪率あるなしで条件分岐
                             ? ListTile(
-                                leading: Image.network(muscleData.imageURL),
+                                leading: RotatedBox(
+                                    quarterTurns: muscleData.angle == null
+                                        ? 0
+                                        : muscleData.angle,
+                                    child: Image.network(muscleData.imageURL)),
                                 title: muscleData.bodyFatPercentage != null
                                     ? Text(muscleData.weight.toString() +
                                         ' kg       ' +
@@ -230,6 +240,7 @@ class ListPage extends StatelessWidget {
           builder: (context, model, child) {
             if (model.hasData) {
               return FloatingActionButton.extended(
+                heroTag: 'hero2',
                 label: Text(model.sortName),
                 onPressed: () async {
                   model.showBottomSheet(context);

@@ -157,7 +157,12 @@ class ComparePage extends StatelessWidget {
                                 ? Container(
                                     height: deviceHeight * 0.35,
                                     width: deviceWidth * 0.5,
-                                    child: Image.network(model.imageURL[0]),
+                                    child: RotatedBox(
+                                        quarterTurns: model.angle[0] == null
+                                            ? 0
+                                            : model.angle[0],
+                                        child:
+                                            Image.network(model.imageURL[0])),
                                   )
                                 : Container(
                                     height: deviceHeight * 0.35,
@@ -308,7 +313,12 @@ class ComparePage extends StatelessWidget {
                                 ? Container(
                                     height: deviceHeight * 0.35,
                                     width: deviceWidth * 0.5,
-                                    child: Image.network(model.imageURL[1]),
+                                    child: RotatedBox(
+                                        quarterTurns: model.angle[1] == null
+                                            ? 0
+                                            : model.angle[1],
+                                        child:
+                                            Image.network(model.imageURL[1])),
                                   )
                                 : Container(
                                     height: deviceHeight * 0.35,

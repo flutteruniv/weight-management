@@ -102,7 +102,9 @@ class GraphPage extends StatelessWidget {
                           height: 30,
                           child: RaisedButton(
                             onPressed: () async {
-                              await model.chagePeriod(model.sevenDaysAgo);
+                              await model.chagePeriod(model.isSelectedWeight
+                                  ? model.sevenDaysAgo
+                                  : model.fatSevenDaysAgo);
                             },
                             child: Text(
                               '1週間',
@@ -119,7 +121,9 @@ class GraphPage extends StatelessWidget {
                           height: 30,
                           child: RaisedButton(
                             onPressed: () async {
-                              await model.chagePeriod(model.thirtyDaysAgo);
+                              await model.chagePeriod(model.isSelectedWeight
+                                  ? model.thirtyDaysAgo
+                                  : model.fatThirtyDaysAgo);
                             },
                             child: Text(
                               '1か月間',
@@ -136,7 +140,9 @@ class GraphPage extends StatelessWidget {
                           height: 30,
                           child: RaisedButton(
                             onPressed: () async {
-                              await model.chagePeriod(model.threeMonthsAgo);
+                              await model.chagePeriod(model.isSelectedWeight
+                                  ? model.threeMonthsAgo
+                                  : model.fatThreeMonthsAgo);
                             },
                             child: Text(
                               '3か月間',

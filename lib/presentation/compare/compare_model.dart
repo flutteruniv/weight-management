@@ -13,6 +13,7 @@ class CompareModel extends ChangeNotifier {
   List<String> date = ['日付を選ぶ', '日付を選ぶ'];
   List<IdealMuscleData> idealMuscleList = [];
   IdealMuscleData idealMuscle;
+  List<int> angle = [0, 0];
 
   List<Users> userData = [];
   String userDocID;
@@ -40,6 +41,7 @@ class CompareModel extends ChangeNotifier {
     if (idealMuscle.bodyFatPercentage != null)
       fatPercentage[i] = idealMuscle.bodyFatPercentage.toString();
     imageURL[i] = idealMuscle.imageURL;
+    angle[i] = 0;
     date[i] = '理想の身体';
 
     notifyListeners();
@@ -50,6 +52,7 @@ class CompareModel extends ChangeNotifier {
     fatPercentage[i] = null;
     imageURL[i] = null;
     date[i] = '日付を選ぶ';
+    angle[i] = 0;
     notifyListeners();
   }
 
@@ -63,6 +66,7 @@ class CompareModel extends ChangeNotifier {
           : null;
       imageURL[i] =
           selectMuscleData.imageURL != null ? selectMuscleData.imageURL : null;
+      angle[i] = selectMuscleData.angle != null ? selectMuscleData.angle : 0;
     } catch (e) {}
     notifyListeners();
   }
