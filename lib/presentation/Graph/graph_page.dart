@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/Graph/graph_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:weight_management/presentation/main/main_model.dart';
+import 'package:weight_management/presentation/Top/top_model.dart';
 
 class GraphPage extends StatelessWidget {
   @override

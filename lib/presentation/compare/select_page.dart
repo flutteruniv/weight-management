@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/presentation/compare/compare_page.dart';
 import 'package:weight_management/presentation/compare/select_model.dart';
-import 'package:weight_management/presentation/main/main_model.dart';
 
 class SelectPage extends StatelessWidget {
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/domain/muscle_data.dart';
+import 'package:weight_management/presentation/Top/top_model.dart';
 import 'package:weight_management/presentation/list/list_model.dart';
-import 'package:weight_management/presentation/main/main_model.dart';
 
 class ListPage extends StatelessWidget {
   @override

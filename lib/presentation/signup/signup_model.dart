@@ -38,14 +38,6 @@ class SignUpModel extends ChangeNotifier {
           'documentID': newDoc.id,
         },
       );
-
-      /* FirebaseFirestore.instance.collection('users').add(
-        {
-          'email': email,
-          'createdAt': Timestamp.now(),
-          'userID': uid,
-        },
-      );*/
     } catch (e) {
       print(e.code);
       throw (_convertErrorMessage(e.code));
