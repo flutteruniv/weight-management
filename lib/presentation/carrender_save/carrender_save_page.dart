@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/Top/top_model.dart';
@@ -13,7 +14,7 @@ class CarenderSavePage extends StatelessWidget {
     final User currentUser = FirebaseAuth.instance.currentUser;
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<CalenderSaveModel>(
-      create: (_) => CalenderSaveModel()..initData(),
+      create: (_) => CalenderSaveModel()..initState(),
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -25,7 +26,7 @@ class CarenderSavePage extends StatelessWidget {
           resizeToAvoidBottomInset: true,
           body: Consumer<CalenderSaveModel>(builder: (context, model, child) {
             if (topModel.listPageUpdate) {
-              model.initData();
+              model.initState();
               model.imageFile = null;
             }
             if (model.loadingData) {
@@ -51,7 +52,7 @@ class CarenderSavePage extends StatelessWidget {
                             // 日付を取得
                             icon: Icon(Icons.arrow_drop_down),
                             onPressed: () async {
-                              model.pickedDate = await showDatePicker(
+                              final pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: new DateTime.now(),
                                 firstDate:
@@ -59,9 +60,7 @@ class CarenderSavePage extends StatelessWidget {
                                 lastDate:
                                     DateTime.now().add(Duration(days: 1095)),
                               );
-                              model.selectDate();
-                              await model.judgeDate(); //日付を取得した時に同じ日付があるか判断
-                              await model.setText();
+                              model.changeDate(pickedDate);
                             },
                             label: Text(
                               model.viewDate,
@@ -119,7 +118,7 @@ class CarenderSavePage extends StatelessWidget {
                                 onTap: () async {
                                   model.showBottomSheet(context);
                                 },
-                                child: model.sameDate
+                                child: model.sameDateMuscleData != null
                                     ? model.imageFile != null
                                         ? RotatedBox(
                                             quarterTurns: model.angle,
@@ -186,21 +185,13 @@ class CarenderSavePage extends StatelessWidget {
                           child: RaisedButton(
                             onPressed: () async {
                               if (currentUser != null) {
-                                //to do
-                                if (model.sameDate) {
-                                  //同じ日付あるなら更新
-                                  await updateData(model, context,
-                                      model.sameDateMuscleData, topModel);
-                                } else {
-                                  //同じ日付がないなら保存
-                                  await addData(model, context, topModel);
-                                }
-                                await model.initData();
+                                await model.addDate(context);
+                                await model.initState();
                               } else {
                                 _showDialog(context);
                               }
                             },
-                            child: model.sameDate != true
+                            child: model.sameDateMuscleData == null
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
@@ -243,7 +234,6 @@ class CarenderSavePage extends StatelessWidget {
       CalenderSaveModel model, BuildContext context, TopModel topModel) async {
     try {
       model.showProgressDialog(context);
-      await model.addDataToFirebase();
       topModel.updatePageTrue();
       topModel.updateGraphPageTrue();
       Navigator.of(context).pop();
@@ -291,7 +281,7 @@ class CarenderSavePage extends StatelessWidget {
     try {
       model.showProgressDialog(context);
 
-      await model.updateData(muscleData);
+      // await model.addDate();
       topModel.updatePageTrue();
       topModel.updateGraphPageTrue();
       Navigator.of(context).pop();
