@@ -82,7 +82,7 @@ class CarenderSavePage extends StatelessWidget {
                                 hintText: '体重を入力（Kg）', labelText: '体重(Kg)'),
                             onChanged: (number) {
                               //テキストに体重入力
-                              model.additionalWeight = double.parse(number);
+                              model.addWeight = double.parse(number);
                             },
                             style: TextStyle(fontSize: 20),
                           ),
@@ -99,8 +99,7 @@ class CarenderSavePage extends StatelessWidget {
                             ),
                             onChanged: (number) {
                               //テキストに体重入力
-                              model.additionalBodyFatPercentage =
-                                  double.parse(number);
+                              model.addFatPercentage = double.parse(number);
                             },
                             style: TextStyle(fontSize: 20),
                           ),

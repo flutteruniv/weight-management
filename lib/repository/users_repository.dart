@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/user.dart';
 import 'package:weight_management/repository/auth_repository.dart';
@@ -40,15 +41,29 @@ class UsersRepository {
     return _user;
   }
 
-  Future<List<MuscleData>> getMuscleData(docID) async {
+  Future<List<MuscleData>> getMuscleData(
+      {String docID, String orderByState, bool bool}) async {
     final docs = await FirebaseFirestore.instance
         .collection('users')
         .doc(docID)
         .collection('muscleData')
-        .orderBy('date', descending: true)
+        .orderBy(orderByState, descending: bool)
         .get();
     final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
     return muscleData;
+  }
+
+  Future<IdealMuscleData> getIdealMuscleData({String docID}) async {
+    final docs = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docID)
+        .collection('idealMuscleData')
+        .limit(1)
+        .get();
+    final idealMuscleData =
+        docs.docs.map((doc) => IdealMuscleData(doc)).toList();
+    final idealMuscle = idealMuscleData.first;
+    return idealMuscle;
   }
 
   Future<void> addMuscleData(

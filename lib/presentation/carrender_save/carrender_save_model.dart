@@ -12,30 +12,30 @@ import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
+  Users myUser;
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
   DateTime pickedDate = DateTime.now();
-  double additionalWeight;
-  double additionalBodyFatPercentage;
-  DateTime additionalDate = DateTime.now();
+  double addWeight;
+  double addFatPercentage;
+  DateTime addedDate = DateTime.now();
   File imageFile;
+  String imageURL = '';
+  int angle = 0;
+  String userDocumentID;
   List<MuscleData> muscleData = [];
   MuscleData sameDateMuscleData;
   bool loadingData = false;
   TextEditingController weightTextController, fatTextController;
-  String imageURL = '';
-  List<Users> userData = [];
-  String userDocID;
-  int angle = 0;
   final User currentUser = FirebaseAuth.instance.currentUser;
-  Users myUser;
   final _usersRepository = UsersRepository.instance;
 
   Future initState() async {
     if (currentUser != null) {
       try {
         myUser = await _usersRepository.fetch();
-        muscleData = await _usersRepository.getMuscleData(myUser.documentID);
-        userDocID = myUser.documentID;
+        muscleData = await _usersRepository.getMuscleData(
+            docID: myUser.documentID, orderByState: 'date', bool: true);
+        userDocumentID = myUser.documentID;
       } catch (e) {
         print(e.toString());
       }
@@ -65,16 +65,16 @@ class CalenderSaveModel extends ChangeNotifier {
   Future deleteDate() {
     weightTextController = TextEditingController(text: '');
     fatTextController = TextEditingController(text: '');
-    additionalWeight = null;
-    additionalBodyFatPercentage = null;
+    addWeight = null;
+    addFatPercentage = null;
     imageFile = null;
   }
 
   void initialize() {
     weightTextController = TextEditingController(text: '');
     fatTextController = TextEditingController(text: '');
-    additionalWeight = null;
-    additionalBodyFatPercentage = null;
+    addWeight = null;
+    addFatPercentage = null;
     imageFile = null;
     imageURL = null;
     angle = 0;
@@ -83,7 +83,7 @@ class CalenderSaveModel extends ChangeNotifier {
   Future judgeSameDate(String dateTime) async {
     final docs = await FirebaseFirestore.instance
         .collection('users')
-        .doc(userDocID)
+        .doc(userDocumentID)
         .collection('muscleData')
         .where('StringDate', isEqualTo: dateTime)
         .get();
@@ -102,14 +102,14 @@ class CalenderSaveModel extends ChangeNotifier {
     if (sameDateMuscleData != null) {
       weightTextController =
           TextEditingController(text: sameDateMuscleData.weight.toString());
-      additionalWeight = double.parse(weightTextController.text);
+      addWeight = double.parse(weightTextController.text);
       if (sameDateMuscleData.bodyFatPercentage != null) {
         fatTextController = TextEditingController(
             text: sameDateMuscleData.bodyFatPercentage.toString());
-        additionalBodyFatPercentage = double.parse(fatTextController.text);
+        addFatPercentage = double.parse(fatTextController.text);
       } else {
         fatTextController = TextEditingController(text: '');
-        additionalBodyFatPercentage = null;
+        addFatPercentage = null;
       }
       if (sameDateMuscleData.imageURL != null) {
         imageURL = sameDateMuscleData.imageURL;
@@ -133,7 +133,7 @@ class CalenderSaveModel extends ChangeNotifier {
 
   void selectDate(DateTime pickedDate) {
     viewDate = (DateFormat('yyyy/MM/dd')).format(pickedDate);
-    additionalDate = pickedDate;
+    addedDate = pickedDate;
     notifyListeners();
   }
 
@@ -190,15 +190,15 @@ class CalenderSaveModel extends ChangeNotifier {
   }
 
   Future addDate(BuildContext context) async {
-    if (additionalWeight == null) {
+    if (addWeight == null) {
       throw ('体重を入力してください');
     } else {
       if (imageFile != null) imageURL = await _uploadImage();
       if (sameDateMuscleData == null) {
         _usersRepository.addMuscleData(
             user: myUser,
-            weight: additionalWeight,
-            fat: additionalBodyFatPercentage,
+            weight: addWeight,
+            fat: addFatPercentage,
             dateTime: pickedDate,
             imageURL: imageURL,
             angle: angle);
@@ -208,8 +208,8 @@ class CalenderSaveModel extends ChangeNotifier {
         _usersRepository.updateMuscleData(
             user: myUser,
             muscleData: sameDateMuscleData,
-            weight: additionalWeight,
-            fat: additionalBodyFatPercentage,
+            weight: addWeight,
+            fat: addFatPercentage,
             dateTime: pickedDate,
             imageURL: imageURL,
             angle: angle);
@@ -224,7 +224,7 @@ class CalenderSaveModel extends ChangeNotifier {
     final storage = FirebaseStorage.instance;
     StorageTaskSnapshot snapshot = await storage
         .ref()
-        .child("muscle/$userDocID/$viewDate")
+        .child("muscle/$userDocumentID/$viewDate")
         .putFile(imageFile)
         .onComplete;
     final String downloadURL = await snapshot.ref.getDownloadURL();

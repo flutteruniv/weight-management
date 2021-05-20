@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/repository/users_repository.dart';
 
 class SelectModel extends ChangeNotifier {
   List<Users> userData = [];
@@ -12,28 +13,16 @@ class SelectModel extends ChangeNotifier {
   String sortName = '日付順（降順）';
   bool hasData = false;
   final User currentUser = FirebaseAuth.instance.currentUser;
+  final _usersRepository = UsersRepository.instance;
+  Users myUser;
 
-  Future fetchData() async {
+  Future fetch() async {
     if (currentUser != null) {
-      final docss = await FirebaseFirestore.instance.collection('users').get();
-      final userData = docss.docs.map((doc) => Users(doc)).toList();
-      this.userData = userData;
-      for (int i = 0; i < userData.length; i++) {
-        if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-          userDocID = userData[i].documentID;
-          break;
-        }
-      }
       try {
-        final docs = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userDocID)
-            .collection('muscleData')
-            .orderBy('date', descending: true)
-            .get();
-        final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-        this.muscleData = muscleData;
-        if (muscleData[0] != null) hasData = true;
+        myUser = await _usersRepository.fetch();
+        muscleData = await _usersRepository.getMuscleData(
+            docID: myUser.documentID, orderByState: 'date', bool: true);
+        hasData = true;
       } catch (e) {
         hasData = false;
       }
@@ -98,44 +87,20 @@ class SelectModel extends ChangeNotifier {
     final sortingType = await showCupertinoBottomBar(context);
     if (sortingType == 0) {
       sortName = '日付順（降順）';
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('date', descending: true)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
+      muscleData = await _usersRepository.getMuscleData(
+          docID: myUser.documentID, orderByState: 'date', bool: true);
     } else if (sortingType == 1) {
       sortName = '日付順（昇順）';
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('date', descending: false)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
+      muscleData = await _usersRepository.getMuscleData(
+          docID: myUser.documentID, orderByState: 'date', bool: false);
     } else if (sortingType == 2) {
       sortName = '体重順（降順）';
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('weight', descending: true)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
+      muscleData = await _usersRepository.getMuscleData(
+          docID: myUser.documentID, orderByState: 'weight', bool: true);
     } else if (sortingType == 3) {
       sortName = '体重順（昇順）';
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('muscleData')
-          .orderBy('weight', descending: false)
-          .get();
-      final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-      this.muscleData = muscleData;
+      muscleData = await _usersRepository.getMuscleData(
+          docID: myUser.documentID, orderByState: 'weight', bool: false);
     }
     notifyListeners();
   }

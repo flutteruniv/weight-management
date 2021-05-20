@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/repository/users_repository.dart';
 
 class CompareModel extends ChangeNotifier {
   MuscleData muscleData;
@@ -16,8 +17,26 @@ class CompareModel extends ChangeNotifier {
   List<int> angle = [0, 0];
 
   List<Users> userData = [];
+  Users myUser;
   String userDocID;
+  final _usersRepository = UsersRepository.instance;
 
+  Future setIdeal(int i) async {
+    myUser = await _usersRepository.fetch();
+    idealMuscle =
+        await _usersRepository.getIdealMuscleData(docID: myUser.documentID);
+
+    weight[i] = idealMuscle.weight.toString();
+    if (idealMuscle.bodyFatPercentage != null)
+      fatPercentage[i] = idealMuscle.bodyFatPercentage.toString();
+    imageURL[i] = idealMuscle.imageURL;
+    angle[i] = 0;
+    date[i] = '理想の身体';
+
+    notifyListeners();
+  }
+
+/*
   Future setIdealBody(int i) async {
     final docss = await FirebaseFirestore.instance.collection('users').get();
     final userData = docss.docs.map((doc) => Users(doc)).toList();
@@ -46,7 +65,7 @@ class CompareModel extends ChangeNotifier {
 
     notifyListeners();
   }
-
+*/
   Future clearValue(int i) {
     weight[i] = null;
     fatPercentage[i] = null;

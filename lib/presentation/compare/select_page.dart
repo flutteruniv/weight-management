@@ -6,7 +6,7 @@ class SelectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SelectModel>(
-      create: (_) => SelectModel()..fetchData(),
+      create: (_) => SelectModel()..fetch(),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
