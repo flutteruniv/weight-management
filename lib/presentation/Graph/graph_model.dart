@@ -1,27 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/repository/users_repository.dart';
+import 'package:weight_management/services/dialog_helper.dart';
 
 class GraphModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
   var seriesWeightList = List<weightData>();
   var seriesFatList = List<fatData>();
-  DateTime sevenDaysAgo;
-  DateTime thirtyDaysAgo;
-  DateTime threeMonthsAgo;
+  DateTime weightSevenDaysAgo;
+  DateTime weightThirtyDaysAgo;
+  DateTime weightThreeMonthsAgo;
   DateTime fatSevenDaysAgo;
   DateTime fatThirtyDaysAgo;
   DateTime fatThreeMonthsAgo;
   bool isSelectedWeight = true;
   bool hasData = false;
-
-  List<Users> userData = [];
-  String userDocID;
-
   final User currentUser = FirebaseAuth.instance.currentUser;
+  final _userRepository = UsersRepository.instance;
+  Users myUser;
 
   Future weightTrue() {
     isSelectedWeight = true;
@@ -33,83 +31,82 @@ class GraphModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future fetchData() async {
+  Future fetch(BuildContext context) async {
     if (currentUser != null) {
-      seriesFatList.clear();
-      seriesWeightList.clear();
-      final docss = await FirebaseFirestore.instance.collection('users').get();
-      final userData = docss.docs.map((doc) => Users(doc)).toList();
-      this.userData = userData;
-      for (int i = 0; i < userData.length; i++) {
-        if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-          userDocID = userData[i].documentID;
-          break;
-        }
-      }
       try {
-        final docs = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userDocID)
-            .collection('muscleData')
-            .orderBy('date', descending: true)
-            .get();
-        final muscleData = docs.docs.map((doc) => MuscleData(doc)).toList();
-        this.muscleData = muscleData;
-        if (muscleData[0] != null) hasData = true;
+        myUser = await _userRepository.fetch();
+        muscleData = await _userRepository.getMuscleData(
+            docID: myUser.documentID, orderByState: 'date', bool: true);
+        hasData = true;
+        await getWeightDays();
+        getWeightList(weightThirtyDaysAgo);
+        await getFatDays();
+        getFatList(fatThirtyDaysAgo);
       } catch (e) {
         hasData = false;
-      }
-
-      if (hasData) {
-        sevenDaysAgo =
-            muscleData[0].timestamp.toDate().add(Duration(days: 7) * -1);
-        thirtyDaysAgo =
-            muscleData[0].timestamp.toDate().add(Duration(days: 30) * -1);
-        threeMonthsAgo =
-            muscleData[0].timestamp.toDate().add(Duration(days: 90) * -1);
-
-        for (int i = 0; i < muscleData.length; i++) {
-          if (muscleData[i].timestamp.toDate().isBefore(threeMonthsAgo)) break;
-          seriesWeightList.add(weightData(
-              muscleData[i].timestamp.toDate(), muscleData[i].weight));
-          /*  seriesFatList.add(fatData(muscleData[i].timestamp.toDate(),
-              muscleData[i].bodyFatPercentage));*/
-        }
-        for (int i = 0; i < muscleData.length; i++) {
-          if (muscleData[i].bodyFatPercentage != null) {
-            fatSevenDaysAgo =
-                muscleData[i].timestamp.toDate().add(Duration(days: 7) * -1);
-            fatThirtyDaysAgo =
-                muscleData[i].timestamp.toDate().add(Duration(days: 30) * -1);
-            fatThreeMonthsAgo =
-                muscleData[i].timestamp.toDate().add(Duration(days: 90) * -1);
-            break;
-          }
-        }
-        for (int i = 0; i < muscleData.length; i++) {
-          if (muscleData[i].timestamp.toDate().isBefore(fatThreeMonthsAgo))
-            break;
-          if (muscleData[i].bodyFatPercentage != null) {
-            seriesFatList.add(fatData(muscleData[i].timestamp.toDate(),
-                muscleData[i].bodyFatPercentage));
-          }
-        }
+        showAlertDialog(context, e.toString());
       }
     }
     notifyListeners();
   }
 
-  Future chagePeriod(DateTime time) {
-    seriesWeightList.clear();
-    seriesFatList.clear();
+  Future getWeightDays() {
+    weightSevenDaysAgo =
+        muscleData.first.timestamp.toDate().add(Duration(days: 7) * -1);
+    weightThirtyDaysAgo =
+        muscleData.first.timestamp.toDate().add(Duration(days: 30) * -1);
+    weightThreeMonthsAgo =
+        muscleData.first.timestamp.toDate().add(Duration(days: 90) * -1);
+    notifyListeners();
+  }
+
+  //dateTime以内の体重をリストに格納
+  Future getWeightList(DateTime dateTime) {
     for (int i = 0; i < muscleData.length; i++) {
-      if (muscleData[i].timestamp.toDate().isBefore(time)) break;
+      if (muscleData[i].timestamp.toDate().isBefore(dateTime)) break;
       seriesWeightList.add(
           weightData(muscleData[i].timestamp.toDate(), muscleData[i].weight));
-      if (muscleData[i].bodyFatPercentage != null)
+    }
+    notifyListeners();
+  }
+
+  Future getFatDays() {
+    for (int i = 0; i < muscleData.length; i++) {
+      if (muscleData[i].bodyFatPercentage != null) {
+        fatSevenDaysAgo =
+            muscleData[i].timestamp.toDate().add(Duration(days: 7) * -1);
+        fatThirtyDaysAgo =
+            muscleData[i].timestamp.toDate().add(Duration(days: 30) * -1);
+        fatThreeMonthsAgo =
+            muscleData[i].timestamp.toDate().add(Duration(days: 90) * -1);
+        break;
+      }
+    }
+    notifyListeners();
+  }
+
+  Future getFatList(DateTime dateTime) {
+    for (int i = 0; i < muscleData.length; i++) {
+      if (muscleData[i].timestamp.toDate().isBefore(dateTime)) break;
+      if (muscleData[i].bodyFatPercentage != null) {
         seriesFatList.add(fatData(
             muscleData[i].timestamp.toDate(), muscleData[i].bodyFatPercentage));
+      }
     }
+    notifyListeners();
+  }
+
+  Future changeWeight(DateTime dateTime) async {
+    seriesWeightList.clear();
+    await getWeightDays();
+    getWeightList(dateTime);
+    notifyListeners();
+  }
+
+  Future changeFat(DateTime dateTime) async {
+    seriesFatList.clear();
+    await getFatDays();
+    getFatList(dateTime);
     notifyListeners();
   }
 
