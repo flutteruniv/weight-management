@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
-import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/domain/app_user.dart';
 
 class MyPageModel extends ChangeNotifier {
   double idealWeight;
@@ -14,7 +14,7 @@ class MyPageModel extends ChangeNotifier {
   File idealImageFile;
   String idealImagePath;
   String idealImageURL;
-  List<Users> userData = [];
+  List<AppUser> userData = [];
   String userDocID;
   List<IdealMuscleData> idealMuscleList = [];
   IdealMuscleData idealMuscle;
@@ -33,7 +33,7 @@ class MyPageModel extends ChangeNotifier {
   Future fetchData() async {
     if (currentUser != null) {
       final docss = await FirebaseFirestore.instance.collection('users').get();
-      final userData = docss.docs.map((doc) => Users(doc)).toList();
+      final userData = docss.docs.map((doc) => AppUser(doc)).toList();
       this.userData = userData;
       for (int i = 0; i < userData.length; i++) {
         if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {

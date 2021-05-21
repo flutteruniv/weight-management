@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/auth_repository.dart';
 
 /// ログインしているユーザーを操作する
@@ -20,11 +20,11 @@ class UsersRepository {
   final _firestore = FirebaseFirestore.instance;
 
   /// ユーザー情報（ここで保持することでメモリキャッシュしている）
-  Users _user;
+  AppUser _user;
 
   /// ユーザーを返す
   /// 一度取得したらメモリキャッシュしておく
-  Future<Users> fetch() async {
+  Future<AppUser> fetch() async {
     if (_user == null) {
       final id = _auth.firebaseUser?.uid;
       if (id == null) {
@@ -36,9 +36,18 @@ class UsersRepository {
       if (!doc.exists) {
         print("user not found!");
       }
-      _user = Users(doc);
+      _user = AppUser(doc);
     }
     return _user;
+  }
+
+  Future<void> deleteMuscleData(AppUser user, MuscleData muscleData) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.documentID)
+        .collection('muscleData')
+        .doc(muscleData.documentID)
+        .delete();
   }
 
   Future<List<MuscleData>> getMuscleData(
@@ -67,7 +76,7 @@ class UsersRepository {
   }
 
   Future<void> addMuscleData(
-      {Users user,
+      {AppUser user,
       double weight,
       double fat,
       DateTime dateTime,
@@ -88,7 +97,7 @@ class UsersRepository {
   }
 
   Future<void> updateMuscleData(
-      {Users user,
+      {AppUser user,
       MuscleData muscleData,
       double weight,
       double fat,
@@ -107,45 +116,6 @@ class UsersRepository {
       'StringDate': (DateFormat('yyyy/MM/dd')).format(dateTime),
       'imageURL': imageURL,
       'angle': angle,
-    });
-  }
-
-  ///ユーザー情報に更新があったらに呼び出す。
-  Future<void> _updateLocalCache() async {
-    final id = _auth.firebaseUser?.uid;
-    if (id == null) {
-      return null;
-    }
-    final doc = await _firestore.collection('users').doc(id).get();
-    if (!doc.exists) {
-      print("user not found");
-    }
-    _user = Users(doc);
-  }
-
-  void deleteLocalCache() {
-    _user = null;
-  }
-
-  /// Firestoreにユーザーを登録する
-  Future<void> registerUser(
-      {String uid, String displayName, String email, String userID}) async {
-    await _firestore.collection('users').doc(uid).set({
-      "displayName": displayName,
-      "email": email,
-      "photoURL": "",
-      "userID": userID,
-      "createdAt": Timestamp.now(),
-      'homeSauna': '',
-    });
-    //初回登録時に自分の投稿を自分のタイムラインに表示するために、タイムライン検索用配列に自分のuidを追加しておく。
-    await _firestore
-        .collection('users')
-        .doc(uid)
-        .collection("listsForTimeline")
-        .doc("1")
-        .set({
-      "friendList": [uid]
     });
   }
 }

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/users_repository.dart';
 
 class CompareModel extends ChangeNotifier {
@@ -16,8 +16,8 @@ class CompareModel extends ChangeNotifier {
   IdealMuscleData idealMuscle;
   List<int> angle = [0, 0];
 
-  List<Users> userData = [];
-  Users myUser;
+  List<AppUser> userData = [];
+  AppUser myUser;
   String userDocID;
   final _usersRepository = UsersRepository.instance;
 

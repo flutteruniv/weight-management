@@ -7,12 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
-  Users myUser;
+  AppUser myUser;
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
   DateTime pickedDate = DateTime.now();
   double addWeight;

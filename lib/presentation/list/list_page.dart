@@ -9,12 +9,12 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<ListModel>(
-      create: (_) => ListModel()..fetchData(),
+      create: (_) => ListModel()..fetch(context),
       child: Scaffold(
         body: Consumer<ListModel>(
           builder: (context, model, child) {
             if (topModel.savePageUpdate) {
-              model.fetchData();
+              model.fetch(context);
             }
             if (model.hasData) {
               final muscleData = model.muscleData;
@@ -162,10 +162,8 @@ class ListPage extends StatelessWidget {
 
                                                 await deleteList(
                                                     context, model, muscleData);
-                                                await topModel
-                                                    .updateListPageTrue();
-                                                await topModel
-                                                    .updateGraphPageTrue();
+                                                topModel.updateListPageTrue();
+                                                topModel.updateGraphPageTrue();
                                               },
                                             ),
                                           ],
@@ -258,8 +256,8 @@ class ListPage extends StatelessWidget {
   Future deleteList(
       BuildContext context, ListModel model, MuscleData muscleData) async {
     try {
-      await model.deleteList(muscleData);
-      await model.fetchData();
+      await model.deleteMuscleData(muscleData);
+      await model.fetch(context);
     } catch (e) {
       await _showDialog(context, e.toString());
       print(e.toString());

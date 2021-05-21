@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:weight_management/domain/user.dart';
+import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/presentation/Graph/graph_page.dart';
 import 'package:weight_management/presentation/Top/top_page.dart';
 import 'package:weight_management/presentation/authentication/authentication_page.dart';
