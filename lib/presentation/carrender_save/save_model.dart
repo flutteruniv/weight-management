@@ -12,7 +12,7 @@ import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
 class CalenderSaveModel extends ChangeNotifier {
-  AppUser myUser;
+  Users myUser;
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
   DateTime pickedDate = DateTime.now();
   double addWeight;

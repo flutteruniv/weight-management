@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
+import 'package:weight_management/repository/users_repository.dart';
+import 'package:weight_management/services/dialog_helper.dart';
 
 class MyPageModel extends ChangeNotifier {
   double idealWeight;
@@ -14,7 +16,7 @@ class MyPageModel extends ChangeNotifier {
   File idealImageFile;
   String idealImagePath;
   String idealImageURL;
-  List<AppUser> userData = [];
+  List<Users> userData = [];
   String userDocID;
   List<IdealMuscleData> idealMuscleList = [];
   IdealMuscleData idealMuscle;
@@ -23,6 +25,8 @@ class MyPageModel extends ChangeNotifier {
   int angle = 0;
 
   final User currentUser = FirebaseAuth.instance.currentUser;
+  final _usersRepository = UsersRepository.instance;
+  Users myUser;
 
   Future changeAngle() {
     angle = angle + 45;
@@ -30,6 +34,37 @@ class MyPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future fetch(BuildContext context) async {
+    if (currentUser != null) {
+      try {
+        myUser = await _usersRepository.fetch();
+        idealMuscle =
+            await _usersRepository.getIdealMuscleData(docID: myUser.documentID);
+        hasIdealMuscle = true;
+        setText();
+      } catch (e) {
+        hasIdealMuscle = false;
+        //  showAlertDialog(context, e.toString());
+      }
+    }
+  }
+
+  Future setText() {
+    idealWeight = idealMuscle.weight;
+    idealWeightTextController =
+        TextEditingController(text: idealWeight.toString());
+
+    if (idealFat != null) {
+      idealFat = idealMuscle.bodyFatPercentage;
+      idealFatTextController = TextEditingController(text: idealFat.toString());
+    }
+    if (idealImageURL != null) {
+      idealImageURL = idealMuscle.imageURL;
+    }
+    notifyListeners();
+  }
+
+/*
   Future fetchData() async {
     if (currentUser != null) {
       final docss = await FirebaseFirestore.instance.collection('users').get();
@@ -70,7 +105,7 @@ class MyPageModel extends ChangeNotifier {
     }
     notifyListeners();
   }
-
+*/
   Future showImagePicker() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -79,66 +114,35 @@ class MyPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future addDataToFirebase() async {
-    //firebaseに値を追加
-    final firebaseUser = FirebaseAuth.instance.currentUser;
-
+  Future addDate(BuildContext context) async {
     if (idealWeight == null) {
-      throw ('体重は入力するんだ！');
+      throw ('体重を入力してください');
+    } else {
+      if (idealImageFile != null) idealImageURL = await _uploadImage();
+      if (!hasIdealMuscle) {
+        _usersRepository.addIdealMuscleData(
+          user: myUser,
+          weight: idealWeight,
+          fat: idealFat,
+          dateTime: DateTime.now(),
+          imageURL: idealImageURL,
+        );
+        print('追加');
+        showAlertDialog(context, '追加しました');
+      } else {
+        _usersRepository.updateIdealMuscleData(
+          user: myUser,
+          idealMuscleData: idealMuscle,
+          weight: idealWeight,
+          fat: idealFat,
+          dateTime: DateTime.now(),
+          imageURL: idealImageURL,
+        );
+        print('更新');
+        showAlertDialog(context, '更新しました');
+      }
     }
-    if (idealImageFile != null && idealFat != null) {
-      //写真と体脂肪率があるとき
-      final imageURL = await _uploadImage();
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .add(
-        {
-          'weight': idealWeight,
-          'bodyFatPercentage': idealFat,
-          'imageURL': imageURL,
-          'imagePath': idealImagePath,
-        },
-      );
-    } else if (idealImageFile == null && idealFat != null) {
-      //写真なし＆体脂肪率あり
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .add(
-        {
-          'weight': idealWeight,
-          'bodyFatPercentage': idealFat,
-        },
-      );
-    } else if (idealImageFile != null && idealFat == null) {
-      //写真アリ＆体脂肪率なし
-      final imageURL = await _uploadImage();
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .add(
-        {
-          'weight': idealWeight,
-          'imageURL': imageURL,
-          'imagePath': idealImagePath,
-        },
-      );
-    } else if (idealImageFile == null && idealFat == null) {
-      //写真なし＆体脂肪率なし
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .add(
-        {
-          'weight': idealWeight,
-        },
-      );
-    }
+    notifyListeners();
   }
 
   Future updateData(IdealMuscleData muscleData) async {

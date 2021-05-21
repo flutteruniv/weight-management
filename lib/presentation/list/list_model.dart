@@ -8,7 +8,7 @@ import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
 class ListModel extends ChangeNotifier {
-  List<AppUser> userData = [];
+  List<Users> userData = [];
   String userDocID;
   List<MuscleData> muscleData = [];
   String sortName = '日付順（降順）';
@@ -16,7 +16,7 @@ class ListModel extends ChangeNotifier {
 
   final User currentUser = FirebaseAuth.instance.currentUser;
   final _userRepository = UsersRepository.instance;
-  AppUser myUser;
+  Users myUser;
 
   Future fetch(BuildContext context) async {
     if (currentUser != null) {

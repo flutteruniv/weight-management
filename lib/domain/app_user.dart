@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AppUser {
-  AppUser(DocumentSnapshot doc) {
+class Users {
+  Users(DocumentSnapshot doc) {
     documentID = doc.id;
     userID = doc.data()['userID'];
   }

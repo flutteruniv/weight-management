@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/presentation/Graph/graph_page.dart';
 import 'package:weight_management/presentation/Top/top_model.dart';
-import 'package:weight_management/presentation/carrender_save/carrender_save_page.dart';
+import 'package:weight_management/presentation/carrender_save/save_page.dart';
 import 'package:weight_management/presentation/compare/compare_page.dart';
 import 'package:weight_management/presentation/list/list_page.dart';
 import 'package:provider/provider.dart';

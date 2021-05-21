@@ -19,7 +19,7 @@ class GraphModel extends ChangeNotifier {
   bool hasData = false;
   final User currentUser = FirebaseAuth.instance.currentUser;
   final _userRepository = UsersRepository.instance;
-  AppUser myUser;
+  Users myUser;
 
   Future weightTrue() {
     isSelectedWeight = true;

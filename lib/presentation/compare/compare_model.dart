@@ -16,8 +16,8 @@ class CompareModel extends ChangeNotifier {
   IdealMuscleData idealMuscle;
   List<int> angle = [0, 0];
 
-  List<AppUser> userData = [];
-  AppUser myUser;
+  List<Users> userData = [];
+  Users myUser;
   String userDocID;
   final _usersRepository = UsersRepository.instance;
 

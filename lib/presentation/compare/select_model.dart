@@ -7,14 +7,14 @@ import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/users_repository.dart';
 
 class SelectModel extends ChangeNotifier {
-  List<AppUser> userData = [];
+  List<Users> userData = [];
   String userDocID;
   List<MuscleData> muscleData = [];
   String sortName = '日付順（降順）';
   bool hasData = false;
   final User currentUser = FirebaseAuth.instance.currentUser;
   final _usersRepository = UsersRepository.instance;
-  AppUser myUser;
+  Users myUser;
 
   Future fetch() async {
     if (currentUser != null) {

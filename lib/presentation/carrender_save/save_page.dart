@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/Top/top_model.dart';
 import 'package:weight_management/presentation/authentication/authentication_page.dart';
-import 'package:weight_management/presentation/carrender_save/carrender_save_model.dart';
+import 'package:weight_management/presentation/carrender_save/save_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:weight_management/services/dialog_helper.dart';
 
 class CarenderSavePage extends StatelessWidget {
   @override
@@ -184,8 +185,12 @@ class CarenderSavePage extends StatelessWidget {
                           child: RaisedButton(
                             onPressed: () async {
                               if (currentUser != null) {
-                                await model.addDate(context);
-                                await model.initState();
+                                if (model.addWeight != null) {
+                                  await model.addDate(context);
+                                  await model.initState();
+                                } else {
+                                  showAlertDialog(context, '体重を入力するんだ！');
+                                }
                               } else {
                                 _showDialog(context);
                               }
