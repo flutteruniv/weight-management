@@ -27,7 +27,7 @@ class ListModel extends ChangeNotifier {
         hasData = true;
       } catch (e) {
         hasData = false;
-        showAlertDialog(context, e.toString());
+        print(e.toString());
       }
     }
     notifyListeners();

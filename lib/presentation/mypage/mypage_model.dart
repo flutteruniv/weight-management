@@ -44,7 +44,7 @@ class MyPageModel extends ChangeNotifier {
         setText();
       } catch (e) {
         hasIdealMuscle = false;
-        //  showAlertDialog(context, e.toString());
+        print(e.toString());
       }
     }
   }

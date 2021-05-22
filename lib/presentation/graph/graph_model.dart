@@ -44,7 +44,7 @@ class GraphModel extends ChangeNotifier {
         getFatList(fatThirtyDaysAgo);
       } catch (e) {
         hasData = false;
-        showAlertDialog(context, e.toString());
+        print('NoData');
       }
     }
     notifyListeners();

@@ -41,6 +41,20 @@ class UsersRepository {
     return _user;
   }
 
+  /// Firestoreにユーザーを登録する
+  Future<void> registerUser(
+      {String uid,
+      String email,
+      DocumentReference documentReference,
+      String documentID}) async {
+    await documentReference.set({
+      "userID": uid,
+      "email": email,
+      "createdAt": Timestamp.now(),
+      "documentID": documentID,
+    });
+  }
+
   Future<void> deleteMuscleData(Users user, MuscleData muscleData) async {
     await FirebaseFirestore.instance
         .collection('users')
