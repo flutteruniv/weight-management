@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:weight_management/repository/auth_repository.dart';
+import 'package:weight_management/repository/users_repository.dart';
 
 class SignUpModel extends ChangeNotifier {
   String mail = '';
   String password = '';
-  String uid;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _authRepository = AuthRepository.instance;
+  final _userRepository = UsersRepository.instance;
 
   Future signUp() async {
     if (mail.isEmpty) {
@@ -18,39 +20,19 @@ class SignUpModel extends ChangeNotifier {
       throw ('パスワードを入力してください');
     }
     try {
-      final User user = (await _auth.createUserWithEmailAndPassword(
-        email: mail,
-        password: password,
-      ))
-          .user;
-
-      if (user != null) {
-        uid = user.uid;
-      }
-      final email = user.email;
-
-      final newDoc = FirebaseFirestore.instance.collection('users').doc();
-      newDoc.set(
-        {
-          'email': email,
-          'createdAt': Timestamp.now(),
-          'userID': uid,
-          'documentID': newDoc.id,
-        },
-      );
-
-      /* FirebaseFirestore.instance.collection('users').add(
-        {
-          'email': email,
-          'createdAt': Timestamp.now(),
-          'userID': uid,
-        },
-      );*/
+      User _user =
+          await _authRepository.signUp(email: mail, password: password);
+      final newDoc =
+          FirebaseFirestore.instance.collection('users').doc(_user.uid);
+      _userRepository.registerUser(
+          uid: _user.uid,
+          email: _user.email,
+          documentReference: newDoc,
+          documentID: newDoc.id);
     } catch (e) {
       print(e.code);
       throw (_convertErrorMessage(e.code));
     }
-
     notifyListeners();
   }
 
