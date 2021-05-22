@@ -18,7 +18,7 @@ class ListPage extends StatelessWidget {
               model.fetch(context);
               print('一覧画面更新');
             }
-            if (model.hasData) {
+            if (model.muscleData != null) {
               final muscleData = model.muscleData;
               final listTiles = muscleData
                   .map(
@@ -235,7 +235,7 @@ class ListPage extends StatelessWidget {
         ),
         floatingActionButton: Consumer<ListModel>(
           builder: (context, model, child) {
-            if (model.hasData) {
+            if (model.muscleData != null) {
               return FloatingActionButton.extended(
                 heroTag: 'hero2',
                 label: Text(model.sortName),

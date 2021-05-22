@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
+import 'package:weight_management/repository/auth_repository.dart';
 import 'package:weight_management/repository/users_repository.dart';
 
 class SelectModel extends ChangeNotifier {
@@ -11,12 +12,12 @@ class SelectModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
   String sortName = '日付順（降順）';
   bool hasData = false;
-  final User currentUser = FirebaseAuth.instance.currentUser;
   final _usersRepository = UsersRepository.instance;
+  final _authRepository = AuthRepository.instance;
   Users myUser;
 
   Future fetch() async {
-    if (currentUser != null) {
+    if (_authRepository.isLogin) {
       try {
         myUser = await _usersRepository.fetch();
         muscleData = await _usersRepository.getMuscleData(

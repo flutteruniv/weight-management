@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
+import 'package:weight_management/repository/auth_repository.dart';
 import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
@@ -16,9 +17,8 @@ class GraphModel extends ChangeNotifier {
   DateTime fatThirtyDaysAgo;
   DateTime fatThreeMonthsAgo;
   bool isSelectedWeight = true;
-  bool hasData = false;
-  final User currentUser = FirebaseAuth.instance.currentUser;
   final _userRepository = UsersRepository.instance;
+  final _authRepository = AuthRepository.instance;
   Users myUser;
 
   Future weightTrue() {
@@ -32,14 +32,13 @@ class GraphModel extends ChangeNotifier {
   }
 
   Future fetch(BuildContext context) async {
-    if (currentUser != null) {
+    if (_authRepository.isLogin) {
       try {
         seriesWeightList.clear();
         seriesFatList.clear();
         myUser = await _userRepository.fetch();
         muscleData = await _userRepository.getMuscleData(
             docID: myUser.documentID, orderByState: 'date', bool: true);
-        hasData = true;
         await getWeightDays();
         getWeightList(weightThirtyDaysAgo);
         await getFatDays();
@@ -47,7 +46,6 @@ class GraphModel extends ChangeNotifier {
           getFatList(fatThirtyDaysAgo);
         }
       } catch (e) {
-        hasData = false;
         print("${e.toString()}グラフ");
       }
     }

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
+import 'package:weight_management/repository/auth_repository.dart';
 import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
@@ -26,33 +27,34 @@ class SaveModel extends ChangeNotifier {
   MuscleData sameDateMuscleData;
   bool loadingData = false;
   TextEditingController weightTextController, fatTextController;
-  final User currentUser = FirebaseAuth.instance.currentUser;
+  final _authRepository = AuthRepository.instance;
   final _usersRepository = UsersRepository.instance;
 
   Future initState() async {
-    if (currentUser != null) {
+    if (_authRepository.isLogin) {
       try {
         myUser = await _usersRepository.fetch();
         muscleData = await _usersRepository.getMuscleData(
             docID: myUser.documentID, orderByState: 'date', bool: true);
         userDocumentID = myUser.documentID;
+        await judgeSameDate(viewDate);
+        if (sameDateMuscleData != null) {
+          print('set');
+          set();
+        } else {
+          print('initialize');
+          initialize();
+        }
       } catch (e) {
         print("${e.toString()}保存");
+      } finally {
+        loadingData = true;
       }
 
       imageFile = null;
-
-      await judgeSameDate(viewDate);
-      if (sameDateMuscleData != null) {
-        print('set');
-        set();
-      } else {
-        print('initialize');
-        initialize();
-      }
+    } else {
+      loadingData = true;
     }
-
-    loadingData = true;
     notifyListeners();
   }
 

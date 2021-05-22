@@ -3,28 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
+import 'package:weight_management/repository/auth_repository.dart';
 import 'package:weight_management/repository/users_repository.dart';
 
 class ListModel extends ChangeNotifier {
-  List<Users> userData = [];
   String userDocID;
   List<MuscleData> muscleData = [];
   String sortName = '日付順（降順）';
-  bool hasData = false;
 
-  final User currentUser = FirebaseAuth.instance.currentUser;
   final _userRepository = UsersRepository.instance;
+  final _authRepository = AuthRepository.instance;
   Users myUser;
 
   Future fetch(BuildContext context) async {
-    if (currentUser != null) {
+    if (_authRepository.isLogin) {
       try {
         myUser = await _userRepository.fetch();
         muscleData = await _userRepository.getMuscleData(
             docID: myUser.documentID, orderByState: 'date', bool: true);
-        hasData = true;
       } catch (e) {
-        hasData = false;
         print("${e.toString()}一覧");
       }
     }

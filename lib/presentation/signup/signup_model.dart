@@ -33,7 +33,6 @@ class SignUpModel extends ChangeNotifier {
       print(e.code);
       throw (_convertErrorMessage(e.code));
     }
-
     notifyListeners();
   }
 

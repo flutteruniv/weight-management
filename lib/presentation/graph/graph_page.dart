@@ -19,7 +19,7 @@ class GraphPage extends StatelessWidget {
               print('グラフ画面更新');
             }
 
-            if (model.hasData) {
+            if (model.seriesWeightList.isNotEmpty) {
               return Padding(
                 padding:
                     const EdgeInsets.only(right: 20.0, left: 20.0, top: 10.0),

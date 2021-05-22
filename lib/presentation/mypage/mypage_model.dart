@@ -16,7 +16,6 @@ class MyPageModel extends ChangeNotifier {
   File idealImageFile;
   String idealImagePath;
   String idealImageURL;
-  List<Users> userData = [];
   String userDocID;
   List<IdealMuscleData> idealMuscleList = [];
   IdealMuscleData idealMuscle;
@@ -24,7 +23,6 @@ class MyPageModel extends ChangeNotifier {
   bool hasIdealMuscle = false;
   int angle = 0;
 
-  final User currentUser = FirebaseAuth.instance.currentUser;
   final _usersRepository = UsersRepository.instance;
   final _authRepository = AuthRepository.instance;
   Users myUser;
@@ -40,7 +38,7 @@ class MyPageModel extends ChangeNotifier {
   }
 
   Future fetch(BuildContext context) async {
-    if (currentUser != null) {
+    if (_authRepository.isLogin) {
       try {
         myUser = await _usersRepository.fetch();
         idealMuscle =
