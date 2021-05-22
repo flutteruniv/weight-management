@@ -1,15 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/auth_repository.dart';
 import 'package:weight_management/repository/users_repository.dart';
-import 'package:weight_management/services/dialog_helper.dart';
 
 class GraphModel extends ChangeNotifier {
   List<MuscleData> muscleData = [];
-  var seriesWeightList = List<weightData>();
-  var seriesFatList = List<fatData>();
+  var seriesWeightList = <weightData>[];
+  var seriesFatList = <fatData>[];
   DateTime weightSevenDaysAgo;
   DateTime weightThirtyDaysAgo;
   DateTime weightThreeMonthsAgo;
@@ -113,7 +111,7 @@ class GraphModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future setWholePeriod() {
+  void setWholePeriod() {
     seriesWeightList.clear();
     seriesFatList.clear();
     for (int i = 0; i < muscleData.length; i++) {

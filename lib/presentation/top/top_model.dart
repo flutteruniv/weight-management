@@ -5,12 +5,12 @@ class TopModel extends ChangeNotifier {
   bool saveDone = false;
   bool deleteDone = false;
 
-  Future changeSaveDone(bool bool) {
+  void changeSaveDone(bool bool) {
     saveDone = bool;
     notifyListeners();
   }
 
-  Future changeDeleteDone(bool bool) {
+  void changeDeleteDone(bool bool) {
     deleteDone = bool;
     notifyListeners();
   }

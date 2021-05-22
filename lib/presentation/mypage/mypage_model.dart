@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,13 +25,13 @@ class MyPageModel extends ChangeNotifier {
   final _authRepository = AuthRepository.instance;
   Users myUser;
 
-  Future changeAngle() {
+  void changeAngle() {
     angle = angle + 45;
     if (angle == 360) angle = 0;
     notifyListeners();
   }
 
-  Future sighOut() {
+  void sighOut() {
     _authRepository.signOut();
   }
 
@@ -52,7 +50,7 @@ class MyPageModel extends ChangeNotifier {
     }
   }
 
-  Future setText() {
+  void setText() {
     idealWeight = idealMuscle.weight;
     idealWeightTextController =
         TextEditingController(text: idealWeight.toString());

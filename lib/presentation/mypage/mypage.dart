@@ -209,8 +209,8 @@ class MyPage extends StatelessWidget {
                                         actions: [
                                           FlatButton(
                                             child: Text('OK'),
-                                            onPressed: () async {
-                                              await model.sighOut();
+                                            onPressed: () {
+                                              model.sighOut();
                                               // ログイン画面に遷移＋チャット画面を破棄
                                               Navigator.pushAndRemoveUntil(
                                                   context,

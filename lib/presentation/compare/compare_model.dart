@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/muscle_data.dart';

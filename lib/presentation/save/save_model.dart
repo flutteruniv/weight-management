@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,18 +57,19 @@ class SaveModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future changeAngle() {
+  void changeAngle() {
     angle = angle + 45;
     if (angle == 360) angle = 0;
     notifyListeners();
   }
 
-  Future deleteDate() {
+  void deleteDate() {
     weightTextController = TextEditingController(text: '');
     fatTextController = TextEditingController(text: '');
     addWeight = null;
     addFatPercentage = null;
     imageFile = null;
+    notifyListeners();
   }
 
   void initialize() {
@@ -80,6 +80,7 @@ class SaveModel extends ChangeNotifier {
     imageFile = null;
     imageURL = null;
     angle = 0;
+    notifyListeners();
   }
 
   Future judgeSameDate(String dateTime) async {
