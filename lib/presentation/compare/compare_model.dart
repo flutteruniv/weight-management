@@ -36,36 +36,6 @@ class CompareModel extends ChangeNotifier {
     notifyListeners();
   }
 
-/*
-  Future setIdealBody(int i) async {
-    final docss = await FirebaseFirestore.instance.collection('users').get();
-    final userData = docss.docs.map((doc) => Users(doc)).toList();
-    this.userData = userData;
-    for (int i = 0; i < userData.length; i++) {
-      if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-        userDocID = userData[i].documentID;
-        break;
-      }
-    }
-
-    final docs = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userDocID)
-        .collection('idealMuscleData')
-        .get();
-    final muscleData = docs.docs.map((doc) => IdealMuscleData(doc)).toList();
-    this.idealMuscleList = muscleData;
-    idealMuscle = idealMuscleList[0];
-    weight[i] = idealMuscle.weight.toString();
-    if (idealMuscle.bodyFatPercentage != null)
-      fatPercentage[i] = idealMuscle.bodyFatPercentage.toString();
-    imageURL[i] = idealMuscle.imageURL;
-    angle[i] = 0;
-    date[i] = '理想の身体';
-
-    notifyListeners();
-  }
-*/
   Future clearValue(int i) {
     weight[i] = null;
     fatPercentage[i] = null;

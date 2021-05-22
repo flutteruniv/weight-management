@@ -7,7 +7,6 @@ import 'package:weight_management/repository/users_repository.dart';
 class SignUpModel extends ChangeNotifier {
   String mail = '';
   String password = '';
-  // String uid;
 
   final _authRepository = AuthRepository.instance;
   final _userRepository = UsersRepository.instance;

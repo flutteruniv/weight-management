@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:weight_management/domain/ideal_muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
+import 'package:weight_management/repository/auth_repository.dart';
 import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
@@ -26,12 +26,17 @@ class MyPageModel extends ChangeNotifier {
 
   final User currentUser = FirebaseAuth.instance.currentUser;
   final _usersRepository = UsersRepository.instance;
+  final _authRepository = AuthRepository.instance;
   Users myUser;
 
   Future changeAngle() {
     angle = angle + 45;
     if (angle == 360) angle = 0;
     notifyListeners();
+  }
+
+  Future sighOut() {
+    _authRepository.signOut();
   }
 
   Future fetch(BuildContext context) async {
@@ -44,7 +49,7 @@ class MyPageModel extends ChangeNotifier {
         setText();
       } catch (e) {
         hasIdealMuscle = false;
-        print(e.toString());
+        print("${e.toString()}マイページ");
       }
     }
   }
@@ -64,48 +69,6 @@ class MyPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-/*
-  Future fetchData() async {
-    if (currentUser != null) {
-      final docss = await FirebaseFirestore.instance.collection('users').get();
-      final userData = docss.docs.map((doc) => AppUser(doc)).toList();
-      this.userData = userData;
-      for (int i = 0; i < userData.length; i++) {
-        if (userData[i].userID == FirebaseAuth.instance.currentUser.uid) {
-          userDocID = userData[i].documentID;
-          break;
-        }
-      }
-
-      try {
-        final docs = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userDocID)
-            .collection('idealMuscleData')
-            .get();
-        final muscleData =
-            docs.docs.map((doc) => IdealMuscleData(doc)).toList();
-        this.idealMuscleList = muscleData;
-        idealMuscle = idealMuscleList[0];
-        if (idealMuscle != null) hasIdealMuscle = true;
-        if (hasIdealMuscle) {
-          idealWeight = idealMuscle.weight;
-          idealWeightTextController =
-              TextEditingController(text: idealWeight.toString());
-          if (idealMuscle.bodyFatPercentage != null) {
-            idealFat = idealMuscle.bodyFatPercentage;
-            idealFatTextController =
-                TextEditingController(text: idealFat.toString());
-          }
-          if (idealMuscle.imageURL != null)
-            // idealImageFile = File(idealMuscle.imagePath);
-            idealImageURL = idealMuscle.imageURL;
-        }
-      } catch (e) {}
-    }
-    notifyListeners();
-  }
-*/
   Future showImagePicker() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -143,58 +106,6 @@ class MyPageModel extends ChangeNotifier {
       }
     }
     notifyListeners();
-  }
-
-  Future updateData(IdealMuscleData muscleData) async {
-    if (idealWeight == null) {
-      throw ('体重は入力するんだ！');
-    }
-    if (idealImageFile != null && idealFat != null) {
-      //写真と体脂肪率があるとき
-      final imageURL = await _uploadImage();
-      final document = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .doc(idealMuscle.documentID);
-      await document.update({
-        'weight': idealWeight,
-        'bodyFatPercentage': idealFat,
-        'imageURL': imageURL,
-        'imagePath': idealImagePath,
-      });
-    } else if (idealImageFile == null && idealFat != null) {
-      final document = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .doc(idealMuscle.documentID);
-      await document.update({
-        'weight': idealWeight,
-        'bodyFatPercentage': idealFat,
-      });
-    } else if (idealImageFile != null && idealFat == null) {
-      final imageURL = await _uploadImage();
-      final document = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .doc(idealMuscle.documentID);
-      await document.update({
-        'weight': idealWeight,
-        'imageURL': imageURL,
-        'imagePath': idealImagePath,
-      });
-    } else if (idealImageFile == null && idealFat == null) {
-      final document = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocID)
-          .collection('idealMuscleData')
-          .doc(idealMuscle.documentID);
-      await document.update({
-        'weight': idealWeight,
-      });
-    }
   }
 
   Future<String> _uploadImage() async {

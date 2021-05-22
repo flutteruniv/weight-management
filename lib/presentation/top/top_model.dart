@@ -2,42 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TopModel extends ChangeNotifier {
-  bool savePageUpdate = false;
-  bool listPageUpdate = false;
-  bool graphPageUpdate = false;
-  String uid;
+  bool saveDone = false;
+  bool deleteDone = false;
 
-  Future updateGraphPageTrue() {
-    graphPageUpdate = true;
+  Future changeSaveDone(bool bool) {
+    saveDone = bool;
     notifyListeners();
   }
 
-  Future updateGraphPageFalse() {
-    graphPageUpdate = false;
-    notifyListeners();
-  }
-
-  Future updateListPageTrue() {
-    listPageUpdate = true;
-    notifyListeners();
-  }
-
-  Future updateListPageFalse() {
-    listPageUpdate = false;
-    notifyListeners();
-  }
-
-  Future updatePageTrue() {
-    savePageUpdate = true;
-    notifyListeners();
-  }
-
-  Future updatePageFalse() {
-    savePageUpdate = false;
-    notifyListeners();
-  }
-
-  Future init() async {
+  Future changeDeleteDone(bool bool) {
+    deleteDone = bool;
     notifyListeners();
   }
 
@@ -45,8 +19,7 @@ class TopModel extends ChangeNotifier {
 
   void onTabTapped(int index) async {
     currentIndex = index;
-    updateListPageFalse();
-    updateGraphPageFalse();
+
     notifyListeners();
   }
 }

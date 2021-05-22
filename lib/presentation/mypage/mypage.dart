@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weight_management/presentation/Top/top_page.dart';
 import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_management/domain/ideal_muscle_data.dart';
-import 'package:weight_management/presentation/main/main.dart';
 import 'package:weight_management/presentation/mypage/mypage_model.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
@@ -36,14 +34,14 @@ class MyPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Container(
-                          height: 40,
+                          height: 30,
                           child: Text(
                             '目標体重(Kg)',
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
                         TextField(
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 18),
                           controller: model.idealWeightTextController,
                           keyboardType:
                               TextInputType.numberWithOptions(decimal: true),
@@ -72,7 +70,7 @@ class MyPage extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          height: 40,
+                          height: 30,
                           padding: EdgeInsets.only(top: 4),
                           child: Text(
                             '目標体脂肪率(%)',
@@ -80,7 +78,7 @@ class MyPage extends StatelessWidget {
                           ),
                         ),
                         TextField(
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 18),
                           controller: model.idealFatTextController,
                           keyboardType:
                               TextInputType.numberWithOptions(decimal: true),
@@ -107,18 +105,13 @@ class MyPage extends StatelessWidget {
                             contentPadding: EdgeInsets.all(8.0),
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          padding: EdgeInsets.only(top: 4),
-                          child: Text(
-                            '理想のボディ',
-                            style: TextStyle(fontSize: 18),
-                          ),
+                        SizedBox(
+                          height: 20,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16),
                           child: SizedBox(
-                            height: 250,
+                            height: 230,
                             width: 200,
                             child: InkWell(
                               onTap: () async {
@@ -149,7 +142,7 @@ class MyPage extends StatelessWidget {
                         ),
                         ButtonTheme(
                           minWidth: 500,
-                          height: 40,
+                          height: 30,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -163,7 +156,7 @@ class MyPage extends StatelessWidget {
                                   showAlertDialog(context, '体重を入力するんだ！');
                                 }
                               } else {
-                                _showDialog(context);
+                                showAlertDialog(context, 'ログインが必要です');
                               }
                             },
                             child: Padding(
@@ -217,8 +210,7 @@ class MyPage extends StatelessWidget {
                                           FlatButton(
                                             child: Text('OK'),
                                             onPressed: () async {
-                                              await FirebaseAuth.instance
-                                                  .signOut();
+                                              await model.sighOut();
                                               // ログイン画面に遷移＋チャット画面を破棄
                                               Navigator.pushAndRemoveUntil(
                                                   context,
@@ -254,32 +246,6 @@ class MyPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Future _showDialog(
-    BuildContext context,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('ログインが必要です'),
-          actions: [
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AuthenticationPage(),
-                    ));
-              },
-            )
-          ],
-        );
-      },
     );
   }
 }

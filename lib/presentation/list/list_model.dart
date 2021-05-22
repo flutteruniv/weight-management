@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/users_repository.dart';
-import 'package:weight_management/services/dialog_helper.dart';
 
 class ListModel extends ChangeNotifier {
   List<Users> userData = [];
@@ -27,7 +25,7 @@ class ListModel extends ChangeNotifier {
         hasData = true;
       } catch (e) {
         hasData = false;
-        print(e.toString());
+        print("${e.toString()}一覧");
       }
     }
     notifyListeners();

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/Graph/graph_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:weight_management/presentation/Top/top_model.dart';
+import 'package:weight_management/presentation/top/top_model.dart';
 
 class GraphPage extends StatelessWidget {
   @override
@@ -14,9 +14,11 @@ class GraphPage extends StatelessWidget {
       child: Scaffold(
         body: Consumer<GraphModel>(
           builder: (context, model, child) {
-            if (topModel.graphPageUpdate) {
+            if (topModel.saveDone || topModel.deleteDone) {
               model.fetch(context);
+              print('グラフ画面更新');
             }
+
             if (model.hasData) {
               return Padding(
                 padding:
@@ -71,7 +73,7 @@ class GraphPage extends StatelessWidget {
                         ],
                       ),
                       Container(
-                        height: 500,
+                        height: 430,
                         width: double.infinity,
                         child: charts.TimeSeriesChart(
                           model.isSelectedWeight

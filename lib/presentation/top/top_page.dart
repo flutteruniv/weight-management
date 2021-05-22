@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_management/presentation/Graph/graph_page.dart';
-import 'package:weight_management/presentation/Top/top_model.dart';
-import 'package:weight_management/presentation/carrender_save/save_page.dart';
 import 'package:weight_management/presentation/compare/compare_page.dart';
 import 'package:weight_management/presentation/list/list_page.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/mypage/mypage.dart';
+import 'package:weight_management/presentation/save/save_page.dart';
+import 'package:weight_management/presentation/top/top_model.dart';
 
 class TopPage extends StatelessWidget {
   final List<String> _tabNames = [
@@ -21,7 +21,7 @@ class TopPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
     return ChangeNotifierProvider<TopModel>(
-      create: (_) => TopModel()..init(),
+      create: (_) => TopModel(),
       child: Consumer<TopModel>(
         builder: (context, model, child) {
           return Scaffold(
@@ -76,7 +76,7 @@ class TopPage extends StatelessWidget {
     final currentIndex = model.currentIndex;
     return Stack(
       children: <Widget>[
-        _tabPage(currentIndex, 0, CarenderSavePage()),
+        _tabPage(currentIndex, 0, SavePage()),
         _tabPage(currentIndex, 1, ComparePage()),
         _tabPage(currentIndex, 2, GraphPage()),
         _tabPage(currentIndex, 3, ListPage()),

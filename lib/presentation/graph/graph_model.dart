@@ -34,6 +34,8 @@ class GraphModel extends ChangeNotifier {
   Future fetch(BuildContext context) async {
     if (currentUser != null) {
       try {
+        seriesWeightList.clear();
+        seriesFatList.clear();
         myUser = await _userRepository.fetch();
         muscleData = await _userRepository.getMuscleData(
             docID: myUser.documentID, orderByState: 'date', bool: true);
@@ -41,10 +43,12 @@ class GraphModel extends ChangeNotifier {
         await getWeightDays();
         getWeightList(weightThirtyDaysAgo);
         await getFatDays();
-        getFatList(fatThirtyDaysAgo);
+        if (fatThirtyDaysAgo != null) {
+          getFatList(fatThirtyDaysAgo);
+        }
       } catch (e) {
         hasData = false;
-        print('NoData');
+        print("${e.toString()}グラフ");
       }
     }
     notifyListeners();
@@ -82,6 +86,7 @@ class GraphModel extends ChangeNotifier {
         break;
       }
     }
+    print(fatThirtyDaysAgo);
     notifyListeners();
   }
 

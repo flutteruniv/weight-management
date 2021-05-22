@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/presentation/Top/top_model.dart';
-import 'package:weight_management/presentation/authentication/authentication_page.dart';
-import 'package:weight_management/presentation/carrender_save/save_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:weight_management/presentation/save/save_model.dart';
+import 'package:weight_management/presentation/top/top_model.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
-class CarenderSavePage extends StatelessWidget {
+class SavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User currentUser = FirebaseAuth.instance.currentUser;
     final topModel = Provider.of<TopModel>(context);
-    return ChangeNotifierProvider<CalenderSaveModel>(
-      create: (_) => CalenderSaveModel()..initState(),
+    return ChangeNotifierProvider<SaveModel>(
+      create: (_) => SaveModel()..initState(),
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -25,10 +22,11 @@ class CarenderSavePage extends StatelessWidget {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          body: Consumer<CalenderSaveModel>(builder: (context, model, child) {
-            if (topModel.listPageUpdate) {
+          body: Consumer<SaveModel>(builder: (context, model, child) {
+            if (topModel.deleteDone) {
               model.initState();
               model.imageFile = null;
+              print('保存画面更新');
             }
             if (model.loadingData) {
               //データローディングが終わればこっちを表示
@@ -43,12 +41,9 @@ class CarenderSavePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        SizedBox(
-                          height: 20,
-                        ),
                         ButtonTheme(
                           minWidth: 250,
-                          height: 50,
+                          height: 40,
                           child: RaisedButton.icon(
                             // 日付を取得
                             icon: Icon(Icons.arrow_drop_down),
@@ -106,13 +101,13 @@ class CarenderSavePage extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         Stack(
                           alignment: AlignmentDirectional(1.3, 1.3),
                           children: [
                             SizedBox(
-                              height: 250,
+                              height: 230,
                               width: 200,
                               child: InkWell(
                                 onTap: () async {
@@ -177,22 +172,24 @@ class CarenderSavePage extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          height: 50,
+                          height: 30,
                         ),
                         ButtonTheme(
                           minWidth: 20000,
-                          height: 50,
+                          height: 40,
                           child: RaisedButton(
                             onPressed: () async {
                               if (currentUser != null) {
                                 if (model.addWeight != null) {
                                   await model.addDate(context);
+                                  topModel.changeSaveDone(true);
                                   await model.initState();
+                                  topModel.changeSaveDone(false);
                                 } else {
                                   showAlertDialog(context, '体重を入力するんだ！');
                                 }
                               } else {
-                                _showDialog(context);
+                                showAlertDialog(context, 'ログインが必要です');
                               }
                             },
                             child: model.sameDateMuscleData == null
@@ -231,125 +228,6 @@ class CarenderSavePage extends StatelessWidget {
           }),
         ),
       ),
-    );
-  }
-
-  Future addData(
-      CalenderSaveModel model, BuildContext context, TopModel topModel) async {
-    try {
-      model.showProgressDialog(context);
-      topModel.updatePageTrue();
-      topModel.updateGraphPageTrue();
-      Navigator.of(context).pop();
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('保存しました'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  topModel.updatePageFalse();
-                  topModel.updateGraphPageFalse();
-                },
-                child: Text('OK'),
-              )
-            ],
-          );
-        },
-      );
-    } catch (e) {
-      Navigator.of(context).pop();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(e.toString()),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'))
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  Future updateData(CalenderSaveModel model, BuildContext context,
-      MuscleData muscleData, TopModel topModel) async {
-    try {
-      model.showProgressDialog(context);
-
-      // await model.addDate();
-      topModel.updatePageTrue();
-      topModel.updateGraphPageTrue();
-      Navigator.of(context).pop();
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('更新しました'),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'))
-            ],
-          );
-        },
-      );
-    } catch (e) {
-      Navigator.of(context).pop();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(e.toString()),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    topModel.updatePageFalse();
-                    topModel.updateGraphPageFalse();
-                  },
-                  child: Text('OK'))
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  Future _showDialog(
-    BuildContext context,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('ログインが必要です'),
-          actions: [
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AuthenticationPage(),
-                    ));
-              },
-            )
-          ],
-        );
-      },
     );
   }
 }

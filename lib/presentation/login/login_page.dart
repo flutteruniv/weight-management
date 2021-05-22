@@ -1,9 +1,8 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/Top/top_page.dart';
 import 'package:weight_management/presentation/login/login_model.dart';
-import 'package:weight_management/presentation/main/main.dart';
+import 'package:weight_management/services/dialog_helper.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -177,14 +176,14 @@ class LoginPage extends StatelessWidget {
                       onPressed: () async {
                         try {
                           await model.login();
-                          await _showDialog(context, 'ログインしました');
+                          await showAlertDialog(context, 'ログインしました');
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => TopPage()),
                               (_) => false);
                         } catch (e) {
-                          _showDialog(context, e.toString());
+                          showAlertDialog(context, e.toString());
                         }
                       },
                     ),
@@ -195,28 +194,6 @@ class LoginPage extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-
-  Future _showDialog(
-    BuildContext context,
-    String title,
-  ) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

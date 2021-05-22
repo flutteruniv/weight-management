@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_management/presentation/Top/top_page.dart';
-import 'package:weight_management/presentation/authentication/authentication_page.dart';
 import 'package:weight_management/presentation/introduction/introduction_model.dart';
-import 'package:weight_management/presentation/main/main.dart';
+import 'package:weight_management/presentation/top/top_page.dart';
 
 class IntroductionPage extends StatelessWidget {
   @override

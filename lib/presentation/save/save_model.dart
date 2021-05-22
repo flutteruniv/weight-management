@@ -11,7 +11,7 @@ import 'package:weight_management/domain/app_user.dart';
 import 'package:weight_management/repository/users_repository.dart';
 import 'package:weight_management/services/dialog_helper.dart';
 
-class CalenderSaveModel extends ChangeNotifier {
+class SaveModel extends ChangeNotifier {
   Users myUser;
   String viewDate = (DateFormat('yyyy/MM/dd')).format(DateTime.now()); //表示する日付
   DateTime pickedDate = DateTime.now();
@@ -37,7 +37,7 @@ class CalenderSaveModel extends ChangeNotifier {
             docID: myUser.documentID, orderByState: 'date', bool: true);
         userDocumentID = myUser.documentID;
       } catch (e) {
-        print(e.toString());
+        print("${e.toString()}保存");
       }
 
       imageFile = null;
