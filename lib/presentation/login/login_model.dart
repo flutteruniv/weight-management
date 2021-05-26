@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:weight_management/repository/auth_repository.dart';
 
 class LoginModel extends ChangeNotifier {
   String mail = '';
   String password = '';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _authRepository = AuthRepository.instance;
 
   String email;
 
@@ -60,16 +62,11 @@ class LoginModel extends ChangeNotifier {
     if (mail.isEmpty) {
       throw ('メールアドレスを入力してください');
     }
-
     if (password.isEmpty) {
       throw ('パスワードを入力してください');
     }
     try {
-      final result = await _auth.signInWithEmailAndPassword(
-        email: mail,
-        password: password,
-      );
-      final uid = result.user.uid;
+      final user = await _authRepository.login(email: mail, password: password);
     } catch (e) {
       print(e.code);
       throw (_convertErrorMessage(e.code));

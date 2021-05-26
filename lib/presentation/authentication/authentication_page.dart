@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/presentation/login/login_page.dart';
-import 'package:weight_management/presentation/login/select_login_page.dart';
-import 'package:weight_management/presentation/signup/select_signup_page.dart';
 import 'package:weight_management/presentation/signup/signup_page.dart';
 
 class AuthenticationPage extends StatelessWidget {

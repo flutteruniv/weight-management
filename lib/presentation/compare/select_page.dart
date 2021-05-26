@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_management/domain/muscle_data.dart';
-import 'package:weight_management/presentation/compare/compare_page.dart';
 import 'package:weight_management/presentation/compare/select_model.dart';
-import 'package:weight_management/presentation/main/main_model.dart';
 
 class SelectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SelectModel>(
-      create: (_) => SelectModel()..fetchData(),
+      create: (_) => SelectModel()..fetch(),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -39,7 +36,11 @@ class SelectPage extends StatelessWidget {
                               onTap: () {
                                 Navigator.pop(context, muscleData);
                               },
-                              leading: Image.network(muscleData.imageURL),
+                              leading: RotatedBox(
+                                  quarterTurns: muscleData.angle == null
+                                      ? 0
+                                      : muscleData.angle,
+                                  child: Image.network(muscleData.imageURL)),
                               title: muscleData.bodyFatPercentage != null
                                   ? Text(muscleData.weight.toString() +
                                       ' kg       ' +
@@ -82,6 +83,7 @@ class SelectPage extends StatelessWidget {
           builder: (context, model, child) {
             if (model.hasData) {
               return FloatingActionButton.extended(
+                heroTag: 'hero1',
                 label: Text(model.sortName),
                 onPressed: () async {
                   model.showBottomSheet(context);

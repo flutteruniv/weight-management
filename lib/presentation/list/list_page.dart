@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_management/domain/muscle_data.dart';
 import 'package:weight_management/presentation/list/list_model.dart';
-import 'package:weight_management/presentation/main/main_model.dart';
+import 'package:weight_management/presentation/top/top_model.dart';
+import 'package:weight_management/services/dialog_helper.dart';
 
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topModel = Provider.of<TopModel>(context);
     return ChangeNotifierProvider<ListModel>(
-      create: (_) => ListModel()..fetchData(),
+      create: (_) => ListModel()..fetch(context),
       child: Scaffold(
         body: Consumer<ListModel>(
           builder: (context, model, child) {
-            if (topModel.savePageUpdate) {
-              model.fetchData();
+            if (topModel.saveDone) {
+              model.fetch(context);
+              print('一覧画面更新');
             }
-            if (model.hasData) {
+            if (model.muscleData != null) {
               final muscleData = model.muscleData;
               final listTiles = muscleData
                   .map(
@@ -39,8 +41,14 @@ class ListPage extends StatelessWidget {
                                         muscleData.imageURL != null
                                             ? Column(
                                                 children: [
-                                                  Image.network(
-                                                      muscleData.imageURL),
+                                                  RotatedBox(
+                                                    quarterTurns:
+                                                        muscleData.angle == null
+                                                            ? 0
+                                                            : muscleData.angle,
+                                                    child: Image.network(
+                                                        muscleData.imageURL),
+                                                  ),
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -126,7 +134,11 @@ class ListPage extends StatelessWidget {
                         },
                         child: muscleData.imageURL != null //写真、体脂肪率あるなしで条件分岐
                             ? ListTile(
-                                leading: Image.network(muscleData.imageURL),
+                                leading: RotatedBox(
+                                    quarterTurns: muscleData.angle == null
+                                        ? 0
+                                        : muscleData.angle,
+                                    child: Image.network(muscleData.imageURL)),
                                 title: muscleData.bodyFatPercentage != null
                                     ? Text(muscleData.weight.toString() +
                                         ' kg       ' +
@@ -152,10 +164,6 @@ class ListPage extends StatelessWidget {
 
                                                 await deleteList(
                                                     context, model, muscleData);
-                                                await topModel
-                                                    .updateListPageTrue();
-                                                await topModel
-                                                    .updateGraphPageTrue();
                                               },
                                             ),
                                           ],
@@ -193,12 +201,11 @@ class ListPage extends StatelessWidget {
                                               child: Text('OK'),
                                               onPressed: () async {
                                                 Navigator.of(context).pop();
+                                                topModel.changeDeleteDone(true);
                                                 await deleteList(
                                                     context, model, muscleData);
-                                                await topModel
-                                                    .updateListPageTrue();
-                                                await topModel
-                                                    .updateGraphPageTrue();
+                                                topModel
+                                                    .changeDeleteDone(false);
                                               },
                                             ),
                                           ],
@@ -228,8 +235,9 @@ class ListPage extends StatelessWidget {
         ),
         floatingActionButton: Consumer<ListModel>(
           builder: (context, model, child) {
-            if (model.hasData) {
+            if (model.muscleData != null) {
               return FloatingActionButton.extended(
+                heroTag: 'hero2',
                 label: Text(model.sortName),
                 onPressed: () async {
                   model.showBottomSheet(context);
@@ -247,33 +255,11 @@ class ListPage extends StatelessWidget {
   Future deleteList(
       BuildContext context, ListModel model, MuscleData muscleData) async {
     try {
-      await model.deleteList(muscleData);
-      await model.fetchData();
+      await model.deleteMuscleData(muscleData);
+      await model.fetch(context);
     } catch (e) {
-      await _showDialog(context, e.toString());
+      await showAlertDialog(context, e.toString());
       print(e.toString());
     }
-  }
-
-  Future _showDialog(
-    BuildContext context,
-    String title,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          actions: [
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      },
-    );
   }
 }

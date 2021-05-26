@@ -9,6 +9,7 @@ class MuscleData {
     bodyFatPercentage = doc.data()['bodyFatPercentage'];
     imagePath = doc.data()['imagePath'];
     timestamp = doc.data()['date'];
+    angle = doc.data()['angle'];
   }
   Timestamp timestamp;
   String documentID;
@@ -17,4 +18,5 @@ class MuscleData {
   String date;
   double bodyFatPercentage;
   String imagePath;
+  int angle;
 }
